@@ -15,4 +15,18 @@ public class Position implements Serializable {
 	public String toString() {
 		return row + "," + col;
 	}
+
+	@Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!Position.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+
+        Position other = (Position)obj;
+        return other.row == row && other.col == col;
+    }
 }

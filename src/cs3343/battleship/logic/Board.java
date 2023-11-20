@@ -2,6 +2,8 @@ package cs3343.battleship.logic;
 
 import java.util.Arrays;
 
+import cs3343.battleship.exceptions.PositionShotTwiceException;
+
 public final class Board {
 	public enum State {
 		HIT,
@@ -63,13 +65,13 @@ public final class Board {
 		}
 	}
 
-	public boolean addShot(Position shot) {
+	public boolean addShot(Position shot) throws PositionShotTwiceException {
 		int row = shot.row;
 		int col = shot.col;
 		switch (board[row][col]) {
 			case HIT:
 			case MISS:
-				System.out.println("Position has already been shot");
+				throw new PositionShotTwiceException(shot);
 			case WATER:
 				board[row][col] = State.MISS;
 				return false;

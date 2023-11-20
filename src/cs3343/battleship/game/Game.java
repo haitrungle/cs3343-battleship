@@ -1,15 +1,19 @@
 package cs3343.battleship.game;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.*;
 
 import cs3343.battleship.backend.*;
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.logic.*;
 
 public final class Game {
     private Scanner sc;
     private Player player;
     private boolean myTurn;
+    private boolean isServer;
+    private Backend backend;
 
     public Game() {
         sc = new Scanner(System.in);
@@ -21,9 +25,7 @@ public final class Game {
 
         player = askPlayerName();
 
-        boolean isServer = askIsServer();
-
-        Backend backend;
+        isServer = askIsServer();
         if (isServer) {
             backend = new Server(1234);
         } else {
@@ -130,15 +132,20 @@ public final class Game {
     }
 
     public Position askShot() {
-        System.out.println("Where do you want to shot?");
+        System.out.println("Where do you want to shoot?");
         while (true) {
             prompt();
             try {
                 int row = sc.nextInt();
                 int col = sc.nextInt();
-                return new Position(row, col);
-            } catch (Exception e) {
-                System.out.println("Invalid input. Please try again.");
+                Position shot = new Position(row, col);
+                if (player.hasShotEnemyAt(shot))
+                    throw new PositionShotTwiceException(shot);
+                return shot;
+            } catch (NoSuchElementException e) {
+                System.out.println("Invalid input: Cannot parse Position. Please enter in the format '[row],[col]', like '2,3'.");
+            } catch (PositionShotTwiceException e) {
+                System.out.println(e.getMessage());
             }
         }
     }

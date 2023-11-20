@@ -3,6 +3,7 @@ package cs3343.battleship.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.logic.Board;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.Ship;
@@ -24,15 +25,20 @@ public final class Player {
 		board.addShip(s);
 	}
 
-	public boolean getShot(Position shot) {
+	public boolean getShot(Position shot) throws PositionShotTwiceException {
 		return board.addShot(shot);
 	}
 
-	public void shotEnemy(Position shot, boolean hit) {
-		if (targets.contains(shot))
-			System.out.println("Position has already been shot");
+	public void shotEnemy(Position shot, boolean hit) throws PositionShotTwiceException {
+		if (hasShotEnemyAt(shot))
+			throw new PositionShotTwiceException(shot);
 		State state = hit ? State.HIT : State.MISS;
 		enemyBoard.setState(shot, state);
+		targets.add(shot);
+	}
+
+	public boolean hasShotEnemyAt(Position shot) {
+		return targets.contains(shot);
 	}
 
 	public boolean hasAliveShip() {

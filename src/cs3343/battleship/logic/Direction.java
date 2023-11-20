@@ -6,13 +6,13 @@ public enum Direction {
 	DOWN,
 	RIGHT;
 
-	public static Direction decode(String s) throws ValidationException {
+	public static Direction decode(String s) throws InvalidInputException {
 		String lower = s.toLowerCase();
 		if (lower.equals("d") || lower.equals("down"))
 			return DOWN;
 		else if (lower.equals("r") || lower.equals("r"))
 			return RIGHT;
 		else
-			throw new ValidationException(s, "Direction");
+			throw new InvalidInputException("Direction can only be 'd'/'down' or 'r'/'right'.");
 	}
 }
