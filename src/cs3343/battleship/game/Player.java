@@ -124,4 +124,12 @@ public final class Player {
 		builder.append("           YOUR BOARD              |               ENEMY BOARD         \n\n");
 		System.out.println(builder.toString());
 	}
+
+    public Position hasOverlapShip(Ship ship) {
+        for (Ship s : ships) {
+			Position p = Ship.overlapPosition(s, ship);
+			if (p != null) return p;
+		}
+		return null;
+    }
 }

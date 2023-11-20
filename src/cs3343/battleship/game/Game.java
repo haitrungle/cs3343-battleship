@@ -2,10 +2,9 @@ package cs3343.battleship.game;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.function.*;
 
 import cs3343.battleship.backend.*;
-import cs3343.battleship.exceptions.PositionShotTwiceException;
+import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
 
 public final class Game {
@@ -42,20 +41,17 @@ public final class Game {
         try {
             while (true) { // main game loop
                 System.out.println("\nNEW GAME\n");
-                player.printBoard();
 
                 int[] lengths = { 5, 4, 3, 3, 2 };
                 String[] names = { "Aircraft Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer" };
                 System.out.println("Setting ships. You will have 5 ships in total.");
                 System.out.println("For each ship, enter direction and start position, e.g. 'd 2,3'");
                 for (int i = 0; i < 5; i++) {
-                    final String name = names[i];
-                    final int length = lengths[i];
+                    String name = names[i];
+                    int length = lengths[i];
                     System.out.println((i + 1) + ". " + name + ": length " + length);
-                    askShip((Direction d, Position p) -> {
-                        Ship ship = new Ship(name, length, p, d);
-                        player.addShip(ship);
-                    });
+                    Ship ship = askShip(name, length);
+                    player.addShip(ship);
                     player.printBoard();
                 }
 
@@ -65,7 +61,7 @@ public final class Game {
 
                         Message shotMsg = Message.ShotMsg(pos);
                         backend.sendMessage(shotMsg);
-                        
+
                         Message resultMsg = backend.waitForMessage();
                         assert resultMsg.type == Message.Type.RESULT;
 
@@ -79,7 +75,7 @@ public final class Game {
 
                         Position shot = shotMsg.shot;
                         boolean result = player.getShot(shot);
-                        
+
                         Message resultMsg = Message.ResultMsg(result);
                         backend.sendMessage(resultMsg);
 
@@ -94,7 +90,6 @@ public final class Game {
         }
     }
 
-
     public Player askPlayerName() {
         System.out.println("What is your name?");
         prompt();
@@ -103,34 +98,43 @@ public final class Game {
 
     public boolean askIsServer() {
         System.out.println("Are you the server? [y/n]");
-        return readBoolean();
+        while (true) {
+            prompt();
+            try {
+                boolean option = readBoolean();
+                return option;
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     public String[] askAddress() {
         System.out.println(
-            "Enter the address of server, e.g. '127.0.0.1:1234'");
+                "Enter the address of server, e.g. '127.0.0.1:1234'");
         String s;
         while (true) {
             prompt();
             s = sc.nextLine();
-            if (s.contains(":")) return s.split(":");
+            if (s.contains(":"))
+                return s.split(":");
             System.out.println("Invalid address. Please enter both host and port.");
         }
     }
 
-    public void askShip(BiConsumer<Direction, Position> f) {
-        System.out.println("Enter your ship direction and start position, e.g. 'd 2,3'");
+    public Ship askShip(String name, int length) {
+        System.out.println("Enter your ship direction and start position.");
         while (true) {
             prompt();
             try {
-                Direction direction = Direction.decode(sc.next());
-                int row = sc.nextInt();
-                int col = sc.nextInt();
-                Position position = new Position(row, col);
-                f.accept(direction, position);
-                return;
-            } catch (Exception e) {
-                System.out.println("Invalid input: " + e.getMessage() + ". Please try again.");
+                Pair<Direction, Position> pair = readPositionAndDirection();
+                Ship ship = new Ship(name, length, pair.second, pair.first);
+                Position pos;
+                if ((pos = player.hasOverlapShip(ship)) != null)
+                    throw new OverlapShipException(pos);
+                return ship;
+            } catch (InvalidInputException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -140,28 +144,55 @@ public final class Game {
         while (true) {
             prompt();
             try {
-                int row = sc.nextInt();
-                int col = sc.nextInt();
-                Position shot = new Position(row, col);
+                Position shot = readPosition();
                 if (player.hasShotEnemyAt(shot))
                     throw new PositionShotTwiceException(shot);
                 return shot;
-            } catch (NoSuchElementException e) {
-                System.out.println("Invalid input: Cannot parse Position. Please enter in the format '[row],[col]', like '2,3'.");
-            } catch (PositionShotTwiceException e) {
+            } catch (InvalidInputException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private boolean readBoolean() {
-        String s;
-        while (true) {
-            prompt();
-            s = sc.nextLine().toLowerCase();
-            if (s.equals("y") || s.equals("yes")) return true;
-            if (s.equals("n") || s.equals("no")) return false;
-            System.out.println("Invalid option. Please enter 'y' or 'n'.");
+    private Position readPosition() throws InvalidInputException {
+        String errorMsg = "Cannot parse Position. Please enter in the format '[row],[col]', like '2,3'.";
+        try {
+            String line = sc.nextLine().trim();
+            String[] parts = line.split("[,\\s]+");
+            if (parts.length != 2) throw new InvalidInputException(errorMsg);
+            int row = Integer.parseInt(parts[0]);
+            int col = Integer.parseInt(parts[1]);
+            return new Position(row, col);
+        } catch (NoSuchElementException e) {
+            throw new InvalidInputException(errorMsg);
+        }
+    }
+
+    private Pair<Direction, Position> readPositionAndDirection() throws InvalidInputException {
+        String errorMsg = "Cannot parse Direction and Position. Please enter in the format '[d/r] [row],[col]', like 'd 2,3'.";
+        try {
+            String line = sc.nextLine().trim();
+            String[] parts = line.split("[,\\s]+");
+            if (parts.length != 3) throw new InvalidInputException(errorMsg);
+            Direction dir = Direction.decode(parts[0]);
+            int row = Integer.parseInt(parts[1]);
+            int col = Integer.parseInt(parts[2]);
+            return new Pair<Direction, Position>(dir, new Position(row, col));
+        } catch (NoSuchElementException e) {
+            throw new InvalidInputException(errorMsg);
+        }
+    }
+
+    private boolean readBoolean() throws InvalidInputException {
+        try {
+            String s = sc.nextLine().toLowerCase();
+            if (s.equals("y") || s.equals("yes"))
+                return true;
+            else if (s.equals("n") || s.equals("no"))
+                return false;
+            else throw new InvalidInputException("Can only be yes or no. Please enter 'y'/'yes' or 'n'/'no'.");
+        } catch (NoSuchElementException e) {
+            throw new InvalidInputException("Cannot read line. Please enter 'y'/'yes' or 'n'/'no'.");
         }
     }
 
@@ -169,8 +200,17 @@ public final class Game {
         System.out.print("> ");
     }
 
-    private static String banner =
-    " ___    __   _____ _____  _     ____  __   _     _   ___  \n" +
-    "| |_)  / /\\   | |   | |  | |   | |_  ( (` | |_| | | | |_) \n" +
-    "|_|_) /_/--\\  |_|   |_|  |_|__ |_|__ _)_) |_| | |_| |_|   \n";
+    private static String banner = " ___    __   _____ _____  _     ____  __   _     _   ___  \n" +
+            "| |_)  / /\\   | |   | |  | |   | |_  ( (` | |_| | | | |_) \n" +
+            "|_|_) /_/--\\  |_|   |_|  |_|__ |_|__ _)_) |_| | |_| |_|   \n";
+}
+
+final class Pair<A, B> {
+    public A first;
+    public B second;
+
+    public Pair(A a, B b) {
+        first = a;
+        second = b;
+    }
 }
