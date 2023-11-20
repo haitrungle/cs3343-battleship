@@ -65,10 +65,13 @@ public final class Game {
 
                         Message shotMsg = Message.ShotMsg(pos);
                         backend.sendMessage(shotMsg);
+                        
                         Message resultMsg = backend.waitForMessage();
                         assert resultMsg.type == Message.Type.RESULT;
 
                         player.shotEnemy(pos, resultMsg.hit);
+
+                        player.printTwoBoards();
                         System.out.println(resultMsg.hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
                     } else {
                         Message shotMsg = backend.waitForMessage();
@@ -76,13 +79,14 @@ public final class Game {
 
                         Position shot = shotMsg.shot;
                         boolean result = player.getShot(shot);
-                        System.out.println("Enemy shot at position " + shot);
-
+                        
                         Message resultMsg = Message.ResultMsg(result);
                         backend.sendMessage(resultMsg);
+
+                        player.printTwoBoards();
+                        System.out.println("Enemy shot at position " + shot);
                     }
                     myTurn = !myTurn;
-                    player.printTwoBoards();
                 }
             }
         } catch (Exception e) {

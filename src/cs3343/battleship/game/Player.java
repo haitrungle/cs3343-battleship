@@ -52,18 +52,18 @@ public final class Player {
 			builder.append(i + "  ");
 		builder.append("\n");
 		for (int i = 0; i < board.size; i++) {
-			builder.append(ANSI.WHITE + i + "  " + ANSI.RESET);
+			builder.append(Console.WHITE + i + "  " + Console.RESET);
 
 			for (int j = 0; j < board.size; j++) {
 				State cell = board.board[i][j];
 				if (cell == State.WATER)
-					builder.append(ANSI.BLUE + cell + ANSI.RESET);
+					builder.append(Console.BLUE + cell + Console.RESET);
 				else if (cell == State.HIT)
-					builder.append(ANSI.RED + cell + ANSI.RESET);
+					builder.append(Console.RED + cell + Console.RESET);
 				else if (cell == State.MISS)
-					builder.append(ANSI.WHITE + cell + ANSI.RESET);
+					builder.append(Console.WHITE + cell + Console.RESET);
 				else
-					builder.append(ANSI.YELLOW + cell + ANSI.RESET);
+					builder.append(Console.YELLOW + cell + Console.RESET);
 				builder.append("  ");
 			}
 			builder.append("\n");
@@ -86,35 +86,35 @@ public final class Player {
 		builder.append("\n");
 
 		for (int i = 0; i < board.size; i++) {
-			builder.append(ANSI.WHITE + i + ANSI.RESET + "  ");
+			builder.append(Console.WHITE + i + Console.RESET + "  ");
 
 			for (int j = 0; j < board.size; j++) {
 				State cell = board.board[i][j];
 				if (cell == State.WATER)
-					builder.append(ANSI.BLUE + cell + ANSI.RESET);
+					builder.append(Console.BLUE + cell + Console.RESET);
 				else if (cell == State.HIT)
-					builder.append(ANSI.RED + cell + ANSI.RESET);
+					builder.append(Console.RED + cell + Console.RESET);
 				else if (cell == State.MISS)
-					builder.append(ANSI.WHITE + cell + ANSI.RESET);
+					builder.append(Console.WHITE + cell + Console.RESET);
 				else
-					builder.append(ANSI.YELLOW + cell + ANSI.RESET);
+					builder.append(Console.YELLOW + cell + Console.RESET);
 				builder.append("  ");
 			}
 
 			builder.append("  |    ");
 
-			builder.append(ANSI.WHITE + i + ANSI.RESET + "  ");
+			builder.append(Console.WHITE + i + Console.RESET + "  ");
 
 			for (int j = 0; j < enemyBoard.size; j++) {
 				State cell = enemyBoard.board[i][j];
 				if (cell == State.WATER)
-					builder.append(ANSI.BLUE + cell + ANSI.RESET);
+					builder.append(Console.BLUE + cell + Console.RESET);
 				else if (cell == State.HIT)
-					builder.append(ANSI.RED + cell + ANSI.RESET);
+					builder.append(Console.RED + cell + Console.RESET);
 				else if (cell == State.MISS)
-					builder.append(ANSI.WHITE + cell + ANSI.RESET);
+					builder.append(Console.WHITE + cell + Console.RESET);
 				else
-					builder.append(ANSI.YELLOW + cell + ANSI.RESET);
+					builder.append(Console.YELLOW + cell + Console.RESET);
 				builder.append("  ");
 			}
 
@@ -124,25 +124,4 @@ public final class Player {
 		builder.append("           YOUR BOARD              |               ENEMY BOARD         \n\n");
 		System.out.println(builder.toString());
 	}
-}
-
-final class ANSI {
-	public static final String RESET = "\u001B[0m";
-	public static final String BLACK = "\u001B[30m";
-	public static final String RED = "\u001B[31m";
-	public static final String GREEN = "\u001B[32m";
-	public static final String YELLOW = "\u001B[33m";
-	public static final String BLUE = "\u001B[34m";
-	public static final String PURPLE = "\u001B[35m";
-	public static final String CYAN = "\u001B[36m";
-	public static final String WHITE = "\u001B[37m";
-
-	public static final String BLACK_BG = "\u001B[40m";
-	public static final String RED_BG = "\u001B[41m";
-	public static final String GREEN_BG = "\u001B[42m";
-	public static final String YELLOW_BG = "\u001B[43m";
-	public static final String BLUE_BG = "\u001B[44m";
-	public static final String PURPLE_BG = "\u001B[45m";
-	public static final String CYAN_BG = "\u001B[46m";
-	public static final String WHITE_BG = "\u001B[47m";
 }

@@ -5,15 +5,24 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.net.InetAddress;
 
 public class Server extends Backend {
     private ServerSocket serverSocket;
     private Socket socket;
+    private static InetAddress ip;
 
     public Server(int port) {
         try {
+            ip = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            System.out.println("Cannot determine the address of local host. You can only play with another person on the same machine.");
+            ip = InetAddress.getLoopbackAddress();
+        }
+        try {
             serverSocket = new ServerSocket(port);
-            System.out.println("Backend listening on port " + port);
+            System.out.println("Backend listening at " + ip + ":" + port);
 
             socket = serverSocket.accept();
             System.out.println("Client connected: " + socket.getInetAddress().getHostAddress());

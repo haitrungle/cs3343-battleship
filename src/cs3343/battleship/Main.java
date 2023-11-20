@@ -4,9 +4,8 @@ import cs3343.battleship.game.*;
 
 
 public class Main {
-
+	private static Game game = new Game();
 	public static void main(String[] args) {
-		Game game = new Game();
 		game.run();
 	}
 }
