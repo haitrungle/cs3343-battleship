@@ -8,13 +8,20 @@ import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
 
 public final class Game {
+    private static Game _game = new Game();
+
+    public static Game create() {
+        if (_game == null) _game = new Game();
+        return _game;
+    }
+
     private Scanner sc;
     private Player player;
     private boolean myTurn;
     private boolean isServer;
     private Backend backend;
 
-    public Game() {
+    private Game() {
         sc = new Scanner(System.in);
         sc.useDelimiter("[,\\s]+");
     }
@@ -47,12 +54,12 @@ public final class Game {
                 System.out.println("Setting ships. You will have 5 ships in total.");
                 System.out.println("For each ship, enter direction and start position, e.g. 'd 2,3'");
                 for (int i = 0; i < 5; i++) {
+                    player.printBoard();
                     String name = names[i];
                     int length = lengths[i];
                     System.out.println((i + 1) + ". " + name + ": length " + length);
                     Ship ship = askShip(name, length);
                     player.addShip(ship);
-                    player.printBoard();
                 }
 
                 while (player.hasAliveShip()) {
