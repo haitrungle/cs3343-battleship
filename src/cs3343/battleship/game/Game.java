@@ -20,7 +20,6 @@ public final class Game {
     private Scanner sc;
     private Player player;
     private boolean myTurn;
-    private boolean isServer;
     private Backend backend;
     private Ship[] defaultShips = { new AircraftCarrier(), new Battleship(), new Cruiser(), new Submarine(),
             new Destroyer() };
@@ -35,13 +34,7 @@ public final class Game {
 
         player = askPlayerName();
 
-        isServer = askIsServer();
-        if (isServer) {
-            backend = new Server(1234);
-        } else {
-            String[] parts = askAddress();
-            backend = new Client(parts[0], Integer.parseInt(parts[1]));
-        }
+        backend = askBackend();
 
         Message init = Message.InitMsg();
         backend.sendMessage(init);
@@ -96,13 +89,23 @@ public final class Game {
         }
     }
 
-    public Player askPlayerName() {
+    private Player askPlayerName() {
         System.out.println("What is your name?");
         prompt();
         return new Player(sc.nextLine());
     }
 
-    public boolean askIsServer() {
+    private Backend askBackend() {
+        boolean isServer = askIsServer();
+        if (isServer) {
+            return new Server();
+        } else {
+            String[] parts = askAddress();
+            return new Client(parts[0], Integer.parseInt(parts[1]));
+        }
+    }
+
+    private boolean askIsServer() {
         System.out.println("Are you the server? [y/n]");
         while (true) {
             prompt();
@@ -115,20 +118,22 @@ public final class Game {
         }
     }
 
-    public String[] askAddress() {
+    private String[] askAddress() {
         System.out.println(
                 "Enter the address of server, e.g. '127.0.0.1:1234'");
         String s;
         while (true) {
             prompt();
             s = sc.nextLine();
+            if (s.equals(""))
+                return new String[] { "localhost", "1234" };
             if (s.contains(":"))
                 return s.split(":");
             System.out.println("Invalid address. Please enter both host and port.");
         }
     }
 
-    public Ship askShip(int i) {
+    private Ship askShip(int i) {
         Ship ship = defaultShips[i];
         System.out.println(String.format("Ship %d: %s", i + 1, ship.introduce()));
         System.out.println("Enter your ship direction and start position.");
@@ -148,7 +153,7 @@ public final class Game {
         }
     }
 
-    public Position askShot() {
+    private Position askShot() {
         System.out.println("Where do you want to shoot?");
         while (true) {
             prompt();

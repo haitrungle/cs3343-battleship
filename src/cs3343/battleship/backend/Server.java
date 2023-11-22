@@ -13,7 +13,9 @@ public class Server extends Backend {
     private Socket socket;
     private static InetAddress ip;
 
-    public Server(int port) {
+    public static int defaultPort = 1234;
+
+    public Server() {
         try {
             ip = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
@@ -21,8 +23,8 @@ public class Server extends Backend {
             ip = InetAddress.getLoopbackAddress();
         }
         try {
-            serverSocket = new ServerSocket(port);
-            System.out.println("Backend listening at " + ip + ":" + port);
+            serverSocket = new ServerSocket(defaultPort);
+            System.out.println("Backend listening at " + ip + ":" + defaultPort);
 
             socket = serverSocket.accept();
             System.out.println("Client connected: " + socket.getInetAddress().getHostAddress());

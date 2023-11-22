@@ -8,6 +8,10 @@ public class Client extends Backend {
     private Socket socket;
 
     public Client(String remoteHost, int remotePort) {
+        if (remoteHost == null) {
+            remoteHost = "localhost";
+            remotePort = Server.defaultPort;
+        }
         try {
             socket = new Socket(remoteHost, remotePort);
             System.out.println("Server connected: " + socket.getInetAddress().getHostAddress());
