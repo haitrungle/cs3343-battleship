@@ -6,12 +6,14 @@ import java.util.Scanner;
 import cs3343.battleship.backend.*;
 import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
+import cs3343.battleship.logic.ship.*;
 
 public final class Game {
     private static Game _game = new Game();
 
     public static Game create() {
-        if (_game == null) _game = new Game();
+        if (_game == null)
+            _game = new Game();
         return _game;
     }
 
@@ -20,6 +22,8 @@ public final class Game {
     private boolean myTurn;
     private boolean isServer;
     private Backend backend;
+    private Ship[] defaultShips = { new AircraftCarrier(), new Battleship(), new Cruiser(), new Submarine(),
+            new Destroyer() };
 
     private Game() {
         sc = new Scanner(System.in);
@@ -49,16 +53,11 @@ public final class Game {
             while (true) { // main game loop
                 System.out.println("\nNEW GAME\n");
 
-                int[] lengths = { 5, 4, 3, 3, 2 };
-                String[] names = { "Aircraft Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer" };
                 System.out.println("Setting ships. You will have 5 ships in total.");
                 System.out.println("For each ship, enter direction and start position, e.g. 'd 2,3'");
                 for (int i = 0; i < 5; i++) {
                     player.printBoard();
-                    String name = names[i];
-                    int length = lengths[i];
-                    System.out.println((i + 1) + ". " + name + ": length " + length);
-                    Ship ship = askShip(name, length);
+                    Ship ship = askShip(i);
                     player.addShip(ship);
                 }
 
@@ -129,13 +128,16 @@ public final class Game {
         }
     }
 
-    public Ship askShip(String name, int length) {
+    public Ship askShip(int i) {
+        Ship ship = defaultShips[i];
+        System.out.println(String.format("Ship %d: %s", i + 1, ship.introduce()));
         System.out.println("Enter your ship direction and start position.");
         while (true) {
             prompt();
             try {
                 Pair<Direction, Position> pair = readPositionAndDirection();
-                Ship ship = new Ship(name, length, pair.second, pair.first);
+                ship.setDirection(pair.first);
+                ship.setStartPosition(pair.second);
                 Position pos;
                 if ((pos = player.hasOverlapShip(ship)) != null)
                     throw new OverlapShipException(pos);
@@ -162,11 +164,12 @@ public final class Game {
     }
 
     private Position readPosition() throws InvalidInputException {
-        String errorMsg = "Cannot parse Position. Please enter in the format '[row],[col]', like '2,3'.";
+        String errorMsg = "Cannot parse Position.\nPlease enter in the format '[row],[col]', like '2,3'.";
         try {
             String line = sc.nextLine().trim();
             String[] parts = line.split("[,\\s]+");
-            if (parts.length != 2) throw new InvalidInputException(errorMsg);
+            if (parts.length != 2)
+                throw new InvalidInputException(errorMsg);
             int row = Integer.parseInt(parts[0]);
             int col = Integer.parseInt(parts[1]);
             return new Position(row, col);
@@ -176,11 +179,12 @@ public final class Game {
     }
 
     private Pair<Direction, Position> readPositionAndDirection() throws InvalidInputException {
-        String errorMsg = "Cannot parse Direction and Position. Please enter in the format '[d/r] [row],[col]', like 'd 2,3'.";
+        String errorMsg = "Cannot parse Direction and Position.\nPlease enter in the format '[d/r] [row],[col]', like 'd 2,3'.";
         try {
             String line = sc.nextLine().trim();
             String[] parts = line.split("[,\\s]+");
-            if (parts.length != 3) throw new InvalidInputException(errorMsg);
+            if (parts.length != 3)
+                throw new InvalidInputException(errorMsg);
             Direction dir = Direction.decode(parts[0]);
             int row = Integer.parseInt(parts[1]);
             int col = Integer.parseInt(parts[2]);
@@ -197,7 +201,8 @@ public final class Game {
                 return true;
             else if (s.equals("n") || s.equals("no"))
                 return false;
-            else throw new InvalidInputException("Can only be yes or no. Please enter 'y'/'yes' or 'n'/'no'.");
+            else
+                throw new InvalidInputException("Can only be yes or no. Please enter 'y'/'yes' or 'n'/'no'.");
         } catch (NoSuchElementException e) {
             throw new InvalidInputException("Cannot read line. Please enter 'y'/'yes' or 'n'/'no'.");
         }

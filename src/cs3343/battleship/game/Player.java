@@ -6,8 +6,8 @@ import java.util.List;
 import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.logic.Board;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.Ship;
 import cs3343.battleship.logic.Board.State;
+import cs3343.battleship.logic.ship.Ship;
 
 public final class Player {
 	private String name;

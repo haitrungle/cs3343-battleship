@@ -3,6 +3,7 @@ package cs3343.battleship.logic;
 import java.util.Arrays;
 
 import cs3343.battleship.exceptions.PositionShotTwiceException;
+import cs3343.battleship.logic.ship.Ship;
 
 public final class Board {
 	public enum State {
@@ -46,17 +47,17 @@ public final class Board {
 	}
 
 	public void addShip(Ship s) {
-		int row = s.startPosition.row;
-		int col = s.startPosition.col;
-		if (s.direction == Direction.RIGHT) {
-			for (int j = col; j < col + s.length; j++) {
+		int row = s.getStartPosition().row;
+		int col = s.getStartPosition().col;
+		if (s.getDirection() == Direction.RIGHT) {
+			for (int j = col; j < col + s.getLength(); j++) {
 				if (board[row][j] == State.WATER) {
 					board[row][j] = State.SHIP;
 				} else
 					System.out.println("A ship already overlapped");
 			}
 		} else {
-			for (int i = row; i < row + s.length; i++) {
+			for (int i = row; i < row + s.getLength(); i++) {
 				if (board[i][col] == State.WATER) {
 					board[i][col] = State.SHIP;
 				} else
