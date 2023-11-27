@@ -1,5 +1,7 @@
 package cs3343.battleship.logic;
 
+import java.util.Random;
+
 import cs3343.battleship.exceptions.*;
 
 public enum Direction {
@@ -14,5 +16,9 @@ public enum Direction {
 			return RIGHT;
 		else
 			throw new InvalidInputException("Direction can only be 'd'/'down' or 'r'/'right'.");
+	}
+
+	public static Direction random(Random rng) {
+		return rng.nextBoolean() ? DOWN : RIGHT;
 	}
 }

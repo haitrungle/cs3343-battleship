@@ -2,6 +2,8 @@ package cs3343.battleship.logic;
 
 import java.util.Arrays;
 
+import cs3343.battleship.exceptions.OverlapShipException;
+import cs3343.battleship.exceptions.PositionOutOfBoundsException;
 import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.logic.ship.Ship;
 
@@ -46,22 +48,31 @@ public final class Board {
 		return table;
 	}
 
-	public void addShip(Ship s) {
+	public void addShip(Ship s) throws PositionOutOfBoundsException, OverlapShipException {
 		int row = s.getStartPosition().row;
 		int col = s.getStartPosition().col;
+		int len = s.getLength();
+		if (row < 0 || row >= size || col < 0 || col >= size)
+			throw new PositionOutOfBoundsException(row, col, size);
 		if (s.getDirection() == Direction.RIGHT) {
-			for (int j = col; j < col + s.getLength(); j++) {
-				if (board[row][j] == State.WATER) {
-					board[row][j] = State.SHIP;
-				} else
-					System.out.println("A ship already overlapped");
+			if (col + len > size)
+				throw new PositionOutOfBoundsException(row, col + len - 1, size);
+			for (int j = col; j < col + len; j++) {
+				if (board[row][j] != State.WATER)
+					throw new OverlapShipException(new Position(row, j));		
+			}
+			for (int j = col; j < col + len; j++) {
+				board[row][j] = State.SHIP;		
 			}
 		} else {
-			for (int i = row; i < row + s.getLength(); i++) {
-				if (board[i][col] == State.WATER) {
-					board[i][col] = State.SHIP;
-				} else
-					System.out.println("A ship already overlapped");
+			if (row + len > size)
+				throw new PositionOutOfBoundsException(row + len - 1, col, size);
+			for (int i = row; i < row + len; i++) {
+				if (board[i][col] != State.WATER)
+					throw new OverlapShipException(new Position(i, col));
+			}
+			for (int i = row; i < row + len; i++) {
+				board[i][col] = State.SHIP;		
 			}
 		}
 	}
@@ -85,8 +96,12 @@ public final class Board {
 		return false;
 	}
 
-	public void setState(Position position, State state) {
-		board[position.row][position.col] = state;
+	public void setState(Position position, State state) throws PositionOutOfBoundsException {
+		int row = position.row;
+		int col = position.col;
+		if (row >= size || col >= size)
+			throw new PositionOutOfBoundsException(row, col, size);
+		board[row][col] = state;
 	}
 
 	public boolean hasAliveShip() {
