@@ -22,6 +22,22 @@ public final class Player {
 		ships.add(s);
 	}
 
+	public Ship addShipRandom(Ship ship) {
+		Random rng = new Random(145);
+		while (true) {
+			Position p = Position.random(rng, board.size);
+			ship.setStartPosition(p);
+			Direction direction = Direction.random(rng);
+			ship.setDirection(direction);
+			try {
+				addShip(ship);
+				return ship;
+			} catch (OverlapShipException | PositionOutOfBoundsException e) {
+				continue;
+			}
+		}
+	}
+
 	public boolean getShot(Position shot) throws PositionShotTwiceException {
 		return board.addShot(shot);
 	}
@@ -35,7 +51,7 @@ public final class Player {
 	}
 
 	public void checkShot(Position shot) throws PositionShotTwiceException, PositionOutOfBoundsException {
-		if (targets.contains(shot))
+		if (hasShotEnemyAt(shot))
 			throw new PositionShotTwiceException(shot);
 		if (shot.row < 0 || shot.row >= board.size || shot.col < 0 || shot.col >= board.size)
 			throw new PositionOutOfBoundsException(shot.row, shot.col, board.size);
@@ -47,6 +63,25 @@ public final class Player {
 
 	public boolean hasAliveShip() {
 		return board.hasAliveShip();
+	}
+
+	public Position hasOverlapShip(Ship ship) {
+		for (Ship s : ships) {
+			Position p = Ship.overlapPosition(s, ship);
+			if (p != null)
+				return p;
+		}
+		return null;
+	}
+
+	public Position getRandomShot() {
+		Random rng = new Random(145);
+		while (true) {
+			Position p = Position.random(rng, board.size);
+			if (hasShotEnemyAt(p))
+				continue;
+			return p;
+		}
 	}
 
 	public void printBoard() {
@@ -127,38 +162,5 @@ public final class Player {
 		builder.append("                                   |                                   \n");
 		builder.append("           YOUR BOARD              |               ENEMY BOARD         \n\n");
 		Console.println(builder.toString());
-	}
-
-    public Position hasOverlapShip(Ship ship) {
-        for (Ship s : ships) {
-			Position p = Ship.overlapPosition(s, ship);
-			if (p != null) return p;
-		}
-		return null;
-    }
-
-    public Ship addShipRandom(Ship ship) {
-		Random rng = new Random(145);
-		while (true) {
-			Position p = Position.random(rng, board.size);
-			ship.setStartPosition(p);
-			Direction direction = Direction.random(rng);
-			ship.setDirection(direction);
-			try {
-				addShip(ship);
-				return ship;
-			} catch (OverlapShipException | PositionOutOfBoundsException e) {
-				continue;
-			}
-		}
-    }
-
-	public Position getRandomShot() {
-		Random rng = new Random(145);
-		while (true) {
-			Position p = Position.random(rng, board.size);
-			if (hasShotEnemyAt(p)) continue;
-			return p;
-		}
 	}
 }

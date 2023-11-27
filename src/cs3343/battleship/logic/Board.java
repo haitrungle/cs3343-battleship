@@ -49,6 +49,8 @@ public final class Board {
 	}
 
 	public void addShip(Ship s) throws PositionOutOfBoundsException, OverlapShipException {
+		// Change states if and only if the ship can be added successfully
+		// In other words, this method is "atomic": if it throws, then the board is not changed
 		int row = s.getStartPosition().row;
 		int col = s.getStartPosition().col;
 		int len = s.getLength();
@@ -59,10 +61,10 @@ public final class Board {
 				throw new PositionOutOfBoundsException(row, col + len - 1, size);
 			for (int j = col; j < col + len; j++) {
 				if (board[row][j] != State.WATER)
-					throw new OverlapShipException(new Position(row, j));		
+					throw new OverlapShipException(new Position(row, j));
 			}
 			for (int j = col; j < col + len; j++) {
-				board[row][j] = State.SHIP;		
+				board[row][j] = State.SHIP;
 			}
 		} else {
 			if (row + len > size)
@@ -72,7 +74,7 @@ public final class Board {
 					throw new OverlapShipException(new Position(i, col));
 			}
 			for (int i = row; i < row + len; i++) {
-				board[i][col] = State.SHIP;		
+				board[i][col] = State.SHIP;
 			}
 		}
 	}
