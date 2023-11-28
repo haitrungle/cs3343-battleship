@@ -30,6 +30,10 @@ public final class Console {
 
 	private static Scanner sc = new Scanner(System.in).useDelimiter("[,\\s]+");
 
+    public void setScanner(Scanner s) {
+        sc = s;
+    }
+
     public static String textColor(String str, String color) {
         return color + str + RESET;
     }
@@ -57,7 +61,7 @@ public final class Console {
 	}
 
 	static String askName() {
-        System.out.println("What is your name?");
+        println("What is your name?");
         prompt();
         return sc.nextLine();
     }
@@ -65,7 +69,7 @@ public final class Console {
     static Backend askBackend() {
         boolean isServer = askIsServer();
         if (isServer) {
-            return new Server();
+            return new Server(Config.DEFAULT_PORT);
         } else {
             String[] parts = askAddress();
             return new Client(parts[0], Integer.parseInt(parts[1]));
@@ -73,21 +77,20 @@ public final class Console {
     }
 
     private static boolean askIsServer() {
-        System.out.println("Are you the server? [y/n]");
+        println("Are you the server? [y/n]");
         while (true) {
             prompt();
             try {
                 boolean option = readBoolean();
                 return option;
             } catch (InvalidInputException e) {
-                System.out.println(e.getMessage());
+                println(e.getMessage());
             }
         }
     }
 
     private static String[] askAddress() {
-        System.out.println(
-                "Enter the address of server, e.g. '127.0.0.1:1234'");
+        println("Enter the address of server, e.g. '127.0.0.1:1234'");
         String s;
         while (true) {
             prompt();
@@ -96,14 +99,14 @@ public final class Console {
                 return new String[] { "localhost", "1234" };
             if (s.contains(":"))
                 return s.split(":");
-            System.out.println("Invalid address. Please enter both host and port.");
+            println("Invalid address. Please enter both host and port.");
         }
     }
 
     static int askGameOption() {
-        System.out.println("Choose an option:");
-        System.out.println("[1] Tutorial");
-        System.out.println("[2] New game");
+        println("Choose an option:");
+        println("[1] Tutorial");
+        println("[2] New match");
         while (true) {
             prompt();
             try {
@@ -113,16 +116,16 @@ public final class Console {
                 else
                     throw new InvalidInputException("Can only be 1 or 2. Please enter 1 or 2.");
             } catch (InvalidInputException e) {
-                System.out.println(e.getMessage());
+                println(e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println("Cannot parse integer. Please enter 1 or 2.");
+                println("Cannot parse integer. Please enter 1 or 2.");
             }
         }
     }
 
     static Ship askAndAddShip(Ship ship, Player player) {
-        System.out.println(String.format(ship.introduce()));
-        System.out.println("Enter your ship direction and start position.");
+        println(String.format(ship.introduce()));
+        println("Enter your ship direction and start position.");
         while (true) {
             prompt();
             try {
@@ -133,13 +136,13 @@ public final class Console {
                 player.addShip(ship);
                 return ship;
             } catch (InvalidInputException e) {
-                System.out.println(e.getMessage());
+                println(e.getMessage());
             }
         }
     }
 
     static Position askShot(Player player) {
-        System.out.println("Where do you want to shoot?");
+        println("Where do you want to shoot?");
         while (true) {
             prompt();
             try {
@@ -148,7 +151,7 @@ public final class Console {
                 player.checkShot(shot);
                 return shot;
             } catch (InvalidInputException e) {
-                System.out.println(e.getMessage());
+                println(e.getMessage());
             }
         }
     }

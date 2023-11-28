@@ -18,6 +18,8 @@ public final class Game {
         Console.println(banner);
 
         name = Console.askName();
+        Console.typeln("Welcome, " + name + "!");
+
         while (true) {
             int option = Console.askGameOption();
             if (option == 1) {

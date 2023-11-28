@@ -22,50 +22,49 @@ public class Match {
         Message init = Message.InitMsg();
         backend.sendMessage(init);
         Message remoteInit = backend.waitForMessage();
-        assert remoteInit.type == Message.Type.INIT;
-        myTurn = init.timestamp.compareTo(remoteInit.timestamp) < 0;
+        assert remoteInit.getType() == Message.Type.INIT;
+        myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
 
         try {
-            while (true) { // main game loop
-                System.out.println("\nNEW GAME\n");
+            Console.println(".-------------.\n" +
+                            "|  NEW MATCH  |\n" +
+                            "'-------------'\n");
 
-                System.out.println("Setting ships. You will have 5 ships in total.");
-                System.out.println("For each ship, enter direction and start position, e.g. 'd 2,3'");
-                Ship[] fleet = Config.defaultFleet();
-                for (int i = 0; i < 5; i++) {
-                    player.printBoard();
-                    Console.askAndAddShip(fleet[i], player);
+            Console.typeln("Setting ships. You will have 5 ships in total.");
+            Console.typeln("For each ship, enter direction and start position, e.g. 'd 2,3'");
+            Ship[] fleet = Config.defaultFleet();
+            for (int i = 0; i < 5; i++) {
+                player.printBoard();
+                Console.askAndAddShip(fleet[i], player);
+            }
+
+            while (player.hasAliveShip()) {
+                if (myTurn) {
+                    Position pos = Console.askShot(player);
+
+                    Message shotMsg = Message.ShotMsg(pos);
+                    backend.sendMessage(shotMsg);
+
+                    Message resultMsg = backend.waitForMessage();
+                    boolean hit = resultMsg.getHit();
+
+                    player.shotEnemy(pos, hit);
+
+                    player.printTwoBoards();
+                    System.out.println(hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
+                } else {
+                    Message shotMsg = backend.waitForMessage();
+
+                    Position shot = shotMsg.getShot();
+                    boolean result = player.getShot(shot);
+
+                    Message resultMsg = Message.ResultMsg(result);
+                    backend.sendMessage(resultMsg);
+
+                    player.printTwoBoards();
+                    System.out.println("Enemy shot at position " + shot);
                 }
-
-                while (player.hasAliveShip()) {
-                    if (myTurn) {
-                        Position pos = Console.askShot(player);
-
-                        Message shotMsg = Message.ShotMsg(pos);
-                        backend.sendMessage(shotMsg);
-
-                        Message resultMsg = backend.waitForMessage();
-                        assert resultMsg.type == Message.Type.RESULT;
-
-                        player.shotEnemy(pos, resultMsg.hit);
-
-                        player.printTwoBoards();
-                        System.out.println(resultMsg.hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
-                    } else {
-                        Message shotMsg = backend.waitForMessage();
-                        assert shotMsg.type == Message.Type.SHOT;
-
-                        Position shot = shotMsg.shot;
-                        boolean result = player.getShot(shot);
-
-                        Message resultMsg = Message.ResultMsg(result);
-                        backend.sendMessage(resultMsg);
-
-                        player.printTwoBoards();
-                        System.out.println("Enemy shot at position " + shot);
-                    }
-                    myTurn = !myTurn;
-                }
+                myTurn = !myTurn;
             }
         } catch (Exception e) {
             Console.println(e);

@@ -4,13 +4,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Client extends Backend {
+import cs3343.battleship.game.Config;
+
+public class Client extends SocketBackend {
     private Socket socket;
 
     public Client(String remoteHost, int remotePort) {
         if (remoteHost == null) {
             remoteHost = "localhost";
-            remotePort = Server.defaultPort;
+            remotePort = Config.DEFAULT_PORT;
         }
         try {
             socket = new Socket(remoteHost, remotePort);

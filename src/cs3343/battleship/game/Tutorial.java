@@ -23,7 +23,9 @@ public class Tutorial {
     }
 
     private void startTutorial() {
-        Console.typeln("Welcome to the tutorial!");
+        Console.println(".------------.\n" +
+                        "|  TUTORIAL  |\n" +
+                        "'------------'\n");
         Console.typeln("In this tutorial, you will learn how to play Battleship.\n");
     }
 

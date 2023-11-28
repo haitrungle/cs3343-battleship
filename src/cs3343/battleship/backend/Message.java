@@ -13,16 +13,34 @@ public final class Message implements Serializable {
         LOST;
     }
 
-    public Type type;
-    public Instant timestamp;
-    public Position shot;
-    public boolean hit;
+    private Type type;
+    private Instant timestamp;
+    private Position shot;
+    private boolean hit;
 
     private Message(Type type, Position shot, boolean hit) {
         this.type = type;
         this.timestamp = Instant.now();
         this.shot = shot;
         this.hit = hit;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    public Position getShot() {
+        assert type == Type.SHOT;
+        return shot;
+    }
+
+    public boolean getHit() {
+        assert type == Type.RESULT;
+        return hit;
     }
 
     public static Message InitMsg() {

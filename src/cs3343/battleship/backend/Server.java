@@ -8,14 +8,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.net.InetAddress;
 
-public class Server extends Backend {
+public class Server extends SocketBackend {
     private ServerSocket serverSocket;
     private Socket socket;
     private static InetAddress ip;
 
-    public static int defaultPort = 1234;
+    public int port;
 
-    public Server() {
+    public Server(int port) {
+        this.port = port;
         try {
             ip = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
@@ -23,8 +24,8 @@ public class Server extends Backend {
             ip = InetAddress.getLoopbackAddress();
         }
         try {
-            serverSocket = new ServerSocket(defaultPort);
-            System.out.println("Backend listening at " + ip + ":" + defaultPort);
+            serverSocket = new ServerSocket(port);
+            System.out.println("Backend listening at " + ip + ":" + port);
 
             socket = serverSocket.accept();
             System.out.println("Client connected: " + socket.getInetAddress().getHostAddress());
