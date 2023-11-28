@@ -104,7 +104,7 @@ public final class Console {
     }
 
     static int askGameOption() {
-        println("Choose an option:");
+        println("\nChoose an option:");
         println("[1] Tutorial");
         println("[2] New match");
         while (true) {

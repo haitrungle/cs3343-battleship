@@ -9,6 +9,7 @@ public class Match {
     private Player player;
     private Backend backend;
     private boolean myTurn;
+    private boolean won;
 
     public Match(Backend backend) {
         if (backend == null) {
@@ -16,6 +17,7 @@ public class Match {
             this.backend = backend;
         }
         player = new Player();
+        won = false;
     }
 
     public void run() {
@@ -51,20 +53,30 @@ public class Match {
                     player.shotEnemy(pos, hit);
 
                     player.printTwoBoards();
-                    System.out.println(hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
+                    Console.typeln(hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
                 } else {
-                    Message shotMsg = backend.waitForMessage();
+                    Message msg = backend.waitForMessage();
+                    if (msg.getType() == Message.Type.LOST) {
+                        won = true;
+                        break;
+                    }
 
-                    Position shot = shotMsg.getShot();
+                    Position shot = msg.getShot();
                     boolean result = player.getShot(shot);
 
                     Message resultMsg = Message.ResultMsg(result);
                     backend.sendMessage(resultMsg);
 
                     player.printTwoBoards();
-                    System.out.println("Enemy shot at position " + shot);
+                    Console.typeln("Enemy shot you at position " + shot);
                 }
                 myTurn = !myTurn;
+            }
+            if (won) {
+                Console.typeln("\nCongratulations! You won the match!");
+            } else {
+                backend.sendMessage(Message.LostMsg());
+                Console.typeln("\nSorry, you lost. Better luck next time.");
             }
         } catch (Exception e) {
             Console.println(e);

@@ -1,5 +1,7 @@
 package cs3343.battleship.game;
 
+import java.util.Random;
+
 import cs3343.battleship.logic.ship.*;
 
 public final class Config {
@@ -10,4 +12,5 @@ public final class Config {
                 new AircraftCarrier(), new Battleship(), new Cruiser(), new Submarine(), new Destroyer()
         };
     }
+    public static Random rng = new Random(1234);
 }

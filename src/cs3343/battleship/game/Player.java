@@ -2,7 +2,6 @@ package cs3343.battleship.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import cs3343.battleship.exceptions.OverlapShipException;
 import cs3343.battleship.exceptions.PositionOutOfBoundsException;
@@ -23,11 +22,10 @@ public final class Player {
 	}
 
 	public Ship addShipRandom(Ship ship) {
-		Random rng = new Random(145);
 		while (true) {
-			Position p = Position.random(rng, board.size);
+			Position p = Position.random(Config.rng, board.size);
 			ship.setStartPosition(p);
-			Direction direction = Direction.random(rng);
+			Direction direction = Direction.random(Config.rng);
 			ship.setDirection(direction);
 			try {
 				addShip(ship);
@@ -75,9 +73,8 @@ public final class Player {
 	}
 
 	public Position getRandomShot() {
-		Random rng = new Random(145);
 		while (true) {
-			Position p = Position.random(rng, board.size);
+			Position p = Position.random(Config.rng, board.size);
 			if (hasShotEnemyAt(p))
 				continue;
 			return p;
