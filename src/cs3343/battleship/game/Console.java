@@ -9,26 +9,26 @@ import cs3343.battleship.logic.*;
 import cs3343.battleship.logic.ship.Ship;
 
 public final class Console {
-	public static String RESET = "\u001B[0m";
-	public static String BLACK = "\u001B[30m";
-	public static String RED = "\u001B[31m";
-	public static String GREEN = "\u001B[32m";
-	public static String YELLOW = "\u001B[33m";
-	public static String BLUE = "\u001B[34m";
-	public static String PURPLE = "\u001B[35m";
-	public static String CYAN = "\u001B[36m";
-	public static String WHITE = "\u001B[37m";
+    public static String RESET = "\u001B[0m";
+    public static String BLACK = "\u001B[30m";
+    public static String RED = "\u001B[31m";
+    public static String GREEN = "\u001B[32m";
+    public static String YELLOW = "\u001B[33m";
+    public static String BLUE = "\u001B[34m";
+    public static String PURPLE = "\u001B[35m";
+    public static String CYAN = "\u001B[36m";
+    public static String WHITE = "\u001B[37m";
 
-	public static String BLACK_BG = "\u001B[40m";
-	public static String RED_BG = "\u001B[41m";
-	public static String GREEN_BG = "\u001B[42m";
-	public static String YELLOW_BG = "\u001B[43m";
-	public static String BLUE_BG = "\u001B[44m";
-	public static String PURPLE_BG = "\u001B[45m";
-	public static String CYAN_BG = "\u001B[46m";
-	public static String WHITE_BG = "\u001B[47m";
+    public static String BLACK_BG = "\u001B[40m";
+    public static String RED_BG = "\u001B[41m";
+    public static String GREEN_BG = "\u001B[42m";
+    public static String YELLOW_BG = "\u001B[43m";
+    public static String BLUE_BG = "\u001B[44m";
+    public static String PURPLE_BG = "\u001B[45m";
+    public static String CYAN_BG = "\u001B[46m";
+    public static String WHITE_BG = "\u001B[47m";
 
-	private static Scanner sc = new Scanner(System.in).useDelimiter("[,\\s]+");
+    private static Scanner sc = new Scanner(System.in).useDelimiter("[,\\s]+");
 
     public void setScanner(Scanner s) {
         sc = s;
@@ -38,29 +38,29 @@ public final class Console {
         return color + str + RESET;
     }
 
-	// Print text with a typewriter effect
-	public static void typeln(String str) {
-		for (int i = 0; i < str.length(); i++) {
-			System.out.print(str.charAt(i));
-			try {
-				Thread.sleep(75);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+    // Print text with a typewriter effect
+    public static void typeln(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            System.out.print(str.charAt(i));
+            try {
+                Thread.sleep(75);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             Thread.sleep(150);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-		System.out.println();
-	}
+        System.out.println();
+    }
 
-	public static void println(Object obj) {
-		System.out.println(obj);
-	}
+    public static void println(Object obj) {
+        System.out.println(obj);
+    }
 
-	static String askName() {
+    static String askName() {
         println("What is your name?");
         prompt();
         return sc.nextLine();
@@ -130,7 +130,8 @@ public final class Console {
             prompt();
             try {
                 Pair<Direction, Position> pair = readPositionAndDirection();
-                if (pair == null) return player.addShipRandom(ship);
+                if (pair == null)
+                    return player.addShipRandom(ship);
                 ship.setDirection(pair.first);
                 ship.setStartPosition(pair.second);
                 player.addShip(ship);
@@ -147,7 +148,8 @@ public final class Console {
             prompt();
             try {
                 Position shot = readPosition();
-                if (shot == null) shot = player.getRandomShot();
+                if (shot == null)
+                    shot = player.getRandomShot();
                 player.checkShot(shot);
                 return shot;
             } catch (InvalidInputException e) {
@@ -156,7 +158,7 @@ public final class Console {
         }
     }
 
-	private static Position readPosition() throws InvalidInputException {
+    private static Position readPosition() throws InvalidInputException {
         String errorMsg = "Cannot parse Position.\nPlease enter in the format '[row],[col]', like '2,3'.";
         try {
             String line = sc.nextLine().trim();
