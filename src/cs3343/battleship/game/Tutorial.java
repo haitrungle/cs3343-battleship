@@ -107,7 +107,7 @@ public class Tutorial {
             player.shotEnemy(shot, hit);
             player.printTwoBoards();
             Console.typeln("You have " + (hit ? "hit" : "missed") + " an enemy ship!");
-        } catch (PositionShotTwiceException | PositionOutOfBoundsException e) {
+        } catch (Exception e) {
             Console.println("UNREACHABLE");
         }
 
@@ -117,7 +117,7 @@ public class Tutorial {
             enemy.shotEnemy(shot, hit);
             player.printTwoBoards();
             Console.typeln("The enemy shot at " + shot + ". They have " + (hit ? "hit" : "missed") + " your ships!");
-        } catch (PositionShotTwiceException | PositionOutOfBoundsException e) {
+        } catch (Exception e) {
             Console.println("UNREACHABLE");
         }
     }

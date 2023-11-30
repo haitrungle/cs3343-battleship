@@ -3,9 +3,7 @@ package cs3343.battleship.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import cs3343.battleship.exceptions.OverlapShipException;
-import cs3343.battleship.exceptions.PositionOutOfBoundsException;
-import cs3343.battleship.exceptions.PositionShotTwiceException;
+import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
 import cs3343.battleship.logic.Board.State;
 import cs3343.battleship.logic.ship.Ship;
@@ -16,7 +14,7 @@ public final class Player {
     private List<Ship> ships = new ArrayList<>();
     private List<Position> targets = new ArrayList<>();
 
-    public void addShip(Ship s) throws OverlapShipException, PositionOutOfBoundsException {
+    public void addShip(Ship s) throws Exception {
         board.addShip(s);
         ships.add(s);
     }
@@ -30,17 +28,17 @@ public final class Player {
             try {
                 addShip(ship);
                 return ship;
-            } catch (OverlapShipException | PositionOutOfBoundsException e) {
+            } catch (Exception e) {
                 continue;
             }
         }
     }
 
-    public boolean getShot(Position shot) throws PositionShotTwiceException {
+    public boolean getShot(Position shot) throws Exception {
         return board.addShot(shot);
     }
 
-    public void shotEnemy(Position shot, boolean hit) throws PositionShotTwiceException, PositionOutOfBoundsException {
+    public void shotEnemy(Position shot, boolean hit) throws Exception {
         if (hasShotEnemyAt(shot))
             throw new PositionShotTwiceException(shot);
         State state = hit ? State.HIT : State.MISS;

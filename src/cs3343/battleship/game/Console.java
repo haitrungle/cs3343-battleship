@@ -136,7 +136,7 @@ public final class Console {
                 ship.setStartPosition(pair.second);
                 player.addShip(ship);
                 return ship;
-            } catch (InvalidInputException e) {
+            } catch (Exception e) {
                 println(e.getMessage());
             }
         }

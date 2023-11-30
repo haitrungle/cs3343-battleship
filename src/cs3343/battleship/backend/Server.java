@@ -37,4 +37,9 @@ public class Server extends SocketBackend {
             System.out.println("Error initializing Server: " + e.getMessage());
         }
     }
+
+    public void close() throws Exception {
+        serverSocket.close();
+        socket.close();
+    }
 }

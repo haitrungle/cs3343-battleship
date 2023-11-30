@@ -2,9 +2,7 @@ package cs3343.battleship.logic;
 
 import java.util.Arrays;
 
-import cs3343.battleship.exceptions.OverlapShipException;
-import cs3343.battleship.exceptions.PositionOutOfBoundsException;
-import cs3343.battleship.exceptions.PositionShotTwiceException;
+import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.ship.Ship;
 
 public final class Board {
@@ -48,9 +46,15 @@ public final class Board {
         return table;
     }
 
-    public void addShip(Ship s) throws PositionOutOfBoundsException, OverlapShipException {
+    public void addShip(Ship s) throws PositionOutOfBoundsException, OverlapShipException, DirectionIsNotExistException, PositionIsNotExistException {
         // Change states if and only if the ship can be added successfully
         // In other words, this method is "atomic": if it throws, the board is unchanged
+        if(s.getDirection() == null){
+            throw new DirectionIsNotExistException("Direction is not exist");
+        }
+        if(s.getStartPosition() == null){
+            throw new PositionIsNotExistException("Position is not exist");
+        }
         int row = s.getStartPosition().row;
         int col = s.getStartPosition().col;
         int len = s.getLength();
@@ -79,10 +83,16 @@ public final class Board {
         }
     }
 
-    public boolean addShot(Position shot) throws PositionShotTwiceException {
+    public boolean addShot(Position shot) throws PositionShotTwiceException, ShotIsNotExist, StateIsNotExist {
+        if(shot == null){
+            throw new ShotIsNotExist("Shot is not exist.");
+        }
+
         int row = shot.row;
         int col = shot.col;
-        switch (board[row][col]) {
+
+
+        switch (this.getState(row, col)) {
             case HIT:
             case MISS:
                 throw new PositionShotTwiceException(shot);
@@ -98,12 +108,22 @@ public final class Board {
         return false;
     }
 
-    public void setState(Position position, State state) throws PositionOutOfBoundsException {
+    public void setState(Position position, State state) throws Exception {
+        if(position == null){
+            throw new PositionIsNotExistException("Position is not exist.");
+        }
+        if (state == null){
+            throw new StateIsNotExist("State is not exist.");
+        }
         int row = position.row;
         int col = position.col;
         if (row >= size || col >= size)
             throw new PositionOutOfBoundsException(row, col, size);
         board[row][col] = state;
+    }
+
+    public State getState(int row, int col){
+        return board[row][col];
     }
 
     public boolean hasAliveShip() {

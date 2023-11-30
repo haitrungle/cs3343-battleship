@@ -11,7 +11,6 @@ public class Position implements Serializable {
         this.row = row;
         this.col = col;
     }
-
     public static Position random(Random rng, int size) {
         return new Position(rng.nextInt(size), rng.nextInt(size));
     }

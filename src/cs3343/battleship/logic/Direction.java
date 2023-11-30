@@ -12,7 +12,7 @@ public enum Direction {
         String lower = s.toLowerCase();
         if (lower.equals("d") || lower.equals("down"))
             return DOWN;
-        else if (lower.equals("r") || lower.equals("r"))
+        else if (lower.equals("r") || lower.equals("right"))
             return RIGHT;
         else
             throw new InvalidInputException("Direction can only be 'd'/'down' or 'r'/'right'.");
@@ -21,4 +21,5 @@ public enum Direction {
     public static Direction random(Random rng) {
         return rng.nextBoolean() ? DOWN : RIGHT;
     }
+
 }
