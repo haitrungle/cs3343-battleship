@@ -20,7 +20,31 @@ public class test_battleship_game_console_ask_server {
 
     @Test
     public void test_console_ask_is_server() throws Exception {
-        String input = "y";
+        String input = "h\ny";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        server_start = new Thread(()->{
+            try {
+                Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
+                Console console = new Console();
+                console.setScanner(scanner);
+                server = console.askBackend();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+        server_start.start();
+
+        Backend client = new Client("localhost",1234);
+        client.sendMessage(null);
+        client.close();
+        server.close();
+
+    }
+    @Test
+    public void test_console_ask_is_server_1() throws Exception {
+        String input = "h\ny";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         server_start = new Thread(()->{
@@ -43,20 +67,6 @@ public class test_battleship_game_console_ask_server {
 
     }
 
-    @Test
-    public void test_console_ask_is_server_1() throws Exception {
-        String input = "h";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-        System.setIn(inputStream);
-
-        Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
-        Console console = new Console();
-        console.setScanner(scanner);
-        Exception e = assertThrows(Exception.class, ()-> console.askBackend());
-
-        assertEquals(Console.textColor("Invalid input: ", Console.RED)+ "Can only be yes or no. Please enter 'y'/'yes' or 'n'/'no'.", e.getMessage());
-
-    }
 
     @Test
     public void test_console_ask_is_server_2() throws Exception {
@@ -66,16 +76,12 @@ public class test_battleship_game_console_ask_server {
 
         System.setIn(inputStream);
 
-
-
         Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
         Exception e = assertThrows(Exception.class, ()-> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused: connect", e.getMessage());
-
-
 
 
     }
@@ -117,7 +123,7 @@ public class test_battleship_game_console_ask_server {
 
     @Test
     public void test_console_ask_is_server_5() throws Exception {
-        String input = "3\n";
+        String input = "3\n1";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         System.setIn(inputStream);
@@ -126,15 +132,15 @@ public class test_battleship_game_console_ask_server {
         Console console = new Console();
         console.setScanner(scanner);
 
-        Exception e = assertThrows(Exception.class, ()-> console.askGameOption());
+        int option = console.askGameOption();
 
-        assertEquals(Console.textColor("Invalid input: ", Console.RED)+"Can only be 1 or 2. Please enter 1 or 2.", e.getMessage());
+        assertEquals(1,option);
 
     }
 
     @Test
     public void test_console_ask_is_server_6() throws Exception {
-        String input = "x\n";
+        String input = "x\n1";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         System.setIn(inputStream);
@@ -143,10 +149,9 @@ public class test_battleship_game_console_ask_server {
         Console console = new Console();
         console.setScanner(scanner);
 
-        Exception e = assertThrows(Exception.class, ()-> console.askGameOption());
+        int option = console.askGameOption();
 
-        assertEquals("Cannot parse integer. Please enter 1 or 2.", e.getMessage());
-
+        assertEquals(1,option);
     }
 
     @Test

@@ -76,7 +76,7 @@ public final class Console {
         }
     }
 
-    private static boolean askIsServer() throws InvalidInputException {
+    private static boolean askIsServer() {
         println("Are you the server? [y/n]");
         while (true) {
             prompt();
@@ -84,7 +84,7 @@ public final class Console {
                 boolean option = readBoolean();
                 return option;
             } catch (InvalidInputException e) {
-                throw e;
+                println(e.getMessage());
             }
         }
     }
@@ -116,10 +116,10 @@ public final class Console {
                 else
                     throw new InvalidInputException("Can only be 1 or 2. Please enter 1 or 2.");
             } catch (InvalidInputException e) {
-                throw e;
+                println(e.getMessage());
 
             } catch (NumberFormatException e) {
-                throw new Exception("Cannot parse integer. Please enter 1 or 2.");
+                println("Cannot parse integer. Please enter 1 or 2.");
             }
         }
     }
