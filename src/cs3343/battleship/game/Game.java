@@ -21,13 +21,23 @@ public final class Game {
         Console.typeln("Welcome, " + name + "!");
 
         while (true) {
-            int option = Console.askGameOption();
+            int option = 0;
+            try {
+                option = Console.askGameOption();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             if (option == 1) {
                 Tutorial tutorial = new Tutorial();
                 tutorial.run();
             } else {
-                Match match = new Match(backend);
-                match.run();
+                try{
+                    Match match = new Match(backend);
+                    match.run();
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+
             }
         }
     }

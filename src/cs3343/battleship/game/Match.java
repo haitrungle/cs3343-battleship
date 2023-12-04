@@ -11,7 +11,7 @@ public class Match {
     private boolean myTurn;
     private boolean won;
 
-    public Match(Backend backend) {
+    public Match(Backend backend) throws Exception {
         if (backend == null) {
             backend = Console.askBackend();
             this.backend = backend;
@@ -20,7 +20,7 @@ public class Match {
         won = false;
     }
 
-    public void run() {
+    public void run() throws Exception {
         Message init = Message.InitMsg();
         backend.sendMessage(init);
         Message remoteInit = backend.waitForMessage();

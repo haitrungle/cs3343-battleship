@@ -6,16 +6,15 @@ public abstract class SocketBackend implements Backend {
     protected ObjectInputStream in;
     protected ObjectOutputStream out;
 
-    public Message waitForMessage() {
+    public Message waitForMessage() throws Exception {
         try {
             Message message = (Message) in.readObject();
             return message;
         } catch (IOException e) {
-            System.out.println("Error reading incoming message: " + e.getMessage());
+            throw new Exception("Error reading incoming message: " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            System.out.println("Error reading incoming message: " + e.getMessage());
+            throw new Exception("Error reading incoming message: " + e.getMessage());
         }
-        return null;
     }
 
     public void sendMessage(Message message) {

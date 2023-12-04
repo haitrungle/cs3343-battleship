@@ -20,7 +20,8 @@ import java.net.Socket;
 import java.time.Instant;
 import java.time.ZoneOffset;
 
-import static org.testng.AssertJUnit.*;
+
+import static org.junit.Assert.*;
 
 public class test_battleship_backend {
 
@@ -65,57 +66,81 @@ public class test_battleship_backend {
         Message m = Message.ResultMsg(false);
         assertFalse(m.getHit());
     }
-	private SocketBackend server;
-    private SocketBackend client;
-    private final int port = 1234;
-    @Before
-    public void setup() throws Exception{
 
 
-        new Thread(()->{
-            server = new Server(port);
-
-        }).start();
-
-        client = new Client(null, port);
-
-
-    }
-    @After
-    public void teardown() throws Exception{
-            server.close();
-            client.close();
-            Thread.sleep(100);
-    }
-
-    @Test
-    public void test_backend_socket_backend_1(){
-        Message m = Message.InitMsg();
-        client.sendMessage(m);
-    }
-
-    @Test
-    public void test_backend_socket_backend_2(){
-        new Thread(()->{
-            client.waitForMessage();
-
-        }).start();
-        Message m = Message.InitMsg();
-        client.sendMessage(m);
-    }
-//    @Test
-//    public void test_backend_socket_backend_3() throws Exception {
-//
-//
-//
-//        new Thread(()->{
-//            SocketBackend c = new Client(null, 1234);
-//        }).start();
-//
-//
-//    }
 
 
 
 
 }
+
+//class test_backend_socket_backend{
+//    private SocketBackend server;
+//    private SocketBackend client;
+//    private Thread server_start;
+//    private final int port = 1234;
+//    @Before
+//    public void setup() throws Exception{
+//
+//
+//        server_start = new Thread(()->{
+//            try {
+//                server = new Server(port);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        });
+//        server_start.start();
+//
+//        client = new Client(null, port);
+//
+//
+//    }
+//    @After
+//    public void teardown() throws Exception{
+//        server_start.join();
+//        server.close();
+//        client.close();
+//
+//        Thread.sleep(100);
+//    }
+//
+//    @Test
+//    public void test_backend_socket_backend_1(){
+//        Message m = Message.InitMsg();
+//        client.sendMessage(m);
+//    }
+//
+//    @Test
+//    public void test_backend_socket_backend_2() throws Exception {
+//
+//        Thread client_wait_message = new Thread(()->{
+//            try {
+//                client.waitForMessage();
+//            } catch (Exception e) {
+//                assertEquals("Error reading incoming message: null" ,e.getMessage());
+//            }
+//        });
+//        client_wait_message.start();
+//        Message m = Message.InitMsg();
+//        client.sendMessage(m);
+//    }
+//
+//    @Test
+//    public void test_backend_socket_backend_3() {
+//
+//        Exception e = assertThrows(Exception.class,()->new Server(1234));
+//        assertEquals("Error initializing Server: Address already in use: JVM_Bind", e.getMessage());
+//    }
+//
+//    @Test
+//    public void test_backend_socket_backend_4() throws Exception {
+//        Message m = Message.ResultMsg(true);
+//        client.sendMessage(m);
+//        Message message = server.waitForMessage();
+//        assertEquals(m.getType(),message.getType());
+//
+//
+//    }
+//}

@@ -15,13 +15,14 @@ public class Server extends SocketBackend {
 
     public int port;
 
-    public Server(int port) {
+    public Server(int port) throws Exception{
         this.port = port;
         try {
             ip = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-            System.out.println("Cannot determine the address of local host. You can only play with another person on the same machine.");
             ip = InetAddress.getLoopbackAddress();
+            throw  new Exception("Cannot determine the address of local host. You can only play with another person on the same machine.");
+
         }
         try {
             serverSocket = new ServerSocket(port);
@@ -34,7 +35,7 @@ public class Server extends SocketBackend {
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            System.out.println("Error initializing Server: " + e.getMessage());
+            throw  new Exception("Error initializing Server: " + e.getMessage());
         }
     }
 

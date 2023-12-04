@@ -2,13 +2,18 @@ package cs3343.battleship.test;
 
 
 import java.io.*;
+import java.lang.reflect.Method;
+import java.util.Scanner;
 
 import cs3343.battleship.game.*;
+import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.Direction;
 import cs3343.battleship.logic.Position;
 
 import cs3343.battleship.exceptions.*;
 import org.junit.Test;
+
+import static javafx.beans.binding.Bindings.when;
 import static org.testng.AssertJUnit.*;
 public class test_battleship_game {
 
@@ -28,6 +33,10 @@ public class test_battleship_game {
 
         assertEquals(5, Config.defaultFleet().length);
     }
+
+
+
+
 //	@Test
 //	public void test_Player_1() {
 //		Player p = new Player("KAI");

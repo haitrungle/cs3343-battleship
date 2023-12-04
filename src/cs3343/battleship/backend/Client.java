@@ -10,7 +10,7 @@ public class Client extends SocketBackend {
     private Socket socket;
     String host;
     int port;
-    public Client(String remoteHost, int remotePort) {
+    public Client(String remoteHost, int remotePort) throws Exception {
         this.host = remoteHost;
         this.port = remotePort;
         if (remoteHost == null) {
@@ -24,7 +24,7 @@ public class Client extends SocketBackend {
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
         } catch (Exception e) {
-            System.out.println("Error initializing Client: " + e.getMessage());
+            throw new Exception("Error initializing Client: " + e.getMessage());
         }
     }
     public void close() throws Exception {

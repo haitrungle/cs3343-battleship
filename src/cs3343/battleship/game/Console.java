@@ -28,7 +28,7 @@ public final class Console {
     public static String CYAN_BG = "\u001B[46m";
     public static String WHITE_BG = "\u001B[47m";
 
-    private static Scanner sc = new Scanner(System.in).useDelimiter("[,\\s]+");
+    public static Scanner sc = new Scanner(System.in).useDelimiter("[,\\s]+");
 
     public void setScanner(Scanner s) {
         sc = s;
@@ -60,13 +60,13 @@ public final class Console {
         System.out.println(obj);
     }
 
-    static String askName() {
+    public static String askName() {
         println("What is your name?");
         prompt();
         return sc.nextLine();
     }
 
-    static Backend askBackend() {
+    public static Backend askBackend() throws Exception {
         boolean isServer = askIsServer();
         if (isServer) {
             return new Server(Config.DEFAULT_PORT);
@@ -76,7 +76,7 @@ public final class Console {
         }
     }
 
-    private static boolean askIsServer() {
+    private static boolean askIsServer() throws InvalidInputException {
         println("Are you the server? [y/n]");
         while (true) {
             prompt();
@@ -84,7 +84,7 @@ public final class Console {
                 boolean option = readBoolean();
                 return option;
             } catch (InvalidInputException e) {
-                println(e.getMessage());
+                throw e;
             }
         }
     }
@@ -103,7 +103,7 @@ public final class Console {
         }
     }
 
-    static int askGameOption() {
+    public static int askGameOption() throws Exception{
         println("\nChoose an option:");
         println("[1] Tutorial");
         println("[2] New match");
@@ -116,14 +116,15 @@ public final class Console {
                 else
                     throw new InvalidInputException("Can only be 1 or 2. Please enter 1 or 2.");
             } catch (InvalidInputException e) {
-                println(e.getMessage());
+                throw e;
+
             } catch (NumberFormatException e) {
-                println("Cannot parse integer. Please enter 1 or 2.");
+                throw new Exception("Cannot parse integer. Please enter 1 or 2.");
             }
         }
     }
 
-    static Ship askAndAddShip(Ship ship, Player player) {
+    public static Ship askAndAddShip(Ship ship, Player player) {
         println(String.format(ship.introduce()));
         println("Enter your ship direction and start position.");
         while (true) {
@@ -142,7 +143,7 @@ public final class Console {
         }
     }
 
-    static Position askShot(Player player) {
+    public static Position askShot(Player player) {
         println("Where do you want to shoot?");
         while (true) {
             prompt();
@@ -196,8 +197,10 @@ public final class Console {
     }
 
     private static boolean readBoolean() throws InvalidInputException {
+        String input = null;
         try {
             String s = sc.nextLine().toLowerCase();
+            input = s;
             if (s.equals("y") || s.equals("yes"))
                 return true;
             else if (s.equals("n") || s.equals("no"))
@@ -205,6 +208,7 @@ public final class Console {
             else
                 throw new InvalidInputException("Can only be yes or no. Please enter 'y'/'yes' or 'n'/'no'.");
         } catch (NoSuchElementException e) {
+            System.out.println(input);
             throw new InvalidInputException("Cannot read line. Please enter 'y'/'yes' or 'n'/'no'.");
         }
     }
