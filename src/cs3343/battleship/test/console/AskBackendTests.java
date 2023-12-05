@@ -1,15 +1,12 @@
-package cs3343.battleship.test;
+package cs3343.battleship.test.console;
 
 import cs3343.battleship.backend.Backend;
 import cs3343.battleship.backend.Client;
-import cs3343.battleship.backend.Server;
-import cs3343.battleship.backend.SocketBackend;
 import cs3343.battleship.game.Console;
 
 import org.junit.After;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
 import static org.junit.Assert.*;

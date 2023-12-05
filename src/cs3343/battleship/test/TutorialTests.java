@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
-public class test_battleship_game_tutorial {
+public class TutorialTests {
     // @Test
     // public void test_battleship_game_tutorial_1(){
     // String input =

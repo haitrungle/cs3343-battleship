@@ -1,4 +1,4 @@
-package cs3343.battleship.test;
+package cs3343.battleship.test.console;
 
 import static org.junit.Assert.assertTrue;
 

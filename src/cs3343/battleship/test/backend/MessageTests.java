@@ -1,4 +1,4 @@
-package cs3343.battleship.test;
+package cs3343.battleship.test.backend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

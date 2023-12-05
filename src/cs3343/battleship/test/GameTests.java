@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import cs3343.battleship.game.Config;
 
-public class test_battleship_game {
+public class GameTests {
     @Test
     public void test_config_1() {
         Config c = new Config();

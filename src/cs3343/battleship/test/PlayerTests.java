@@ -17,7 +17,7 @@ import cs3343.battleship.logic.ship.AircraftCarrier;
 import cs3343.battleship.logic.ship.Battleship;
 import cs3343.battleship.logic.ship.Ship;
 
-public class test_battleship_game_player {
+public class PlayerTests {
     private Player p1;
 
     @Before

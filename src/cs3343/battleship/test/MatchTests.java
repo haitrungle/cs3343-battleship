@@ -8,7 +8,7 @@ import org.junit.Before;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Match;
 
-public class test_battleship_match {
+public class MatchTests {
     private Match server;
 
     private Match client;
