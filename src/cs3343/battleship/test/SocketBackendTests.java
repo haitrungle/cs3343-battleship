@@ -12,7 +12,7 @@ import cs3343.battleship.backend.Message;
 import cs3343.battleship.backend.Server;
 import cs3343.battleship.backend.SocketBackend;
 
-public class test_backend_backend_socket_backend {
+public class SocketBackendTests {
     private SocketBackend server;
     private SocketBackend client;
     private Thread server_start;
@@ -42,13 +42,13 @@ public class test_backend_backend_socket_backend {
     }
 
     @Test
-    public void test_backend_socket_backend_1() {
+    public void sendInitMsg() {
         Message m = Message.InitMsg();
         client.sendMessage(m);
     }
 
     @Test
-    public void test_backend_socket_backend_2() throws Exception {
+    public void waitMsg_thenSendInitMsg() throws Exception {
         Thread client_wait_message = new Thread(() -> {
             try {
                 client.waitForMessage();
@@ -62,13 +62,13 @@ public class test_backend_backend_socket_backend {
     }
 
     @Test
-    public void test_backend_socket_backend_3() {
+    public void newServerOnUsedPort_shouldFail() {
         Exception e = assertThrows(Exception.class, () -> new Server(1234));
         assertEquals("Error initializing Server: Address already in use: JVM_Bind", e.getMessage());
     }
 
     @Test
-    public void test_backend_socket_backend_4() throws Exception {
+    public void clientSendResultMsg_serverShouldReceiveResultMsg() throws Exception {
         Message m = Message.ResultMsg(true);
         client.sendMessage(m);
         Message message = server.waitForMessage();

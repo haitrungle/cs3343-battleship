@@ -172,7 +172,7 @@ public final class Console {
             int row = Integer.parseInt(parts[0]);
             int col = Integer.parseInt(parts[1]);
             return new Position(row, col);
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | NumberFormatException e) {
             throw new InvalidInputException(errorMsg);
         }
     }
@@ -191,7 +191,7 @@ public final class Console {
             int row = Integer.parseInt(parts[1]);
             int col = Integer.parseInt(parts[2]);
             return new Pair<Direction, Position>(dir, new Position(row, col));
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | NumberFormatException e) {
             throw new InvalidInputException(errorMsg);
         }
     }

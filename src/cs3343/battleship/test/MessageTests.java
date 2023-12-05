@@ -12,47 +12,47 @@ import org.junit.Test;
 import cs3343.battleship.backend.Message;
 import cs3343.battleship.logic.Position;
 
-public class test_battleship_backend {
+public class MessageTests {
     @Test
-    public void test_message_1() {
+    public void initMsg_shouldHaveTypeINIT() {
         Message m = Message.InitMsg();
         assertEquals(Message.Type.INIT, m.getType());
     }
 
     @Test
-    public void test_message_2() {
+    public void shotMsg_shouldHaveTypeSHOT() {
         Message m = Message.ShotMsg(new Position(1, 1));
         assertEquals(Message.Type.SHOT, m.getType());
     }
 
     @Test
-    public void test_message_3() {
+    public void resultMsg_shouldHaveTypeResult() {
         Message m = Message.ResultMsg(false);
         assertEquals(Message.Type.RESULT, m.getType());
     }
 
     @Test
-    public void test_message_4() {
+    public void lostMsg_shouldHaveTypeLost() {
         Message m = Message.LostMsg();
         assertEquals(Message.Type.LOST, m.getType());
     }
 
     @Test
-    public void test_message_5() {
+    public void shouldHaveTimestampWithinCurrentMinute() {
         Message m = Message.LostMsg();
         int cur_min = Instant.now().atZone(ZoneOffset.UTC).getMinute();
         assertEquals(cur_min, m.getTimestamp().atZone(ZoneOffset.UTC).getMinute());
     }
 
     @Test
-    public void test_message_6() {
+    public void shotMsgWithPosition_shouldHavePosition() {
         Message m = Message.ShotMsg(new Position(1, 1));
         boolean b = m.getShot().equals(new Position(1, 1));
         assertTrue(b);
     }
 
     @Test
-    public void test_message_7() {
+    public void resultMsgWithFalse_shouldHaveHitFalse() {
         Message m = Message.ResultMsg(false);
         assertFalse(m.getHit());
     }

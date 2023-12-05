@@ -14,9 +14,9 @@ import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Player;
 import cs3343.battleship.logic.Position;
 
-public class test_battleship_ask_shot {
+public class AskShotTests {
     @Test
-    public void test_battleship_ask_shot_1() throws Exception {
+    public void allPositionsExcept00AreShot_askShotRandom_shouldGive00() throws Exception {
         String input = "\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -41,7 +41,7 @@ public class test_battleship_ask_shot {
     }
 
     @Test
-    public void test_battleship_ask_shot_2() throws Exception {
+    public void askShotTwoNumbers_shouldGivePosition() throws Exception {
         String input = "0 0\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -59,7 +59,7 @@ public class test_battleship_ask_shot {
     }
 
     @Test
-    public void test_battleship_ask_shot_3() throws Exception {
+    public void askShotOneNumber_shouldAskUntilCorrectPosition() throws Exception {
         String input = "0 \n0 0";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -77,7 +77,7 @@ public class test_battleship_ask_shot {
     }
 
     @Test
-    public void test_battleship_ask_shot_4() throws Exception {
+    public void askShotLetters_shouldAskUntilCorrectPosition() throws Exception {
         String input = "a b\n0 0";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -88,8 +88,8 @@ public class test_battleship_ask_shot {
         console.setScanner(scanner);
 
         Player p1 = new Player();
+        Position p = console.askShot(p1);
 
-        Exception e = assertThrows(Exception.class, () -> console.askShot(p1));
-        assertEquals("For input string: \"a\"", e.getMessage());
+        assertTrue(p.equals(new Position(0, 0)));
     }
 }
