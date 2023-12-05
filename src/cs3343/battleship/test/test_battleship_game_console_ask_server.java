@@ -11,19 +11,16 @@ import java.util.Scanner;
 import static org.junit.Assert.*;
 
 public class test_battleship_game_console_ask_server {
-
     Backend server;
 
     private Thread server_start;
-
-
 
     @Test
     public void test_console_ask_is_server() throws Exception {
         String input = "h\ny";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        server_start = new Thread(()->{
+        server_start = new Thread(() -> {
             try {
                 Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
                 Console console = new Console();
@@ -32,22 +29,21 @@ public class test_battleship_game_console_ask_server {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
         });
         server_start.start();
 
-        Backend client = new Client("localhost",1234);
+        Backend client = new Client("localhost", 1234);
         client.sendMessage(null);
         client.close();
         server.close();
-
     }
+
     @Test
     public void test_console_ask_is_server_1() throws Exception {
         String input = "h\ny";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
-        server_start = new Thread(()->{
+        server_start = new Thread(() -> {
             try {
                 Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
                 Console console = new Console();
@@ -60,18 +56,17 @@ public class test_battleship_game_console_ask_server {
         });
         server_start.start();
 
-        Backend client = new Client("localhost",1234);
+        Backend client = new Client("localhost", 1234);
         client.sendMessage(null);
         client.close();
         server.close();
-
     }
-
 
     @Test
     public void test_console_ask_is_server_2() throws Exception {
         String input = "n\n127.0.0.1:1234\n";
-        //String expectedOutput = "Are you the server? [y/n]\n> Enter the address of server, e.g. '127.0.0.1:1234'\n> ";
+        // String expectedOutput = "Are you the server? [y/n]\n> Enter the address of
+        // server, e.g. '127.0.0.1:1234'\n> ";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         System.setIn(inputStream);
@@ -79,29 +74,26 @@ public class test_battleship_game_console_ask_server {
         Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
-        Exception e = assertThrows(Exception.class, ()-> console.askBackend());
+        Exception e = assertThrows(Exception.class, () -> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused: connect", e.getMessage());
-
-
     }
+
     @Test
     public void test_console_ask_is_server_3() throws Exception {
         String input = "n\n\n";
-        //String expectedOutput = "Are you the server? [y/n]\n> Enter the address of server, e.g. '127.0.0.1:1234'\n> ";
+        // String expectedOutput = "Are you the server? [y/n]\n> Enter the address of
+        // server, e.g. '127.0.0.1:1234'\n> ";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         System.setIn(inputStream);
 
-
-
         Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
-        Exception e = assertThrows(Exception.class, ()-> console.askBackend());
+        Exception e = assertThrows(Exception.class, () -> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused: connect", e.getMessage());
-
     }
 
     @Test
@@ -115,10 +107,9 @@ public class test_battleship_game_console_ask_server {
         Console console = new Console();
         console.setScanner(scanner);
 
-        Exception e = assertThrows(Exception.class, ()-> console.askBackend());
+        Exception e = assertThrows(Exception.class, () -> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused: connect", e.getMessage());
-
     }
 
     @Test
@@ -134,8 +125,7 @@ public class test_battleship_game_console_ask_server {
 
         int option = console.askGameOption();
 
-        assertEquals(1,option);
-
+        assertEquals(1, option);
     }
 
     @Test
@@ -151,7 +141,7 @@ public class test_battleship_game_console_ask_server {
 
         int option = console.askGameOption();
 
-        assertEquals(1,option);
+        assertEquals(1, option);
     }
 
     @Test
@@ -167,8 +157,7 @@ public class test_battleship_game_console_ask_server {
 
         int a = console.askGameOption();
 
-        assertEquals(1,a);
-
+        assertEquals(1, a);
     }
 
     @Test
@@ -184,9 +173,6 @@ public class test_battleship_game_console_ask_server {
 
         int a = console.askGameOption();
 
-        assertEquals(2,a);
-
+        assertEquals(2, a);
     }
-
-
 }

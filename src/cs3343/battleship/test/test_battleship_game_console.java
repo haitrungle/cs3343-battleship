@@ -1,19 +1,19 @@
 package cs3343.battleship.test;
 
-import cs3343.battleship.game.Console;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import static org.testng.AssertJUnit.assertEquals;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import cs3343.battleship.game.Console;
+
 public class test_battleship_game_console {
-
-
     private InputStream sysInBackup;
     private PrintStream sysOutBackup;
 
@@ -31,9 +31,6 @@ public class test_battleship_game_console {
         System.setOut(sysOutBackup);
     }
 
-
-
-
     @Test
     public void test_console_ask_name() throws Exception {
         String input = "KAI";
@@ -49,7 +46,6 @@ public class test_battleship_game_console {
 
     @Test
     public void test_console_ask_name_1() throws Exception {
-
         String input = "Henry";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
@@ -62,7 +58,4 @@ public class test_battleship_game_console {
 
         assertEquals(input, result);
     }
-
-
-
 }
