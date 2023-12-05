@@ -10,11 +10,13 @@ public class Match {
     private Backend backend;
     private boolean myTurn;
     private boolean won;
+    private Console console;
 
-    public Match(Backend backend) throws Exception {
-        if (backend == null) {
-            backend = Console.askBackend();
-            this.backend = backend;
+    public Match(Backend b, Console c) throws Exception {
+        console = c;
+        if (b == null) {
+            b = console.askBackend();
+            backend = b;
         }
         player = new Player();
         won = false;
@@ -28,21 +30,21 @@ public class Match {
         myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
 
         try {
-            Console.println(".-------------.\n" +
+            console.println(".-------------.\n" +
                             "|  NEW MATCH  |\n" +
                             "'-------------'\n");
 
-            Console.typeln("Setting ships. You will have 5 ships in total.");
-            Console.typeln("For each ship, enter direction and start position, e.g. 'd 2,3'");
+            console.typeln("Setting ships. You will have 5 ships in total.");
+            console.typeln("For each ship, enter direction and start position, e.g. 'd 2,3'");
             Ship[] fleet = Config.defaultFleet();
             for (int i = 0; i < 5; i++) {
-                player.printBoard();
-                Console.askAndAddShip(fleet[i], player);
+                console.println(player.boardToString());
+                console.askAndAddShip(fleet[i], player);
             }
 
             while (player.hasAliveShip()) {
                 if (myTurn) {
-                    Position pos = Console.askShot(player);
+                    Position pos = console.askShot(player);
 
                     Message shotMsg = Message.ShotMsg(pos);
                     backend.sendMessage(shotMsg);
@@ -52,8 +54,8 @@ public class Match {
 
                     player.shotEnemy(pos, hit);
 
-                    player.printTwoBoards();
-                    Console.typeln(hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
+                    console.println(player.twoBoardsToString());
+                    console.typeln(hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
                 } else {
                     Message msg = backend.waitForMessage();
                     if (msg.getType() == Message.Type.LOST) {
@@ -67,19 +69,19 @@ public class Match {
                     Message resultMsg = Message.ResultMsg(result);
                     backend.sendMessage(resultMsg);
 
-                    player.printTwoBoards();
-                    Console.typeln("Enemy shot you at position " + shot);
+                    console.println(player.twoBoardsToString());
+                    console.typeln("Enemy shot you at position " + shot);
                 }
                 myTurn = !myTurn;
             }
             if (won) {
-                Console.typeln("\nCongratulations! You won the match!");
+                console.typeln("\nCongratulations! You won the match!");
             } else {
                 backend.sendMessage(Message.LostMsg());
-                Console.typeln("\nSorry, you lost. Better luck next time.");
+                console.typeln("\nSorry, you lost. Better luck next time.");
             }
         } catch (Exception e) {
-            Console.println(e);
+            console.println(e);
         }
     }
 }

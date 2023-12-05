@@ -23,14 +23,12 @@ public class PlayerTests {
     @Before
     public void show_board() {
         p1 = new Player();
-        p1.printBoard();
-        p1.printTwoBoards();
+        System.out.println(p1.twoBoardsToString());
     }
 
     @After
     public void show_tow_board() {
-        p1.printBoard();
-        p1.printTwoBoards();
+        System.out.println(p1.twoBoardsToString());
     }
 
     @Test

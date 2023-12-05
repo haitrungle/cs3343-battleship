@@ -9,7 +9,6 @@ import cs3343.battleship.game.Config;
 public class GameTests {
     @Test
     public void test_config_1() {
-        Config c = new Config();
         assertEquals(10, Config.BOARD_SIZE);
     }
 

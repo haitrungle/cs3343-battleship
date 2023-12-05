@@ -28,10 +28,21 @@ public final class Console {
     public static String CYAN_BG = "\u001B[46m";
     public static String WHITE_BG = "\u001B[47m";
 
-    public static Scanner sc = new Scanner(System.in).useDelimiter("[,\\s]+");
+    private Scanner sc;
+    private Console() {
+        sc = new Scanner(System.in).useDelimiter("[,\\s]+");
+    }
+    private Console(String s) {
+        sc = new Scanner(s).useDelimiter("[,\\s]+");
+    }
+    private static Console defaultInstance = new Console();
 
-    public void setScanner(Scanner s) {
-        sc = s;
+    public static Console systemIn() {
+        return defaultInstance;
+    }
+
+    public static Console withString(String s) {
+        return new Console(s);
     }
 
     public static String textColor(String str, String color) {
@@ -39,7 +50,7 @@ public final class Console {
     }
 
     // Print text with a typewriter effect
-    public static void typeln(String str) {
+    public void typeln(String str) {
         for (int i = 0; i < str.length(); i++) {
             System.out.print(str.charAt(i));
             try {
@@ -56,17 +67,17 @@ public final class Console {
         System.out.println();
     }
 
-    public static void println(Object obj) {
+    public void println(Object obj) {
         System.out.println(obj);
     }
 
-    public static String askName() {
+    public String askName() {
         println("What is your name?");
         prompt();
         return sc.nextLine();
     }
 
-    public static Backend askBackend() throws Exception {
+    public Backend askBackend() throws Exception {
         boolean isServer = askIsServer();
         if (isServer) {
             return new Server(Config.DEFAULT_PORT);
@@ -76,7 +87,7 @@ public final class Console {
         }
     }
 
-    private static boolean askIsServer() {
+    private boolean askIsServer() {
         println("Are you the server? [y/n]");
         while (true) {
             prompt();
@@ -89,7 +100,7 @@ public final class Console {
         }
     }
 
-    private static String[] askAddress() {
+    private String[] askAddress() {
         println("Enter the address of server, e.g. '127.0.0.1:1234'");
         String s;
         while (true) {
@@ -103,7 +114,7 @@ public final class Console {
         }
     }
 
-    public static int askGameOption() throws Exception{
+    public int askGameOption() throws Exception{
         println("\nChoose an option:");
         println("[1] Tutorial");
         println("[2] New match");
@@ -124,7 +135,7 @@ public final class Console {
         }
     }
 
-    public static Ship askAndAddShip(Ship ship, Player player) {
+    public Ship askAndAddShip(Ship ship, Player player) {
         println(String.format(ship.introduce()));
         println("Enter your ship direction and start position.");
         while (true) {
@@ -143,7 +154,7 @@ public final class Console {
         }
     }
 
-    public static Position askShot(Player player) {
+    public Position askShot(Player player) {
         println("Where do you want to shoot?");
         while (true) {
             prompt();
@@ -159,7 +170,7 @@ public final class Console {
         }
     }
 
-    private static Position readPosition() throws InvalidInputException {
+    private Position readPosition() throws InvalidInputException {
         String errorMsg = "Cannot parse Position.\nPlease enter in the format '[row],[col]', like '2,3'.";
         try {
             String line = sc.nextLine().trim();
@@ -177,7 +188,7 @@ public final class Console {
         }
     }
 
-    private static Pair<Direction, Position> readPositionAndDirection() throws InvalidInputException {
+    private Pair<Direction, Position> readPositionAndDirection() throws InvalidInputException {
         String errorMsg = "Cannot parse Direction and Position.\nPlease enter in the format '[d/r] [row],[col]', like 'd 2,3'.";
         try {
             String line = sc.nextLine().trim();
@@ -196,7 +207,7 @@ public final class Console {
         }
     }
 
-    private static boolean readBoolean() throws InvalidInputException {
+    private boolean readBoolean() throws InvalidInputException {
         String input = null;
         try {
             String s = sc.nextLine().toLowerCase();

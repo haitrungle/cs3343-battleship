@@ -12,9 +12,7 @@ public class AskGameOptionTests {
     @Test
     public void numberNot1Or2_shouldAskUntilCorrect() throws Exception {
         String input = "3\n1";
-        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
-        Console console = new Console();
-        console.setScanner(scanner);
+        Console console = Console.withString(input);
 
         int option = console.askGameOption();
 
@@ -24,9 +22,7 @@ public class AskGameOptionTests {
     @Test
     public void notNumber_shouldAskUntilCorrect() throws Exception {
         String input = "x\n1";
-        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
-        Console console = new Console();
-        console.setScanner(scanner);
+        Console console = Console.withString(input);
 
         int option = console.askGameOption();
 
@@ -36,9 +32,7 @@ public class AskGameOptionTests {
     @Test
     public void number1_shouldGive1() throws Exception {
         String input = "1\n";
-        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
-        Console console = new Console();
-        console.setScanner(scanner);
+        Console console = Console.withString(input);
 
         int a = console.askGameOption();
 
@@ -48,9 +42,7 @@ public class AskGameOptionTests {
     @Test
     public void number2_shouldGive2() throws Exception {
         String input = "2\n";
-        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
-        Console console = new Console();
-        console.setScanner(scanner);
+        Console console = Console.withString(input);
 
         int a = console.askGameOption();
 

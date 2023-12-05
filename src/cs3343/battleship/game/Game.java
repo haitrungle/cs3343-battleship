@@ -4,6 +4,7 @@ import cs3343.battleship.backend.Backend;
 
 public final class Game {
     private static Game _game = new Game();
+    private Game() {}
 
     public static Game create() {
         return _game;
@@ -11,28 +12,27 @@ public final class Game {
 
     private String name;
     private Backend backend;
-
-    private Game() {}
+    private Console console = Console.systemIn();
 
     public void run() {
-        Console.println(banner);
+        console.println(banner);
 
-        name = Console.askName();
-        Console.typeln("Welcome, " + name + "!");
+        name = console.askName();
+        console.typeln("Welcome, " + name + "!");
 
         while (true) {
             int option = 0;
             try {
-                option = Console.askGameOption();
+                option = console.askGameOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
             if (option == 1) {
-                Tutorial tutorial = new Tutorial();
+                Tutorial tutorial = new Tutorial(console);
                 tutorial.run();
             } else {
                 try{
-                    Match match = new Match(backend);
+                    Match match = new Match(backend, console);
                     match.run();
                 }catch (Exception e){
                     System.out.println(e.getMessage());

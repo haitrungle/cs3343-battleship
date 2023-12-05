@@ -79,7 +79,7 @@ public final class Player {
         }
     }
 
-    public void printBoard() {
+    public String boardToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("\n   ");
         for (int i = 0; i < board.size; i++)
@@ -102,10 +102,10 @@ public final class Player {
             }
             builder.append("\n");
         }
-        Console.println(builder.toString());
+        return builder.toString();
     }
 
-    public void printTwoBoards() {
+    public String twoBoardsToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("\n   ");
 
@@ -156,6 +156,6 @@ public final class Player {
         }
         builder.append("                                   |                                   \n");
         builder.append("           YOUR BOARD              |               ENEMY BOARD         \n\n");
-        Console.println(builder.toString());
+        return builder.toString();
     }
 }

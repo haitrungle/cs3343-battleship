@@ -13,11 +13,9 @@ public class AskNameTests {
     @ParameterizedTest
     @ValueSource(strings = { "Kai12", "Henry32", "Hei63", "Hai85", "Kusuma17", "Le23", "aer129" })
     public void askNameKai_shouldGiveKai(String input) throws Exception {
-        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
-        Console console = new Console();
-        console.setScanner(scanner);
+        Console console = Console.withString(input);
 
-        String result = Console.askName();
+        String result = console.askName();
         assertEquals(input, result);
     }
 }
