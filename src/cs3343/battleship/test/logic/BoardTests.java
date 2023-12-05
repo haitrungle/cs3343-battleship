@@ -207,8 +207,8 @@ public class BoardTests {
     }
 
     @Test
-    public void test_board_has_alive_ship_2() throws OverlapShipException, DirectionIsNotExistException,
-            PositionOutOfBoundsException, PositionIsNotExistException {
+    public void test_board_has_alive_ship_2() throws OverlapShipException,
+            PositionOutOfBoundsException, NullObjectException {
         Board test = new Board(5);
         Ship s = new Submarine(Direction.DOWN, new Position(1, 1));
         test.addShip(s);

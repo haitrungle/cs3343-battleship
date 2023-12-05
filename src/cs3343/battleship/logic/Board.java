@@ -46,14 +46,15 @@ public final class Board {
         return table;
     }
 
-    public void addShip(Ship s) throws PositionOutOfBoundsException, OverlapShipException, DirectionIsNotExistException, PositionIsNotExistException {
+    public void addShip(Ship s)
+            throws PositionOutOfBoundsException, OverlapShipException, NullObjectException {
         // Change states if and only if the ship can be added successfully
         // In other words, this method is "atomic": if it throws, the board is unchanged
-        if(s.getDirection() == null){
-            throw new DirectionIsNotExistException("Direction is not exist");
+        if (s.getDirection() == null) {
+            throw new NullObjectException(Ship.class);
         }
-        if(s.getStartPosition() == null){
-            throw new PositionIsNotExistException("Position is not exist");
+        if (s.getStartPosition() == null) {
+            throw new NullObjectException(Position.class);
         }
         int row = s.getStartPosition().row;
         int col = s.getStartPosition().col;
@@ -83,14 +84,13 @@ public final class Board {
         }
     }
 
-    public boolean addShot(Position shot) throws PositionShotTwiceException, ShotIsNotExist, StateIsNotExist {
-        if(shot == null){
-            throw new ShotIsNotExist("Shot is not exist.");
+    public boolean addShot(Position shot) throws PositionShotTwiceException, NullObjectException {
+        if (shot == null) {
+            throw new NullObjectException(Position.class);
         }
 
         int row = shot.row;
         int col = shot.col;
-
 
         switch (this.getState(row, col)) {
             case HIT:
@@ -109,11 +109,11 @@ public final class Board {
     }
 
     public void setState(Position position, State state) throws Exception {
-        if(position == null){
-            throw new PositionIsNotExistException("Position is not exist.");
+        if (position == null) {
+            throw new NullObjectException(Position.class);
         }
-        if (state == null){
-            throw new StateIsNotExist("State is not exist.");
+        if (state == null) {
+            throw new NullObjectException(State.class);
         }
         int row = position.row;
         int col = position.col;
@@ -122,7 +122,7 @@ public final class Board {
         board[row][col] = state;
     }
 
-    public State getState(int row, int col){
+    public State getState(int row, int col) {
         return board[row][col];
     }
 
