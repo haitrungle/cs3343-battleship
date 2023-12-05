@@ -1,4 +1,4 @@
-package cs3343.battleship.test;
+package cs3343.battleship.test.game;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +13,6 @@ import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Player;
 import cs3343.battleship.logic.Direction;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.ship.AircraftCarrier;
 import cs3343.battleship.logic.ship.Battleship;
 import cs3343.battleship.logic.ship.Ship;
 
@@ -21,18 +20,18 @@ public class PlayerTests {
     private Player p1;
 
     @Before
-    public void show_board() {
+    public void showBoard() {
         p1 = new Player();
-        System.out.println(p1.twoBoardsToString());
+        System.out.println(p1.boardToString());
     }
 
     @After
-    public void show_tow_board() {
+    public void showTwoBoards() {
         System.out.println(p1.twoBoardsToString());
     }
 
     @Test
-    public void test_battleship_game_player_1() throws Exception {
+    public void addShipDown_shouldHaveCorrectPositions() throws Exception {
         Ship s = new Battleship(Direction.DOWN, new Position(0, 0));
         p1.addShip(s);
         List<Position> positions = s.positions();
@@ -42,7 +41,17 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_2() throws Exception {
+    public void addShipRight_shouldHaveCorrectPositions() throws Exception {
+        Ship s = new Battleship(Direction.RIGHT, new Position(0, 0));
+        p1.addShip(s);
+        List<Position> positions = s.positions();
+        for (int i = 0; i < positions.size(); i++) {
+            assertTrue(positions.get(i).equals(new Position(0, 0 + i)));
+        }
+    }
+
+    @Test
+    public void addShipRandom_shouldHaveCorrectPositions() throws Exception {
         Ship s = new Battleship();
         p1.addShipRandom(s);
         List<Position> positions = s.positions();
@@ -56,7 +65,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_3() throws Exception {
+    public void getShotAtShipPositions_shouldBeTrue() throws Exception {
         Ship s = new Battleship();
         p1.addShipRandom(s);
         List<Position> positions = s.positions();
@@ -67,7 +76,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_4() throws Exception {
+    public void getShotAtEmptyBoard_shouldBeFalse() throws Exception {
         for (int i = 0; i < Config.BOARD_SIZE; i++) {
             for (int j = 0; j < Config.BOARD_SIZE; j++) {
                 assertFalse(p1.getShot(new Position(i, j)));
@@ -76,16 +85,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_5() throws Exception {
-        for (int i = 0; i < Config.BOARD_SIZE; i++) {
-            for (int j = 0; j < Config.BOARD_SIZE; j++) {
-                assertFalse(p1.getShot(new Position(i, j)));
-            }
-        }
-    }
-
-    @Test
-    public void test_battleship_game_player_6() throws Exception {
+    public void shotEnemyTwice_shouldThrow() throws Exception {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.shotEnemy(new Position(0, 0), false));
@@ -94,7 +94,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_7() throws Exception {
+    public void checkShotAtShotPositionsShouldThrow() throws Exception {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.checkShot(new Position(0, 0)));
@@ -103,7 +103,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_8() throws Exception {
+    public void negativeNumberForPosition_shouldThrow() throws Exception {
         Position p = new Position(-1, 0);
         Exception e = assertThrows(Exception.class, () -> p1.checkShot(p));
         assertEquals(
@@ -113,7 +113,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_9() throws Exception {
+    public void afterAddShip_shouldHaveAliveShip() throws Exception {
         Ship s = new Battleship();
         p1.addShipRandom(s);
 
@@ -121,12 +121,12 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_10() throws Exception {
+    public void default_shouldHaveNoShip() throws Exception {
         assertFalse(p1.hasAliveShip());
     }
 
     @Test
-    public void test_battleship_game_player_11() throws Exception {
+    public void shipWithNoOverlap() throws Exception {
         Ship s = new Battleship(Direction.DOWN, new Position(0, 0));
         p1.addShip(s);
         Ship s1 = new Battleship(Direction.DOWN, new Position(0, 1));
@@ -135,7 +135,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_12() throws Exception {
+    public void shipWithOverlap() throws Exception {
         Ship s = new Battleship(Direction.DOWN, new Position(0, 0));
         p1.addShip(s);
         Ship s1 = new Battleship(Direction.DOWN, new Position(0, 0));
@@ -144,13 +144,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_13() throws Exception {
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < Config.BOARD_SIZE; j++) {
-                Ship s = new AircraftCarrier(Direction.RIGHT, new Position(0 + j, 0 + (i * 5)));
-                p1.addShip(s);
-            }
-        }
+    public void shouldRememberLocationShot() throws Exception {
         Position p = p1.getRandomShot();
         p1.shotEnemy(p, true);
         boolean b = p1.hasShotEnemyAt(p);
@@ -158,7 +152,7 @@ public class PlayerTests {
     }
 
     @Test
-    public void test_battleship_game_player_14() throws Exception {
+    public void shouldRememberLocationNotShot() throws Exception {
         Position p = p1.getRandomShot();
         boolean b = p1.hasShotEnemyAt(p);
         assertFalse(b);

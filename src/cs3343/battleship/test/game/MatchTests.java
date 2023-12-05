@@ -1,4 +1,4 @@
-package cs3343.battleship.test;
+package cs3343.battleship.test.game;
 
 import org.junit.Before;
 
@@ -15,7 +15,7 @@ public class MatchTests {
     public void setup() throws Exception {
         server_start = new Thread(() -> {
             try {
-                String input = "y" + "\n".repeat(871);
+                String input = "y" + "\n".repeat(200);
                 Console console = Console.withString(input);
 
                 server = new Match(null, console);
@@ -26,7 +26,7 @@ public class MatchTests {
         });
         server_start.start();
 
-        String input = "n" + "\n".repeat(871);
+        String input = "n" + "\n".repeat(200);
         Console console = Console.withString(input);
         client = new Match(null, console);
     }

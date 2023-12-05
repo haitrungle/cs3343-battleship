@@ -1,8 +1,6 @@
-package cs3343.battleship.test.console;
+package cs3343.battleship.test.game.console;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.Scanner;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

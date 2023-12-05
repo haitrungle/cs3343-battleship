@@ -1,4 +1,4 @@
-package cs3343.battleship.test.console;
+package cs3343.battleship.test.game.console;
 
 import cs3343.battleship.backend.Backend;
 import cs3343.battleship.backend.Client;
@@ -6,8 +6,6 @@ import cs3343.battleship.game.Console;
 
 import org.junit.After;
 import org.junit.Test;
-
-import java.util.Scanner;
 
 import static org.junit.Assert.*;
 

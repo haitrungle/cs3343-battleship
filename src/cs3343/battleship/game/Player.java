@@ -21,9 +21,9 @@ public final class Player {
 
     public Ship addShipRandom(Ship ship) {
         while (true) {
-            Position p = Position.random(Config.rng, board.size);
+            Position p = Position.random(Config.rng(), board.size);
             ship.setStartPosition(p);
-            Direction direction = Direction.random(Config.rng);
+            Direction direction = Direction.random(Config.rng());
             ship.setDirection(direction);
             try {
                 addShip(ship);
@@ -72,7 +72,7 @@ public final class Player {
 
     public Position getRandomShot() {
         while (true) {
-            Position p = Position.random(Config.rng, board.size);
+            Position p = Position.random(Config.rng(), board.size);
             if (hasShotEnemyAt(p))
                 continue;
             return p;
