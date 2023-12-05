@@ -1,10 +1,7 @@
 package cs3343.battleship.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
 import org.junit.Test;
@@ -18,11 +15,7 @@ public class AskShotTests {
     @Test
     public void allPositionsExcept00AreShot_askShotRandom_shouldGive00() throws Exception {
         String input = "\n";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-
-        System.setIn(inputStream);
-
-        Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
+        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
 
@@ -43,11 +36,7 @@ public class AskShotTests {
     @Test
     public void askShotTwoNumbers_shouldGivePosition() throws Exception {
         String input = "0 0\n";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-
-        System.setIn(inputStream);
-
-        Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
+        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
 
@@ -61,11 +50,7 @@ public class AskShotTests {
     @Test
     public void askShotOneNumber_shouldAskUntilCorrectPosition() throws Exception {
         String input = "0 \n0 0";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-
-        System.setIn(inputStream);
-
-        Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
+        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
 
@@ -79,11 +64,7 @@ public class AskShotTests {
     @Test
     public void askShotLetters_shouldAskUntilCorrectPosition() throws Exception {
         String input = "a b\n0 0";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-
-        System.setIn(inputStream);
-
-        Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
+        Scanner scanner = new Scanner(input).useDelimiter("[,\\s]+");
         Console console = new Console();
         console.setScanner(scanner);
 

@@ -15,26 +15,27 @@ import cs3343.battleship.backend.SocketBackend;
 public class SocketBackendTests {
     private SocketBackend server;
     private SocketBackend client;
-    private Thread server_start;
+    private Thread serverThread;
     private final int port = 1234;
 
     @Before
     public void setup() throws Exception {
-        server_start = new Thread(() -> {
+        serverThread = new Thread(() -> {
             try {
                 server = new Server(port);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        server_start.start();
+        serverThread.start();
 
+        Thread.sleep(200);
         client = new Client(null, port);
     }
 
     @After
     public void teardown() throws Exception {
-        server_start.join();
+        serverThread.join();
         server.close();
         client.close();
 
@@ -63,8 +64,8 @@ public class SocketBackendTests {
 
     @Test
     public void newServerOnUsedPort_shouldFail() {
-        Exception e = assertThrows(Exception.class, () -> new Server(1234));
-        assertEquals("Error initializing Server: Address already in use: JVM_Bind", e.getMessage());
+        Exception e = assertThrows(Exception.class, () -> new Server(port));
+        assertEquals("Error initializing Server: Address already in use", e.getMessage());
     }
 
     @Test

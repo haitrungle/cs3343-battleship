@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
-public class test_battleship_game_console_ask_and_add_ship {
+public class AskAndAddShipTests {
     @Test
-    public void test_battleship_game_console_ask_and_add_ship_1() throws Exception {
+    public void askAndAddShipRandom_shouldMutateShip() throws Exception {
         String input = "\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -33,7 +33,7 @@ public class test_battleship_game_console_ask_and_add_ship {
     }
 
     @Test
-    public void test_battleship_game_console_ask_and_add_ship_2() throws Exception {
+    public void askAndAddShipD00_shouldGiveCorrectPositions() throws Exception {
         String input = "d 0 0\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -53,7 +53,7 @@ public class test_battleship_game_console_ask_and_add_ship {
     }
 
     @Test
-    public void test_battleship_game_console_ask_and_add_ship_3() throws Exception {
+    public void askAndAddShipExtraNumber_shouldGiveCorrectPositions() throws Exception {
         String input = "d 0 0 1\nd 0 0";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
@@ -74,7 +74,7 @@ public class test_battleship_game_console_ask_and_add_ship {
     }
 
     @Test
-    public void test_battleship_game_console_ask_and_add_ship_4() throws Exception {
+    public void askAndAddShipMissingNumber_shouldGiveCorrectPositions() throws Exception {
         String input = "d 0\nd 0 0";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
