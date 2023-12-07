@@ -2,6 +2,7 @@ package cs3343.battleship.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
@@ -20,10 +21,11 @@ public final class Player {
     }
 
     public Ship addShipRandom(Ship ship) {
+        Random rng = Config.rng();
         while (true) {
-            Position p = Position.random(Config.rng(), board.size);
+            Position p = Position.random(rng, board.size);
             ship.setStartPosition(p);
-            Direction direction = Direction.random(Config.rng());
+            Direction direction = Direction.random(rng);
             ship.setDirection(direction);
             try {
                 addShip(ship);
@@ -71,8 +73,9 @@ public final class Player {
     }
 
     public Position getRandomShot() {
+        Random rng = Config.rng();
         while (true) {
-            Position p = Position.random(Config.rng(), board.size);
+            Position p = Position.random(rng, board.size);
             if (hasShotEnemyAt(p))
                 continue;
             return p;
@@ -86,18 +89,18 @@ public final class Player {
             builder.append(i + "  ");
         builder.append("\n");
         for (int i = 0; i < board.size; i++) {
-            builder.append(Console.WHITE + i + "  " + Console.RESET);
+            builder.append(Console.colorize(i + "  ", Console.Color.WHITE));
 
             for (int j = 0; j < board.size; j++) {
                 State cell = board.board[i][j];
                 if (cell == State.WATER)
-                    builder.append(Console.BLUE + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.BLUE));
                 else if (cell == State.HIT)
-                    builder.append(Console.RED + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.RED));
                 else if (cell == State.MISS)
-                    builder.append(Console.WHITE + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.WHITE));
                 else
-                    builder.append(Console.YELLOW + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.YELLOW));
                 builder.append("  ");
             }
             builder.append("\n");
@@ -120,35 +123,35 @@ public final class Player {
         builder.append("\n");
 
         for (int i = 0; i < board.size; i++) {
-            builder.append(Console.WHITE + i + Console.RESET + "  ");
+            builder.append(Console.colorize(i + "  ", Console.Color.WHITE));
 
             for (int j = 0; j < board.size; j++) {
                 State cell = board.board[i][j];
                 if (cell == State.WATER)
-                    builder.append(Console.BLUE + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.BLUE));
                 else if (cell == State.HIT)
-                    builder.append(Console.RED + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.RED));
                 else if (cell == State.MISS)
-                    builder.append(Console.WHITE + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.WHITE));
                 else
-                    builder.append(Console.YELLOW + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.YELLOW));
                 builder.append("  ");
             }
 
             builder.append("  |    ");
 
-            builder.append(Console.WHITE + i + Console.RESET + "  ");
+            builder.append(Console.colorize(i + "  ", Console.Color.WHITE));
 
             for (int j = 0; j < enemyBoard.size; j++) {
                 State cell = enemyBoard.board[i][j];
                 if (cell == State.WATER)
-                    builder.append(Console.BLUE + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.BLUE));
                 else if (cell == State.HIT)
-                    builder.append(Console.RED + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.RED));
                 else if (cell == State.MISS)
-                    builder.append(Console.WHITE + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.WHITE));
                 else
-                    builder.append(Console.YELLOW + cell + Console.RESET);
+                    builder.append(Console.colorize(cell, Console.Color.YELLOW));
                 builder.append("  ");
             }
 

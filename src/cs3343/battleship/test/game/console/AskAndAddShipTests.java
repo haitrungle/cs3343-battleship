@@ -15,7 +15,7 @@ public class AskAndAddShipTests {
     @Test
     public void askAndAddShipRandom_shouldMutateShip() throws Exception {
         String input = "\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Ship ship = new Battleship();
         Player p1 = new Player();
@@ -27,7 +27,7 @@ public class AskAndAddShipTests {
     @Test
     public void askAndAddShipD00_shouldGiveCorrectPositions() throws Exception {
         String input = "d 0 0\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Ship ship = new Battleship();
         Player p1 = new Player();
@@ -41,7 +41,7 @@ public class AskAndAddShipTests {
     @Test
     public void askAndAddShipExtraNumber_shouldGiveCorrectPositions() throws Exception {
         String input = "d 0 0 1\nd 0 0";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Ship ship = new Battleship();
         Player p1 = new Player();
@@ -56,7 +56,7 @@ public class AskAndAddShipTests {
     @Test
     public void askAndAddShipMissingNumber_shouldGiveCorrectPositions() throws Exception {
         String input = "d 0\nd 0 0";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Ship ship = new Battleship();
         Player p1 = new Player();

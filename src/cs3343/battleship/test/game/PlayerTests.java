@@ -89,7 +89,7 @@ public class PlayerTests {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.shotEnemy(new Position(0, 0), false));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "You have already shot at " + p
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "You have already shot at " + p
                 + ". Please select another position.", e.getMessage());
     }
 
@@ -98,7 +98,7 @@ public class PlayerTests {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.checkShot(new Position(0, 0)));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "You have already shot at " + p
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "You have already shot at " + p
                 + ". Please select another position.", e.getMessage());
     }
 
@@ -107,7 +107,7 @@ public class PlayerTests {
         Position p = new Position(-1, 0);
         Exception e = assertThrows(Exception.class, () -> p1.checkShot(p));
         assertEquals(
-                Console.textColor("Invalid input: ", Console.RED) + "Position (" + "-1" + "," + 0
+                Console.colorize("Invalid input: ", Console.Color.RED) + "Position (" + "-1" + "," + 0
                         + ") is out of bounds. Row and column must be between 0 and " + (Config.BOARD_SIZE - 1) + ".",
                 e.getMessage());
     }

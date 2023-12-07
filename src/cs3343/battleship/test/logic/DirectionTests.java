@@ -51,7 +51,7 @@ public class DirectionTests {
     public void test_direction_exception_1() throws Exception {
         Throwable exc = assertThrows(InvalidInputException.class, () -> Direction.decode("other"));
         assertEquals(
-                Console.textColor("Invalid input: ", Console.RED) + "Direction can only be 'd'/'down' or 'r'/'right'.",
+                Console.colorize("Invalid input: ", Console.Color.RED) + "Direction can only be 'd'/'down' or 'r'/'right'.",
                 exc.getMessage());
     }
 

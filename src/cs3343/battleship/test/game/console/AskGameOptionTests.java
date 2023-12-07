@@ -10,7 +10,7 @@ public class AskGameOptionTests {
     @Test
     public void numberNot1Or2_shouldAskUntilCorrect() throws Exception {
         String input = "3\n1";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         int option = console.askGameOption();
 
@@ -20,7 +20,7 @@ public class AskGameOptionTests {
     @Test
     public void notNumber_shouldAskUntilCorrect() throws Exception {
         String input = "x\n1";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         int option = console.askGameOption();
 
@@ -30,7 +30,7 @@ public class AskGameOptionTests {
     @Test
     public void number1_shouldGive1() throws Exception {
         String input = "1\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         int a = console.askGameOption();
 
@@ -40,7 +40,7 @@ public class AskGameOptionTests {
     @Test
     public void number2_shouldGive2() throws Exception {
         String input = "2\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         int a = console.askGameOption();
 

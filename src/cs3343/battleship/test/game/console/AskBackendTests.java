@@ -28,7 +28,7 @@ public class AskBackendTests {
         String input = "h\ny";
         serverThread = new Thread(() -> {
             try {
-                Console console = Console.withString(input);
+                Console console = Console.make().withIn(input);
                 server[0] = console.askBackend();
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -44,7 +44,7 @@ public class AskBackendTests {
     @Test
     public void noServer_clientConnectGivenAddress_shouldThrow() throws Exception {
         String input = "n\n127.0.0.1:1234\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
         Exception e = assertThrows(Exception.class, () -> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused", e.getMessage());
@@ -53,7 +53,7 @@ public class AskBackendTests {
     @Test
     public void noServer_clientConnectDefaultAddress_shouldThrow() throws Exception {
         String input = "n\n\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
         Exception e = assertThrows(Exception.class, () -> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused", e.getMessage());
@@ -62,7 +62,7 @@ public class AskBackendTests {
     @Test
     public void noServer_clientConnectNumber_shouldThrow() throws Exception {
         String input = "n\n123412\n\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
         Exception e = assertThrows(Exception.class, () -> console.askBackend());
 
         assertEquals("Error initializing Client: Connection refused", e.getMessage());

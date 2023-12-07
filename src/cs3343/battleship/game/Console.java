@@ -1,5 +1,8 @@
 package cs3343.battleship.game;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -9,52 +12,72 @@ import cs3343.battleship.logic.*;
 import cs3343.battleship.logic.ship.Ship;
 
 public final class Console {
-    public static String RESET = "\u001B[0m";
-    public static String BLACK = "\u001B[30m";
-    public static String RED = "\u001B[31m";
-    public static String GREEN = "\u001B[32m";
-    public static String YELLOW = "\u001B[33m";
-    public static String BLUE = "\u001B[34m";
-    public static String PURPLE = "\u001B[35m";
-    public static String CYAN = "\u001B[36m";
-    public static String WHITE = "\u001B[37m";
-
-    public static String BLACK_BG = "\u001B[40m";
-    public static String RED_BG = "\u001B[41m";
-    public static String GREEN_BG = "\u001B[42m";
-    public static String YELLOW_BG = "\u001B[43m";
-    public static String BLUE_BG = "\u001B[44m";
-    public static String PURPLE_BG = "\u001B[45m";
-    public static String CYAN_BG = "\u001B[46m";
-    public static String WHITE_BG = "\u001B[47m";
-
-    private Scanner sc;
-    private Console() {
-        sc = new Scanner(System.in).useDelimiter("[,\\s]+");
+    public static enum Color {
+        RESET("\u001B[0m"),
+        BLACK("\u001B[30m"),
+        RED("\u001B[31m"),
+        GREEN("\u001B[32m"),
+        YELLOW("\u001B[33m"),
+        BLUE("\u001B[34m"),
+        PURPLE("\u001B[35m"),
+        CYAN("\u001B[36m"),
+        WHITE("\u001B[37m");
+    
+        private String value;
+    
+        Color(String value) {
+            this.value = value;
+        }
+    
+        public String getValue() {
+            return value;
+        }
     }
-    private Console(String s) {
-        sc = new Scanner(s).useDelimiter("[,\\s]+");
-    }
-    private static Console defaultInstance = new Console();
 
-    public static Console systemIn() {
+    private Scanner in;
+    private PrintStream out;
+
+    private Console() {}
+
+    private static final Console defaultInstance = new Console();
+
+    static {
+        defaultInstance.in = new Scanner(System.in).useDelimiter("[,\\s]+");
+        defaultInstance.out = System.out;
+    }
+
+    public static Console system() {
         return defaultInstance;
     }
 
-    public static Console withString(String s) {
-        return new Console(s);
+    public static Console make() {
+        return new Console();
     }
 
-    public static String textColor(String str, String color) {
-        return color + str + RESET;
+    public Console withIn(String s) {
+        in = new Scanner(s).useDelimiter("[,\\s]+");
+        return this;
+    }
+
+    public Console withOut(ByteArrayOutputStream out) {
+        this.out = new PrintStream(out);
+        return this;
+    }
+
+    public static String colorize(Object obj, Color color) {
+        return color.getValue() + obj.toString() + Color.RESET.getValue();
     }
 
     // Print text with a typewriter effect
     public void typeln(String str) {
+        if (!Config.TYPEWRITER_EFFECT) {
+            out.println(str);
+            return;
+        }
         for (int i = 0; i < str.length(); i++) {
-            System.out.print(str.charAt(i));
+            out.print(str.charAt(i));
             try {
-                Thread.sleep(75);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -64,17 +87,17 @@ public final class Console {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println();
+        out.println();
     }
 
     public void println(Object obj) {
-        System.out.println(obj);
+        out.println(obj);
     }
 
     public String askName() {
         println("What is your name?");
         prompt();
-        return sc.nextLine();
+        return in.nextLine();
     }
 
     public Backend askBackend() throws Exception {
@@ -105,7 +128,7 @@ public final class Console {
         String s;
         while (true) {
             prompt();
-            s = sc.nextLine();
+            s = in.nextLine();
             if (s.equals(""))
                 return new String[] { "localhost", "1234" };
             if (s.contains(":"))
@@ -114,14 +137,14 @@ public final class Console {
         }
     }
 
-    public int askGameOption() throws Exception{
+    public int askGameOption() throws Exception {
         println("\nChoose an option:");
         println("[1] Tutorial");
         println("[2] New match");
         while (true) {
             prompt();
             try {
-                int option = Integer.parseInt(sc.nextLine());
+                int option = Integer.parseInt(in.nextLine());
                 if (option == 1 || option == 2)
                     return option;
                 else
@@ -173,7 +196,7 @@ public final class Console {
     private Position readPosition() throws InvalidInputException {
         String errorMsg = "Cannot parse Position.\nPlease enter in the format '[row],[col]', like '2,3'.";
         try {
-            String line = sc.nextLine().trim();
+            String line = in.nextLine().trim();
             // random position
             if (line.equals(""))
                 return null;
@@ -191,7 +214,7 @@ public final class Console {
     private Pair<Direction, Position> readPositionAndDirection() throws InvalidInputException {
         String errorMsg = "Cannot parse Direction and Position.\nPlease enter in the format '[d/r] [row],[col]', like 'd 2,3'.";
         try {
-            String line = sc.nextLine().trim();
+            String line = in.nextLine().trim();
             // random ship
             if (line.equals(""))
                 return null;
@@ -208,10 +231,8 @@ public final class Console {
     }
 
     private boolean readBoolean() throws InvalidInputException {
-        String input = null;
         try {
-            String s = sc.nextLine().toLowerCase();
-            input = s;
+            String s = in.nextLine().toLowerCase();
             if (s.equals("y") || s.equals("yes"))
                 return true;
             else if (s.equals("n") || s.equals("no"))
@@ -219,13 +240,12 @@ public final class Console {
             else
                 throw new InvalidInputException("Can only be yes or no. Please enter 'y'/'yes' or 'n'/'no'.");
         } catch (NoSuchElementException e) {
-            System.out.println(input);
             throw new InvalidInputException("Cannot read line. Please enter 'y'/'yes' or 'n'/'no'.");
         }
     }
 
-    private static void prompt() {
-        System.out.print("> ");
+    private void prompt() {
+        out.print("> ");
     }
 }
 

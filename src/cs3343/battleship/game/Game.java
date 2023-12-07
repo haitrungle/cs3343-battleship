@@ -12,7 +12,7 @@ public final class Game {
 
     private String name;
     private Backend backend;
-    private Console console = Console.systemIn();
+    private Console console = Console.system();
 
     public void run() {
         console.println(banner);

@@ -1,39 +1,44 @@
 package cs3343.battleship.test.game;
 
+import java.io.ByteArrayOutputStream;
+
 import org.junit.Before;
 
+import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Match;
 
 public class MatchTests {
     private Match server;
-
     private Match client;
-    private Thread server_start;
+
+    private final ByteArrayOutputStream serverOutput = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream clientOutput = new ByteArrayOutputStream();
+
+    @Before
+    public void setUpStreams() {
+        Config.TYPEWRITER_EFFECT = false;
+    }
 
     @Before
     public void setup() throws Exception {
-        server_start = new Thread(() -> {
+        Thread serverThread = new Thread(() -> {
             try {
-                String input = "y" + "\n".repeat(200);
-                Console console = Console.withString(input);
-
+                String input = "y" + "\n".repeat(95);
+                Console console = Console.make().withIn(input).withOut(serverOutput);
                 server = new Match(null, console);
                 server.run();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        server_start.start();
+        serverThread.start();
 
-        String input = "n" + "\n".repeat(200);
-        Console console = Console.withString(input);
+        // Ensure that the server has started
+        Thread.sleep(1000);
+        String input = "n" + "\n".repeat(95);
+        Console console = Console.make().withIn(input).withOut(clientOutput);
         client = new Match(null, console);
+        client.run();
     }
-
-    // @Test
-    // public void test_battleship_match_1() throws Exception {
-    //
-    // client.run();
-    // }
 }

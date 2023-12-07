@@ -63,7 +63,7 @@ public class BoardTests {
     public void test_board_set_state_exception_3() throws Exception {
         Board test = new Board(1);
         Exception e = assertThrows(Exception.class, () -> test.setState(new Position(1, 1), Board.State.MISS));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "Position (" + 1 + "," + 1
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "Position (" + 1 + "," + 1
                 + ") is out of bounds. Row and column must be between 0 and " + (1 - 1) + ".", e.getMessage());
     }
 
@@ -113,7 +113,7 @@ public class BoardTests {
         Ship s = new Battleship(Direction.decode("r"), new Position(1, 1));
         Board test = new Board(1);
         Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "Position (" + 1 + "," + 1
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "Position (" + 1 + "," + 1
                 + ") is out of bounds. Row and column must be between 0 and " + (1 - 1) + ".", e.getMessage());
     }
 
@@ -123,7 +123,7 @@ public class BoardTests {
         ;
         Board test = new Board(3);
         Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "Position (" + 1 + "," + 4
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "Position (" + 1 + "," + 4
                 + ") is out of bounds. Row and column must be between 0 and " + (3 - 1) + ".", e.getMessage());
     }
 
@@ -132,7 +132,7 @@ public class BoardTests {
         Ship s = new Battleship(Direction.decode("d"), new Position(1, 1));
         Board test = new Board(3);
         Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "Position (" + 4 + "," + 1
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "Position (" + 4 + "," + 1
                 + ") is out of bounds. Row and column must be between 0 and " + (3 - 1) + ".", e.getMessage());
     }
 
@@ -143,7 +143,7 @@ public class BoardTests {
         Board test = new Board(9);
         test.addShip(s);
         Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "There is an overlapping ship at " + "1,1"
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "There is an overlapping ship at " + "1,1"
                 + ". Please choose another location for your ship.", e.getMessage());
     }
 
@@ -154,7 +154,7 @@ public class BoardTests {
         Board test = new Board(9);
         test.addShip(s);
         Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "There is an overlapping ship at " + "1,1"
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "There is an overlapping ship at " + "1,1"
                 + ". Please choose another location for your ship.", e.getMessage());
     }
 
@@ -186,7 +186,7 @@ public class BoardTests {
         test.addShip(s);
         test.addShot(shot);
         Exception e = assertThrows(Exception.class, () -> test.addShot(shot));
-        assertEquals(Console.textColor("Invalid input: ", Console.RED) + "You have already shot at " + "1,1"
+        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "You have already shot at " + "1,1"
                 + ". Please select another position.", e.getMessage());
     }
 

@@ -13,7 +13,7 @@ public class AskShotTests {
     @Test
     public void allPositionsExcept00AreShot_askShotRandom_shouldGive00() throws Exception {
         String input = "\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Player p1 = new Player();
         for (int i = 0; i < Config.BOARD_SIZE; i++) {
@@ -32,7 +32,7 @@ public class AskShotTests {
     @Test
     public void askShotTwoNumbers_shouldGivePosition() throws Exception {
         String input = "0 0\n";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Player p1 = new Player();
 
@@ -44,7 +44,7 @@ public class AskShotTests {
     @Test
     public void askShotOneNumber_shouldAskUntilCorrectPosition() throws Exception {
         String input = "0 \n0 0";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Player p1 = new Player();
 
@@ -56,7 +56,7 @@ public class AskShotTests {
     @Test
     public void askShotLetters_shouldAskUntilCorrectPosition() throws Exception {
         String input = "a b\n0 0";
-        Console console = Console.withString(input);
+        Console console = Console.make().withIn(input);
 
         Player p1 = new Player();
         Position p = console.askShot(p1);

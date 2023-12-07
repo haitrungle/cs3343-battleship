@@ -1,26 +1,40 @@
 package cs3343.battleship.test.game;
 
+import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Tutorial;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.util.Scanner;
-
 public class TutorialTests {
-    // @Test
-    // public void test_battleship_game_tutorial_1(){
-    // String input =
-    // "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-    // ByteArrayInputStream inputStream = new
-    // ByteArrayInputStream(input.getBytes());
-    //
-    // System.setIn(inputStream);
-    //
-    // Scanner scanner = new Scanner(System.in).useDelimiter("[,\\s]+");
-    // Console console = new Console();
-    // console.setScanner(scanner);
-    // Tutorial t = new Tutorial();
-    // t.run();
-    // }
+    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+    @Before
+    public void setUpStreams() {
+        Config.TYPEWRITER_EFFECT = false;
+    }
+
+    @After
+    public void restoreStreams() {
+        Config.TYPEWRITER_EFFECT = true;
+    }
+
+    @Test
+    public void TutorialOutput() {
+        String input = "r 4,1\nd 6,9\n\n\n\n3,4\n" + "\n".repeat(90);
+        Console console = Console.make().withIn(input).withOut(output);
+        Tutorial t = new Tutorial(console);
+        t.run();
+        String result = output.toString();
+        assertEquals(555449, result.length());
+        assertTrue(result.substring(555266, 555348)
+                .equals("The enemy shot at 5,3. They have hit your ships!\nGAME OVER! You have won the game."));
+    }
 }
