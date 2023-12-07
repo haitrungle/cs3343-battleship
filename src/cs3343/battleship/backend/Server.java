@@ -39,7 +39,7 @@ public class Server extends SocketBackend {
         }
     }
 
-    public void close() throws Exception {
+    public void close() throws IOException {
         serverSocket.close();
         socket.close();
     }

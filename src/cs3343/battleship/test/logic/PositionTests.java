@@ -6,8 +6,8 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import cs3343.battleship.logic.Direction;
 import cs3343.battleship.logic.Position;
+import cs3343.battleship.logic.ship.Direction;
 
 public class PositionTests {
     @Test

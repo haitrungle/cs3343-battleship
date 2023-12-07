@@ -1,7 +1,6 @@
 package cs3343.battleship.game;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -9,6 +8,7 @@ import java.util.Scanner;
 import cs3343.battleship.backend.*;
 import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
+import cs3343.battleship.logic.ship.Direction;
 import cs3343.battleship.logic.ship.Ship;
 
 public final class Console {
@@ -22,13 +22,13 @@ public final class Console {
         PURPLE("\u001B[35m"),
         CYAN("\u001B[36m"),
         WHITE("\u001B[37m");
-    
+
         private String value;
-    
+
         Color(String value) {
             this.value = value;
         }
-    
+
         public String getValue() {
             return value;
         }
@@ -37,7 +37,8 @@ public final class Console {
     private Scanner in;
     private PrintStream out;
 
-    private Console() {}
+    private Console() {
+    }
 
     private static final Console defaultInstance = new Console();
 

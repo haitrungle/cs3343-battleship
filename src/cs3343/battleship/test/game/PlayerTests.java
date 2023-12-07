@@ -11,9 +11,9 @@ import org.junit.Test;
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Player;
-import cs3343.battleship.logic.Direction;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.Battleship;
+import cs3343.battleship.logic.ship.Direction;
 import cs3343.battleship.logic.ship.Ship;
 
 public class PlayerTests {

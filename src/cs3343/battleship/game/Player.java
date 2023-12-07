@@ -7,6 +7,7 @@ import java.util.Random;
 import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
 import cs3343.battleship.logic.Board.State;
+import cs3343.battleship.logic.ship.Direction;
 import cs3343.battleship.logic.ship.Ship;
 
 public final class Player {
@@ -23,7 +24,7 @@ public final class Player {
     public Ship addShipRandom(Ship ship) {
         Random rng = Config.rng();
         while (true) {
-            Position p = Position.random(rng, board.size);
+            Position p = Position.random(rng, board.getSize());
             ship.setStartPosition(p);
             Direction direction = Direction.random(rng);
             ship.setDirection(direction);
@@ -51,8 +52,8 @@ public final class Player {
     public void checkShot(Position shot) throws PositionShotTwiceException, PositionOutOfBoundsException {
         if (hasShotEnemyAt(shot))
             throw new PositionShotTwiceException(shot);
-        if (shot.row < 0 || shot.row >= board.size || shot.col < 0 || shot.col >= board.size)
-            throw new PositionOutOfBoundsException(shot.row, shot.col, board.size);
+        if (shot.row < 0 || shot.row >= board.getSize() || shot.col < 0 || shot.col >= board.getSize())
+            throw new PositionOutOfBoundsException(shot.row, shot.col, board.getSize());
     }
 
     public boolean hasShotEnemyAt(Position shot) {
@@ -75,7 +76,7 @@ public final class Player {
     public Position getRandomShot() {
         Random rng = Config.rng();
         while (true) {
-            Position p = Position.random(rng, board.size);
+            Position p = Position.random(rng, board.getSize());
             if (hasShotEnemyAt(p))
                 continue;
             return p;
@@ -85,14 +86,14 @@ public final class Player {
     public String boardToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("\n   ");
-        for (int i = 0; i < board.size; i++)
+        for (int i = 0; i < board.getSize(); i++)
             builder.append(i + "  ");
         builder.append("\n");
-        for (int i = 0; i < board.size; i++) {
+        for (int i = 0; i < board.getSize(); i++) {
             builder.append(Console.colorize(i + "  ", Console.Color.WHITE));
 
-            for (int j = 0; j < board.size; j++) {
-                State cell = board.board[i][j];
+            for (int j = 0; j < board.getSize(); j++) {
+                State cell = board.getState(i, j);
                 if (cell == State.WATER)
                     builder.append(Console.colorize(cell, Console.Color.BLUE));
                 else if (cell == State.HIT)
@@ -112,21 +113,21 @@ public final class Player {
         StringBuilder builder = new StringBuilder();
         builder.append("\n   ");
 
-        for (int i = 0; i < board.size; i++)
+        for (int i = 0; i < board.getSize(); i++)
             builder.append(i + "  ");
 
         builder.append("  |       ");
 
-        for (int i = 0; i < board.size; i++)
+        for (int i = 0; i < board.getSize(); i++)
             builder.append(i + "  ");
 
         builder.append("\n");
 
-        for (int i = 0; i < board.size; i++) {
+        for (int i = 0; i < board.getSize(); i++) {
             builder.append(Console.colorize(i + "  ", Console.Color.WHITE));
 
-            for (int j = 0; j < board.size; j++) {
-                State cell = board.board[i][j];
+            for (int j = 0; j < board.getSize(); j++) {
+                State cell = board.getState(i, j);
                 if (cell == State.WATER)
                     builder.append(Console.colorize(cell, Console.Color.BLUE));
                 else if (cell == State.HIT)
@@ -142,8 +143,8 @@ public final class Player {
 
             builder.append(Console.colorize(i + "  ", Console.Color.WHITE));
 
-            for (int j = 0; j < enemyBoard.size; j++) {
-                State cell = enemyBoard.board[i][j];
+            for (int j = 0; j < enemyBoard.getSize(); j++) {
+                State cell = enemyBoard.getState(i, j);
                 if (cell == State.WATER)
                     builder.append(Console.colorize(cell, Console.Color.BLUE));
                 else if (cell == State.HIT)

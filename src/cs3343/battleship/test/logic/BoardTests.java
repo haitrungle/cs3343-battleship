@@ -9,7 +9,6 @@ import org.junit.Test;
 import cs3343.battleship.exceptions.*;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.Board;
-import cs3343.battleship.logic.Direction;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.*;
 

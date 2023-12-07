@@ -1,5 +1,6 @@
 package cs3343.battleship.backend;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -10,6 +11,7 @@ public class Client extends SocketBackend {
     private Socket socket;
     String host;
     int port;
+
     public Client(String remoteHost, int remotePort) throws Exception {
         this.host = remoteHost;
         this.port = remotePort;
@@ -27,7 +29,8 @@ public class Client extends SocketBackend {
             throw new Exception("Error initializing Client: " + e.getMessage());
         }
     }
-    public void close() throws Exception {
+
+    public void close() throws IOException {
         socket.close();
     }
 }

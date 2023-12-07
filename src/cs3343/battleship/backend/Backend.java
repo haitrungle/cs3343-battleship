@@ -1,7 +1,8 @@
 package cs3343.battleship.backend;
 
-public interface Backend {
+import java.io.Closeable;
+
+public interface Backend extends Closeable {
     public Message waitForMessage() throws Exception;
     public void sendMessage(Message message);
-    public void close() throws Exception;
 }
