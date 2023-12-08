@@ -109,4 +109,44 @@ public final class Message implements Serializable {
     public static Message LostMsg() {
         return new Message(Type.LOST, null, false);
     }
+
+    @Override
+    public String toString() {
+        String s = "";
+        switch (type) {
+            case INIT:
+                s = "INIT";
+                break;
+            case SHOT:
+                s = "SHOT(" + shot.toString() + ")";
+                break;
+            case RESULT:
+                s = "RESULT(" + hit + ")";
+                break;
+            case LOST:
+                s = "LOST";
+                break;
+        }
+        return "{ timestamp: " + timestamp.toString() + ", type: " + s + " }";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        System.out.println(this);
+        System.out.println(o);
+        if (o == this)
+            return true;
+        if (!(o instanceof Message))
+            return false;
+        Message m = (Message) o;
+        if (m.type != type)
+            return false;
+        if (!m.timestamp.equals(timestamp))
+            return false;
+        if (m.type == Type.SHOT && !m.shot.equals(shot))
+            return false;
+        if (m.type == Type.RESULT && m.hit != hit)
+            return false;
+        return true;
+    }
 }

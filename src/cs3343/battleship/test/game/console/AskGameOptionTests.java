@@ -2,7 +2,7 @@ package cs3343.battleship.test.game.console;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.game.Console;
 

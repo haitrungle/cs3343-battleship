@@ -1,45 +1,45 @@
 package cs3343.battleship.test.logic;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.Direction;
 
 public class PositionTests {
     @Test
-    public void test_position_to_string_1() {
+    public void shouldHaveCorrectStringRep() {
         Position pos = new Position(4, 5);
         assertEquals("4,5", pos.toString());
     }
 
     @Test
-    public void test_position_to_string_2() {
+    public void randomPositionInBoardOfSize1_shouldBe00() {
         Position pos = Position.random(new Random(), 1);
         assertEquals("0,0", pos.toString());
     }
 
     @Test
-    public void test_position_equals_1() {
-        Position pos = Position.random(new Random(), 1);
-        boolean b = pos.equals(null);
-        assertEquals(false, b);
+    public void randomPosition_shouldNotBeNull() {
+        Position pos = Position.random(new Random(), 10);
+        assertNotNull(pos);
     }
 
     @Test
-    public void test_position_equals_2() {
-        Position pos = Position.random(new Random(), 1);
-        boolean b = pos.equals(Direction.random(new Random()));
-        assertEquals(false, b);
+    public void randomPositions_withSameSeed_ShouldBeSame() {
+        Position pos1 = Position.random(new Random(12), 3);
+        Position pos2 = Position.random(new Random(12), 3);
+        assertEquals(pos1, pos2);
     }
 
     @Test
-    public void test_position_equals_3() {
+    public void notEqualToDirection() {
         Position pos = Position.random(new Random(), 1);
-        boolean b = pos.equals(Position.random(new Random(), 1));
-        assertEquals(true, b);
+        assertNotEquals(Direction.random(new Random()), pos);
     }
 }

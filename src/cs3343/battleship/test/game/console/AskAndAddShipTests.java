@@ -1,15 +1,16 @@
 package cs3343.battleship.test.game.console;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Player;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.Battleship;
 import cs3343.battleship.logic.ship.Ship;
-import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class AskAndAddShipTests {
     @Test
@@ -21,7 +22,7 @@ public class AskAndAddShipTests {
         Player p1 = new Player();
         Ship s = console.askAndAddShip(ship, p1);
 
-        assertTrue(s.getStartPosition().equals(ship.getStartPosition()));
+        assertEquals(ship, s);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class AskAndAddShipTests {
         Ship s = console.askAndAddShip(ship, p1);
         List<Position> positions = s.positions();
         for (int i = 0; i < positions.size(); i++) {
-            assertTrue(positions.get(i).equals(new Position(0 + i, 0)));
+            assertEquals(new Position(0 + i, 0), positions.get(i));
         }
     }
 
@@ -49,7 +50,7 @@ public class AskAndAddShipTests {
         Ship s = console.askAndAddShip(ship, p1);
         List<Position> positions = s.positions();
         for (int i = 0; i < positions.size(); i++) {
-            assertTrue(positions.get(i).equals(new Position(0 + i, 0)));
+            assertEquals(new Position(0 + i, 0), positions.get(i));
         }
     }
 
@@ -64,7 +65,7 @@ public class AskAndAddShipTests {
         Ship s = console.askAndAddShip(ship, p1);
         List<Position> positions = s.positions();
         for (int i = 0; i < positions.size(); i++) {
-            assertTrue(positions.get(i).equals(new Position(0 + i, 0)));
+            assertEquals(new Position(0 + i, 0), positions.get(i));
         }
     }
 }

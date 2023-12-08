@@ -1,52 +1,70 @@
 package cs3343.battleship.test.backend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import cs3343.battleship.backend.Client;
 import cs3343.battleship.backend.Message;
 import cs3343.battleship.backend.Server;
 import cs3343.battleship.backend.SocketBackend;
+import cs3343.battleship.logic.Position;
 
 public class SocketBackendTests {
     private SocketBackend server;
     private SocketBackend client;
-    private Thread serverThread;
     private final int port = 1234;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
-        Thread.sleep(200);
-        serverThread = new Thread(() -> {
+        // Start server in a new thread since one thread cannot listen on a port and
+        // connect to the same port
+        new Thread(() -> {
             try {
                 server = new Server(port);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());
             }
-        });
-        serverThread.start();
-
-        Thread.sleep(200);
+        }).start();
+        // Polling until server is created
+        while (server == null)
+            Thread.sleep(30);
         client = new Client(null, port);
+        // Polling until server and client are ready
+        while (!server.isReady() || !client.isReady())
+            Thread.sleep(30);
     }
 
-    @After
+    @AfterEach
     public void teardown() throws Exception {
-        serverThread.join();
         server.close();
         client.close();
-
-        Thread.sleep(200);
     }
 
-    @Test
-    public void sendInitMsg() {
-        Message m = Message.InitMsg();
-        client.sendMessage(m);
+    @ParameterizedTest
+    @ArgumentsSource(MessageArgumentsProvider.class)
+    public void clientSendMsg_shouldBeSameWhenServerReceived(Message msg) {
+        client.sendMessage(msg);
+        Message received = server.waitForMessage();
+        assertEquals(msg, received);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(MessageArgumentsProvider.class)
+    public void serverSendMsg_shouldBeSameWhenClientReceived(Message msg) {
+        server.sendMessage(msg);
+        Message received = client.waitForMessage();
+        assertEquals(msg, received);
     }
 
     @Test
@@ -75,5 +93,18 @@ public class SocketBackendTests {
         client.sendMessage(m);
         Message message = server.waitForMessage();
         assertEquals(m.getType(), message.getType());
+    }
+}
+
+class MessageArgumentsProvider implements ArgumentsProvider {
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+        return Stream.of(
+                Message.InitMsg(),
+                Message.ShotMsg(new Position(2, 3)),
+                Message.ShotMsg(new Position(0, 0)),
+                Message.ResultMsg(true),
+                Message.ResultMsg(false),
+                Message.LostMsg()).map(Arguments::of);
     }
 }

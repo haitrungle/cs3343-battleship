@@ -1,12 +1,16 @@
 package cs3343.battleship.test.game;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.game.Player;
 import cs3343.battleship.logic.Position;
@@ -17,13 +21,13 @@ import cs3343.battleship.logic.ship.Ship;
 public class PlayerTests {
     private Player p1;
 
-    @Before
+    @BeforeEach
     public void showBoard() {
         p1 = new Player();
         System.out.println(p1.boardToString());
     }
 
-    @After
+    @AfterEach
     public void showTwoBoards() {
         System.out.println(p1.twoBoardsToString());
     }
@@ -34,7 +38,7 @@ public class PlayerTests {
         p1.addShip(s);
         List<Position> positions = s.positions();
         for (int i = 0; i < positions.size(); i++) {
-            assertTrue(positions.get(i).equals(new Position(0 + i, 0)));
+            assertEquals(new Position(0 + i, 0), positions.get(i));
         }
     }
 
@@ -44,7 +48,7 @@ public class PlayerTests {
         p1.addShip(s);
         List<Position> positions = s.positions();
         for (int i = 0; i < positions.size(); i++) {
-            assertTrue(positions.get(i).equals(new Position(0, 0 + i)));
+            assertEquals(new Position(0, 0 + i), positions.get(i));
         }
     }
 
@@ -57,8 +61,8 @@ public class PlayerTests {
         int row = positions.get(0).row;
         int col = positions.get(0).col;
         for (int i = 0; i < positions.size(); i++) {
-            assertTrue(positions.get(i)
-                    .equals(d == Direction.DOWN ? new Position(row + i, col) : new Position(row, col + i)));
+            Position expected = d == Direction.DOWN ? new Position(row + i, col) : new Position(row, col + i);
+            assertEquals(expected, positions.get(i));
         }
     }
 

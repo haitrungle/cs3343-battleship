@@ -1,20 +1,21 @@
 package cs3343.battleship.test.game.console;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+
 import cs3343.battleship.backend.Backend;
 import cs3343.battleship.backend.Client;
 import cs3343.battleship.game.Console;
-
-import org.junit.After;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class AskBackendTests {
     private final Backend[] server = new Backend[1];
     private Backend client;
     private Thread serverThread;
 
-    @After
+    @AfterEach
     public void teardown() throws Exception {
         if (serverThread != null) serverThread.join();
         if (server[0] != null) server[0].close();

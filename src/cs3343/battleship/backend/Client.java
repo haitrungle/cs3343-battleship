@@ -38,6 +38,7 @@ public class Client extends SocketBackend {
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
+            ready = true;
         } catch (Exception e) {
             throw new Exception("Error initializing Client: " + e.getMessage());
         }
@@ -47,6 +48,7 @@ public class Client extends SocketBackend {
      * Closes the socket connection.
      */
     public void close() throws IOException {
+        super.close();
         socket.close();
     }
 }

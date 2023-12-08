@@ -11,15 +11,40 @@ import java.io.*;
 public abstract class SocketBackend implements Backend {
     protected ObjectInputStream in;
     protected ObjectOutputStream out;
+    protected boolean ready = false;
 
-    public Message waitForMessage() throws Exception {
+    /**
+     * Returns whether the backend is ready to send and receive messages.
+     * 
+     * @return whether the backend is ready to send and receive messages
+     */
+    public boolean isReady() {
+        return ready;
+    }
+
+    /**
+     * Closes the backend. This method should be called when the backend is no
+     * longer needed. Subclasses should call this method in their own overriding
+     * implementation.
+     * 
+     * Technically, for socket connection, this method is not very needed, as
+     * closing the underlying socket connections also closes these input and output
+     * streams. However, this matters if, say, we use a BufferedInputStream to wrap
+     * the input stream, and we want to release the buffer before closing the
+     * connection.
+     */
+    public void close() throws IOException {
+        in.close();
+        out.close();
+        ready = false;
+    }
+
+    public Message waitForMessage() {
         try {
             Message message = (Message) in.readObject();
             return message;
-        } catch (IOException e) {
-            throw new Exception("Error reading incoming message: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new Exception("Error reading incoming message: " + e.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            return null;
         }
     }
 

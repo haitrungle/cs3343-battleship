@@ -1,8 +1,8 @@
 package cs3343.battleship.test.game.console;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
@@ -26,41 +26,33 @@ public class AskShotTests {
         }
         Position p = console.askShot(p1);
 
-        assertTrue(p.equals(new Position(0, 0)));
+        assertEquals(new Position(0, 0), p);
     }
 
     @Test
     public void askShotTwoNumbers_shouldGivePosition() throws Exception {
         String input = "0 0\n";
         Console console = Console.make().withIn(input);
-
         Player p1 = new Player();
-
         Position p = console.askShot(p1);
-
-        assertTrue(p.equals(new Position(0, 0)));
+        assertEquals(new Position(0, 0), p);
     }
 
     @Test
     public void askShotOneNumber_shouldAskUntilCorrectPosition() throws Exception {
         String input = "0 \n0 0";
         Console console = Console.make().withIn(input);
-
         Player p1 = new Player();
-
         Position p = console.askShot(p1);
-
-        assertTrue(p.equals(new Position(0, 0)));
+        assertEquals(new Position(0, 0), p);
     }
 
     @Test
     public void askShotLetters_shouldAskUntilCorrectPosition() throws Exception {
         String input = "a b\n0 0";
         Console console = Console.make().withIn(input);
-
         Player p1 = new Player();
         Position p = console.askShot(p1);
-
-        assertTrue(p.equals(new Position(0, 0)));
+        assertEquals(new Position(0, 0), p);
     }
 }

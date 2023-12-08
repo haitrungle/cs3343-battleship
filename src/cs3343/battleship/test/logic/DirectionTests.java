@@ -1,12 +1,13 @@
 package cs3343.battleship.test.logic;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import cs3343.battleship.exceptions.*;
+import cs3343.battleship.exceptions.InvalidInputException;
 import cs3343.battleship.logic.ship.Direction;
 
 public class DirectionTests {

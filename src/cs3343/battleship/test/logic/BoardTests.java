@@ -1,16 +1,23 @@
 package cs3343.battleship.test.logic;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import cs3343.battleship.exceptions.*;
-import cs3343.battleship.game.Console;
+import cs3343.battleship.exceptions.NullObjectException;
+import cs3343.battleship.exceptions.OverlapShipException;
+import cs3343.battleship.exceptions.PositionOutOfBoundsException;
 import cs3343.battleship.logic.Board;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.ship.*;
+import cs3343.battleship.logic.ship.Battleship;
+import cs3343.battleship.logic.ship.Direction;
+import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.ship.Submarine;
 
 public class BoardTests {
     @Test
@@ -62,7 +69,9 @@ public class BoardTests {
     public void test_board_set_state_exception_3() throws Exception {
         Board test = new Board(1);
         Exception e = assertThrows(Exception.class, () -> test.setState(new Position(1, 1), Board.State.MISS));
-        assertEquals("Invalid input: Position (1,1) is out of bounds. Row and column must be between 0 and " + (1 - 1) + ".", e.getMessage());
+        assertEquals(
+                "Invalid input: Position (1,1) is out of bounds. Row and column must be between 0 and " + (1 - 1) + ".",
+                e.getMessage());
     }
 
     @Test
@@ -72,8 +81,7 @@ public class BoardTests {
         test.addShip(s);
         List<Position> positions = s.positions();
         for (int i = 0; i < 4; i++) {
-            boolean b = positions.get(i).equals(new Position(1, 1 + i));
-            assertTrue(b);
+            assertEquals(new Position(1, 1 + i), positions.get(i));
         }
     }
 
@@ -84,8 +92,7 @@ public class BoardTests {
         test.addShip(s);
         List<Position> positions = s.positions();
         for (int i = 0; i < 4; i++) {
-            boolean b = positions.get(i).equals(new Position(1 + i, 1));
-            assertTrue(b);
+            assertEquals(new Position(1 + i, 1), positions.get(i));
         }
     }
 

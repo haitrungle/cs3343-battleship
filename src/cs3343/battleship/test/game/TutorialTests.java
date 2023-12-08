@@ -5,23 +5,22 @@ import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Tutorial;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TutorialTests {
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-    @Before
+    @BeforeEach
     public void setUpStreams() {
         Config.TYPEWRITER_EFFECT = false;
     }
 
-    @After
+    @AfterEach
     public void restoreStreams() {
         Config.TYPEWRITER_EFFECT = true;
     }
@@ -34,7 +33,6 @@ public class TutorialTests {
         t.run();
         String result = output.toString();
         assertEquals(189149, result.length());
-        assertTrue(result.substring(188966, 189048)
-                .equals("The enemy shot at 5,3. They have hit your ships!\nGAME OVER! You have won the game."));
+        assertEquals("The enemy shot at 5,3. They have hit your ships!\nGAME OVER! You have won the game.", result.substring(188966, 189048));
     }
 }

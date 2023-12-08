@@ -2,7 +2,7 @@ package cs3343.battleship.test.game;
 
 import java.io.ByteArrayOutputStream;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
@@ -15,13 +15,9 @@ public class MatchTests {
     private final ByteArrayOutputStream serverOutput = new ByteArrayOutputStream();
     private final ByteArrayOutputStream clientOutput = new ByteArrayOutputStream();
 
-    @Before
-    public void setUpStreams() {
-        Config.TYPEWRITER_EFFECT = false;
-    }
-
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
+        Config.TYPEWRITER_EFFECT = false;
         Thread serverThread = new Thread(() -> {
             try {
                 String input = "y" + "\n".repeat(95);

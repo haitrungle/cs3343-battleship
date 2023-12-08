@@ -1,12 +1,13 @@
 package cs3343.battleship.test.logic;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import cs3343.battleship.exceptions.*;
+import cs3343.battleship.exceptions.InvalidInputException;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.*;
 
@@ -73,8 +74,7 @@ public class ShipTests {
         Ship s = new AircraftCarrier(Direction.decode("d"), new Position(1, 1));
         List<Position> positions = s.positions();
         for (int i = 0; i < 5; i++) {
-            boolean b = positions.get(i).equals(new Position(1 + i, 1));
-            assertTrue(b);
+            assertEquals(new Position(1 + i, 1), positions.get(i));
         }
     }
 
@@ -83,8 +83,7 @@ public class ShipTests {
         Ship s = new AircraftCarrier(Direction.decode("r"), new Position(1, 1));
         List<Position> positions = s.positions();
         for (int i = 0; i < 5; i++) {
-            boolean b = positions.get(i).equals(new Position(1, 1 + i));
-            assertTrue(b);
+            assertEquals(new Position(1, 1 + i), positions.get(i));
         }
     }
 
@@ -93,8 +92,7 @@ public class ShipTests {
         Ship s = new AircraftCarrier(Direction.decode("r"), new Position(1, 1));
         Ship s1 = new AircraftCarrier(Direction.decode("r"), new Position(1, 1));
         Position p = Ship.overlapPosition(s, s1);
-        boolean b = p.equals(new Position(1, 1));
-        assertTrue(b);
+        assertEquals(new Position(1, 1), p);
     }
 
     @Test
