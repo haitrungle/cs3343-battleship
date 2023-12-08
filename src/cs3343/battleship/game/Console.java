@@ -128,20 +128,20 @@ public final class Console {
      * @param str the string to print
      */
     public void typeln(String str) {
-        if (!Config.TYPEWRITER_EFFECT) {
+        if (Config.TYPEWRITER_DELAY <= 0) {
             out.println(str);
             return;
         }
         for (int i = 0; i < str.length(); i++) {
             out.print(str.charAt(i));
             try {
-                Thread.sleep(1);
+                Thread.sleep(Config.TYPEWRITER_DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         try {
-            Thread.sleep(150);
+            Thread.sleep(Config.TYPEWRITER_DELAY * 3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

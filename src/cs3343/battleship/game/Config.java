@@ -21,9 +21,9 @@ public final class Config {
      */
     public static int RANDOM_SEED = 5678;
     /**
-     * Whether to enable the typewriter effect (disabled for testing, for example).
+     * Typewriter effect delay in milliseconds. If 0, the effect will be disabled.
      */
-    public static boolean TYPEWRITER_EFFECT = true;
+    public static int TYPEWRITER_DELAY = 75;
     /**
      * Whether to enable color in the console.
      */

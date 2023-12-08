@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cs3343.battleship.game.Player;
+import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.Battleship;
 import cs3343.battleship.logic.ship.Direction;

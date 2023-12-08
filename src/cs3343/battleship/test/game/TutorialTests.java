@@ -17,12 +17,12 @@ public class TutorialTests {
 
     @BeforeEach
     public void setUpStreams() {
-        Config.TYPEWRITER_EFFECT = false;
+        Config.TYPEWRITER_DELAY = 0;
     }
 
     @AfterEach
     public void restoreStreams() {
-        Config.TYPEWRITER_EFFECT = true;
+        Config.TYPEWRITER_DELAY = 75;
     }
 
     @Test

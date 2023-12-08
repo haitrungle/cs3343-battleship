@@ -17,7 +17,7 @@ public class MatchTests {
 
     @BeforeEach
     public void setup() throws Exception {
-        Config.TYPEWRITER_EFFECT = false;
+        Config.TYPEWRITER_DELAY = 0;
         Thread serverThread = new Thread(() -> {
             try {
                 String input = "y" + "\n".repeat(95);

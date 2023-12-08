@@ -2,14 +2,14 @@ package cs3343.battleship.game;
 
 import cs3343.battleship.backend.Backend;
 import cs3343.battleship.backend.Message;
+import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.*;
 
 /**
  * This class represents a match that a player is in with another player. Since
  * two players can be on different computers, perhaps somewhat unintuitively,
- * this
- * class does not contain two players.
+ * this class does not contain two players.
  */
 public final class Match {
     private Player player;

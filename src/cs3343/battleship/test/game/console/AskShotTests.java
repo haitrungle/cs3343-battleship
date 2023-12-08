@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
-import cs3343.battleship.game.Player;
+import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
 
 public class AskShotTests {

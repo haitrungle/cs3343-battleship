@@ -1,11 +1,12 @@
-package cs3343.battleship.game;
+package cs3343.battleship.logic;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import cs3343.battleship.exceptions.*;
-import cs3343.battleship.logic.*;
+import cs3343.battleship.game.Config;
+import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.Board.State;
 import cs3343.battleship.logic.ship.Direction;
 import cs3343.battleship.logic.ship.Ship;
