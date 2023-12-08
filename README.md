@@ -4,8 +4,8 @@ This is the Battlship game written in Java. Two players on the same local networ
 
 The code is very messy, awaiting you to imbue it with grace and elegance.
 
-To play, run
+To play, from the root directory, run
 ```
-javac -d bin $(find src -name "*.java")
+javac -cp lib/*:. -d bin $(find src -name "*.java")
 java -cp ./bin cs3343.battleship.Main
 ```
