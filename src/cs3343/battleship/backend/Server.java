@@ -64,7 +64,7 @@ public class Server extends SocketBackend {
      */
     public void close() throws IOException {
         super.close();
-        serverSocket.close();
-        socket.close();
+        if (serverSocket != null) serverSocket.close();
+        if (socket != null) socket.close();
     }
 }

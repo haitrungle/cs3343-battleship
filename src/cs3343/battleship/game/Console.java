@@ -1,6 +1,6 @@
 package cs3343.battleship.game;
 
-import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -93,13 +93,13 @@ public final class Console {
 
     /**
      * Returns this instance with the output stream set to the
-     * ByteArrayOutputStream. This is useful for testing.
+     * OutputStream. This is useful for testing.
      * 
-     * @param out the ByteArrayOutputStream to set the output stream to
+     * @param out the OutputStream to set the output stream to
      * @return this instance with the output stream set to the given
-     *         ByteArrayOutputStream
+     *         OutputStream
      */
-    public Console withOut(ByteArrayOutputStream out) {
+    public Console withOut(OutputStream out) {
         this.out = new PrintStream(out);
         return this;
     }

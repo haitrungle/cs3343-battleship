@@ -34,8 +34,8 @@ public abstract class SocketBackend implements Backend {
      * connection.
      */
     public void close() throws IOException {
-        in.close();
-        out.close();
+        if (in != null) in.close();
+        if (out != null) out.close();
         ready = false;
     }
 

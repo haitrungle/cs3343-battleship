@@ -7,13 +7,14 @@ import cs3343.battleship.game.Tutorial;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TutorialTests {
-    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    private final OutputStream output = new ByteArrayOutputStream();
 
     @BeforeEach
     public void setUpStreams() {

@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,12 +23,6 @@ public class PlayerTests {
     @BeforeEach
     public void showBoard() {
         p1 = new Player();
-        System.out.println(p1.boardToString());
-    }
-
-    @AfterEach
-    public void showTwoBoards() {
-        System.out.println(p1.twoBoardsToString());
     }
 
     @Test

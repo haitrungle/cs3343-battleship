@@ -21,32 +21,44 @@ public final class Match {
     private boolean won;
 
     /**
-     * Creates a new match with the given backend and console. If backend is null,
-     * ask the user and construct a backend itself.
+     * Creates a new match with the given backend and console.
      * 
-     * @param b the backend to use, or null to ask the user and create a backend
+     * @param b the backend to use
      * @param c the console to use
      */
     public Match(Backend b, Console c) throws Exception {
         console = c;
-        if (b == null) {
-            b = console.askBackend();
-            backend = b;
-        }
+        backend = b;
         player = new Player();
         won = false;
     }
 
     /**
+     * Returns the backend of this Match.
+     * 
+     * @return the backend of this Match
+     */
+    public Backend getBackend() {
+        return backend;
+    }
+
+    /**
      * Runs the match. All the match logic and communication with the other party is
      * contained within this method.
+     * 
+     * @return whether this player has won the match
      */
-    public void run() throws Exception {
-        Message init = Message.InitMsg();
-        backend.sendMessage(init);
-        Message remoteInit = backend.waitForMessage();
-        assert remoteInit.getType() == Message.Type.INIT;
-        myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
+    public boolean run() {
+        try {
+            waitUntilReady();
+            Message init = Message.InitMsg();
+            backend.sendMessage(init);
+            Message remoteInit = backend.waitForMessage();
+            assert remoteInit.getType() == Message.Type.INIT;
+            myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
+        } catch (Exception e) {
+            console.println(e);
+        }
 
         try {
             console.println(".-------------.\n" +
@@ -99,8 +111,16 @@ public final class Match {
                 backend.sendMessage(Message.LostMsg());
                 console.typeln("\nSorry, you lost. Better luck next time.");
             }
+            return won;
         } catch (Exception e) {
             console.println(e);
+            return false;
         }
+    }
+
+    private void waitUntilReady() throws Exception {
+        console.typeln("Waiting for another player to connect...");
+        while (!backend.isReady())
+            Thread.sleep(1000);
     }
 }

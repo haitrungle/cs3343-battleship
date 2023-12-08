@@ -49,6 +49,6 @@ public class Client extends SocketBackend {
      */
     public void close() throws IOException {
         super.close();
-        socket.close();
+        if (socket != null) socket.close();
     }
 }

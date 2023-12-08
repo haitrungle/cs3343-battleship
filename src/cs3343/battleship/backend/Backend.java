@@ -18,6 +18,13 @@ import java.io.Closeable;
  */
 public interface Backend extends Closeable {
     /**
+     * Returns whether the backend is ready to send and receive messages.
+     * 
+     * @return whether the backend is ready to send and receive messages
+     */
+    public boolean isReady();
+
+    /**
      * Blocks until a message is received. Typically, this is when a message is sent
      * by {@link #sendMessage(Message)} from another Backend.
      * 

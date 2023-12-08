@@ -47,6 +47,7 @@ public final class Game {
                 tutorial.run();
             } else {
                 try {
+                    if (backend == null) backend = console.askBackend();
                     Match match = new Match(backend, console);
                     match.run();
                 } catch (Exception e) {
