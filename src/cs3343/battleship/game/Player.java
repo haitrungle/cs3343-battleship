@@ -10,17 +10,30 @@ import cs3343.battleship.logic.Board.State;
 import cs3343.battleship.logic.ship.Direction;
 import cs3343.battleship.logic.ship.Ship;
 
+/**
+ * This class represents a player in the game. It integrates the components of
+ * the logic package in a unified class.
+ */
 public final class Player {
     private Board board = new Board(Config.BOARD_SIZE);
     private Board enemyBoard = new Board(Config.BOARD_SIZE);
     private List<Ship> ships = new ArrayList<>();
     private List<Position> targets = new ArrayList<>();
 
+    /**
+     * Adds a ship to this player's board.
+     */
     public void addShip(Ship s) throws Exception {
         board.addShip(s);
         ships.add(s);
     }
 
+    /**
+     * Adds a ship to this player's board at a random position and returns the ship.
+     * 
+     * @param ship The ship to add, whose startPosition and direction may be unset.
+     * @return The ship that was added, with startPosition and direction set.
+     */
     public Ship addShipRandom(Ship ship) {
         Random rng = Config.rng();
         while (true) {
@@ -37,10 +50,31 @@ public final class Player {
         }
     }
 
+    /**
+     * Returns the board size of this player.
+     * 
+     * @return the board size of this player
+     */
+    public int getBoardSize() {
+        return board.getSize();
+    }
+
+    /**
+     * Adds a shot to this player's board.
+     * 
+     * @param shot the position of the shot
+     * @return true if the shot hits a ship, false otherwise
+     */
     public boolean getShot(Position shot) throws Exception {
         return board.addShot(shot);
     }
 
+    /**
+     * Adds a shot to this player's enemy board.
+     * 
+     * @param shot the position of the shot
+     * @param hit  true if the shot hits a ship, false otherwise
+     */
     public void shotEnemy(Position shot, boolean hit) throws Exception {
         if (hasShotEnemyAt(shot))
             throw new PositionShotTwiceException(shot);
@@ -49,6 +83,15 @@ public final class Player {
         targets.add(shot);
     }
 
+    /**
+     * Thows an exception if this player has shot at the given position or if the
+     * position is out of bounds.
+     * 
+     * @param shot the position to check
+     * @throws PositionShotTwiceException   if this player has shot at the given
+     *                                      position
+     * @throws PositionOutOfBoundsException if the position is out of bounds
+     */
     public void checkShot(Position shot) throws PositionShotTwiceException, PositionOutOfBoundsException {
         if (hasShotEnemyAt(shot))
             throw new PositionShotTwiceException(shot);
@@ -56,14 +99,32 @@ public final class Player {
             throw new PositionOutOfBoundsException(shot.row, shot.col, board.getSize());
     }
 
+    /**
+     * Returns true if this player has shot at the given position. Currently this
+     * method is only used for testing.
+     * 
+     * @param shot the position to check
+     * @return true if this player has shot the enemy at the given position
+     */
     public boolean hasShotEnemyAt(Position shot) {
         return targets.contains(shot);
     }
 
+    /**
+     * Returns true if this player is still alive.
+     * 
+     * @return true if this player has at least one alive ship, false otherwise
+     */
     public boolean hasAliveShip() {
         return board.hasAliveShip();
     }
 
+    /**
+     * Returns true if this player has a ship overlapping with the given ship.
+     * 
+     * @param ship the ship to check
+     * @return an overlapping position, or null if no such ship exists
+     */
     public Position hasOverlapShip(Ship ship) {
         for (Ship s : ships) {
             Position p = Ship.overlapPosition(s, ship);
@@ -73,6 +134,11 @@ public final class Player {
         return null;
     }
 
+    /**
+     * Returns a random shot that this player has not shot at yet.
+     * 
+     * @return a random shot that this player has not shot at yet
+     */
     public Position getRandomShot() {
         Random rng = Config.rng();
         while (true) {
@@ -83,6 +149,11 @@ public final class Player {
         }
     }
 
+    /**
+     * Returns a string representation of this player's board for printing.
+     * 
+     * @return the string representation of this player's board
+     */
     public String boardToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("\n   ");
@@ -109,6 +180,12 @@ public final class Player {
         return builder.toString();
     }
 
+    /**
+     * Returns a string representation of this player's board and enemy board for
+     * printing.
+     * 
+     * @return the string representation of this player's board and enemy board
+     */
     public String twoBoardsToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("\n   ");

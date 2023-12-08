@@ -33,8 +33,8 @@ public class TutorialTests {
         Tutorial t = new Tutorial(console);
         t.run();
         String result = output.toString();
-        assertEquals(555449, result.length());
-        assertTrue(result.substring(555266, 555348)
+        assertEquals(189149, result.length());
+        assertTrue(result.substring(188966, 189048)
                 .equals("The enemy shot at 5,3. They have hit your ships!\nGAME OVER! You have won the game."));
     }
 }

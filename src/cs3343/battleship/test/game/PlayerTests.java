@@ -8,8 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import cs3343.battleship.game.Config;
-import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Player;
 import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.ship.Battleship;
@@ -77,8 +75,8 @@ public class PlayerTests {
 
     @Test
     public void getShotAtEmptyBoard_shouldBeFalse() throws Exception {
-        for (int i = 0; i < Config.BOARD_SIZE; i++) {
-            for (int j = 0; j < Config.BOARD_SIZE; j++) {
+        for (int i = 0; i < p1.getBoardSize(); i++) {
+            for (int j = 0; j < p1.getBoardSize(); j++) {
                 assertFalse(p1.getShot(new Position(i, j)));
             }
         }
@@ -89,7 +87,7 @@ public class PlayerTests {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.shotEnemy(new Position(0, 0), false));
-        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "You have already shot at " + p
+        assertEquals("Invalid input: You have already shot at " + p
                 + ". Please select another position.", e.getMessage());
     }
 
@@ -98,7 +96,7 @@ public class PlayerTests {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.checkShot(new Position(0, 0)));
-        assertEquals(Console.colorize("Invalid input: ", Console.Color.RED) + "You have already shot at " + p
+        assertEquals("Invalid input: You have already shot at " + p
                 + ". Please select another position.", e.getMessage());
     }
 
@@ -107,8 +105,8 @@ public class PlayerTests {
         Position p = new Position(-1, 0);
         Exception e = assertThrows(Exception.class, () -> p1.checkShot(p));
         assertEquals(
-                Console.colorize("Invalid input: ", Console.Color.RED) + "Position (" + "-1" + "," + 0
-                        + ") is out of bounds. Row and column must be between 0 and " + (Config.BOARD_SIZE - 1) + ".",
+                "Invalid input: Position (-1,0) is out of bounds. Row and column must be between 0 and "
+                        + (p1.getBoardSize() - 1) + ".",
                 e.getMessage());
     }
 
@@ -116,7 +114,6 @@ public class PlayerTests {
     public void afterAddShip_shouldHaveAliveShip() throws Exception {
         Ship s = new Battleship();
         p1.addShipRandom(s);
-
         assertTrue(p1.hasAliveShip());
     }
 
@@ -130,7 +127,6 @@ public class PlayerTests {
         Ship s = new Battleship(Direction.DOWN, new Position(0, 0));
         p1.addShip(s);
         Ship s1 = new Battleship(Direction.DOWN, new Position(0, 1));
-
         assertNull(p1.hasOverlapShip(s1));
     }
 
@@ -139,7 +135,6 @@ public class PlayerTests {
         Ship s = new Battleship(Direction.DOWN, new Position(0, 0));
         p1.addShip(s);
         Ship s1 = new Battleship(Direction.DOWN, new Position(0, 0));
-
         assertEquals(new Position(0, 0), p1.hasOverlapShip(s1));
     }
 

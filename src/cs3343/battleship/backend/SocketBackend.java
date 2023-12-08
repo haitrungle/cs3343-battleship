@@ -2,6 +2,12 @@ package cs3343.battleship.backend;
 
 import java.io.*;
 
+/**
+ * This abstract class represents a Backend using socket connection. Currently,
+ * the implementation is rather simplistic: all operation is done synchronously.
+ * When SocketBackend A send a message to SocketBackend B, if B is did not call
+ * waitForMessage() before the message reaches it, the message will be lost.
+ */
 public abstract class SocketBackend implements Backend {
     protected ObjectInputStream in;
     protected ObjectOutputStream out;

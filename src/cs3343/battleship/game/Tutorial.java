@@ -3,17 +3,29 @@ package cs3343.battleship.game;
 import cs3343.battleship.logic.*;
 import cs3343.battleship.logic.ship.Ship;
 
-public class Tutorial {
+/**
+ * This class contains the tutorial of the game. In the tutorial, the player
+ * plays with a dumb computer that places ships and shoots randomly.
+ */
+public final class Tutorial {
     private Player player;
     private Player enemy;
     private Console console;
 
+    /**
+     * Constructs a new tutorial with the given Console.
+     * 
+     * @param c the console to use for input and output
+     */
     public Tutorial(Console c) {
         player = new Player();
         enemy = new Player();
         console = c;
     }
 
+    /**
+     * Runs the tutorial.
+     */
     public void run() {
         startTutorial();
         addShipsToBoard();
@@ -24,8 +36,8 @@ public class Tutorial {
 
     private void startTutorial() {
         console.println(".------------.\n" +
-                        "|  TUTORIAL  |\n" +
-                        "'------------'\n");
+                "|  TUTORIAL  |\n" +
+                "'------------'\n");
         console.typeln("In this tutorial, you will learn how to play Battleship.\n");
     }
 
@@ -41,7 +53,7 @@ public class Tutorial {
         console.typeln("3. Cruiser of length 3");
         console.typeln("4. Submarine of length 3");
         console.typeln("5. Destroyer of length 2\n");
-        
+
         console.typeln("Place a ship by specifying the direction and the starting position:");
         console.typeln("- Direction can either be 'd'/'down' or 'r'/'right'");
         console.typeln("- Starting position can be specified by '[row],[col]'");
@@ -100,7 +112,12 @@ public class Tutorial {
         console.typeln("You can now play the game by choosing option [2].");
     }
 
+    /**
+     * Runs a turn of the game. Since there is no Backend involved, this technically
+     * plays two turns together: the player's turn and the computer's turn.
+     */
     private void turn() {
+        // Player's turn
         try {
             Position shot = console.askShot(player);
             boolean hit = enemy.getShot(shot);
@@ -111,6 +128,7 @@ public class Tutorial {
             console.println("UNREACHABLE");
         }
 
+        // Computer's turn
         try {
             Position shot = enemy.getRandomShot();
             boolean hit = player.getShot(shot);

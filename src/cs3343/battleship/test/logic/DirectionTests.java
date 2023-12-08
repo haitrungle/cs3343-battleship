@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.Test;
 
 import cs3343.battleship.exceptions.*;
-import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.ship.Direction;
 
 public class DirectionTests {
@@ -50,8 +49,7 @@ public class DirectionTests {
     @Test
     public void test_direction_exception_1() throws Exception {
         Throwable exc = assertThrows(InvalidInputException.class, () -> Direction.decode("other"));
-        assertEquals(
-                Console.colorize("Invalid input: ", Console.Color.RED) + "Direction can only be 'd'/'down' or 'r'/'right'.",
+        assertEquals("Invalid input: Direction can only be 'd'/'down' or 'r'/'right'.",
                 exc.getMessage());
     }
 

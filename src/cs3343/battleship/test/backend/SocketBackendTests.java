@@ -20,6 +20,7 @@ public class SocketBackendTests {
 
     @Before
     public void setup() throws Exception {
+        Thread.sleep(200);
         serverThread = new Thread(() -> {
             try {
                 server = new Server(port);
@@ -39,7 +40,7 @@ public class SocketBackendTests {
         server.close();
         client.close();
 
-        Thread.sleep(100);
+        Thread.sleep(200);
     }
 
     @Test
