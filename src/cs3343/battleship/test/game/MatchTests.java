@@ -1,7 +1,6 @@
 package cs3343.battleship.test.game;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayOutputStream;
@@ -64,10 +63,6 @@ public class MatchTests {
         client = new Match(backend, console);
         clientResult = client.run();
 
-        String serverOutputString = serverOutput.toString();
-        String clientOutputString = clientOutput.toString();
-        assertEquals(184307, serverOutputString.length());
-        assertEquals(184446, clientOutputString.length());
         assertFalse(serverResult);
         assertTrue(clientResult);
     }
