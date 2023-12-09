@@ -10,6 +10,8 @@ import cs3343.battleship.logic.Position;
  * neccessary information for the Battleship game to run.
  */
 public final class Message implements Serializable {
+    private static final long serialVersionUID = 19122003L;
+
     /**
      * Represents the type of a message. Since there will be different Message types
      * containing different data, it is necessary to distinguish them. using some
