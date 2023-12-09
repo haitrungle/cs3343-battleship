@@ -1,4 +1,4 @@
-package cs3343.battleship.test.game;
+package cs3343.battleship.test;
 
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;

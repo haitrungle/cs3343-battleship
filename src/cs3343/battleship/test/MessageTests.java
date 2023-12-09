@@ -1,4 +1,4 @@
-package cs3343.battleship.test.backend;
+package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;

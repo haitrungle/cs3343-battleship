@@ -8,8 +8,8 @@ import cs3343.battleship.exceptions.*;
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.Board.State;
-import cs3343.battleship.logic.ship.Direction;
-import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Ship;
 
 /**
  * This class represents a player in the game. It integrates the components of

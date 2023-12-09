@@ -2,7 +2,7 @@ package cs3343.battleship.game;
 
 import java.util.Random;
 
-import cs3343.battleship.logic.ship.*;
+import cs3343.battleship.logic.*;
 
 /**
  * This class contains the configuration of the game.

@@ -8,8 +8,8 @@ import java.util.Scanner;
 import cs3343.battleship.backend.*;
 import cs3343.battleship.exceptions.*;
 import cs3343.battleship.logic.*;
-import cs3343.battleship.logic.ship.Direction;
-import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Ship;
 
 /**
  * This class represents the main game interface that handles all interactions

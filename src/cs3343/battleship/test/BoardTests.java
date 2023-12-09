@@ -1,4 +1,4 @@
-package cs3343.battleship.test.logic;
+package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,10 +14,10 @@ import cs3343.battleship.exceptions.OverlapShipException;
 import cs3343.battleship.exceptions.PositionOutOfBoundsException;
 import cs3343.battleship.logic.Board;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.ship.Battleship;
-import cs3343.battleship.logic.ship.Direction;
-import cs3343.battleship.logic.ship.Ship;
-import cs3343.battleship.logic.ship.Submarine;
+import cs3343.battleship.logic.Battleship;
+import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Ship;
+import cs3343.battleship.logic.Submarine;
 
 public class BoardTests {
     @Test
@@ -101,7 +101,7 @@ public class BoardTests {
         Ship s = new Battleship();
         Board test = new Board(1);
         Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("An object of class cs3343.battleship.logic.ship.Ship is null", e.getMessage());
+        assertEquals("An object of class cs3343.battleship.logic.Ship is null", e.getMessage());
     }
 
     @Test

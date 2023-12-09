@@ -1,7 +1,7 @@
 package cs3343.battleship.game;
 
 import cs3343.battleship.logic.*;
-import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.Ship;
 
 /**
  * This class contains the tutorial of the game. In the tutorial, the player

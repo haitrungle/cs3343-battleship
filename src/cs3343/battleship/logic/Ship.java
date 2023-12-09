@@ -1,4 +1,4 @@
-package cs3343.battleship.logic.ship;
+package cs3343.battleship.logic;
 
 import java.util.Arrays;
 import java.util.List;

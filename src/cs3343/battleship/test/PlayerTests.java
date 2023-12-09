@@ -1,4 +1,4 @@
-package cs3343.battleship.test.game;
+package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.ship.Battleship;
-import cs3343.battleship.logic.ship.Direction;
-import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.Battleship;
+import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Ship;
 
 public class PlayerTests {
     private Player p1;

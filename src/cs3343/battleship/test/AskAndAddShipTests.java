@@ -1,4 +1,4 @@
-package cs3343.battleship.test.game.console;
+package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.ship.Battleship;
-import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.Battleship;
+import cs3343.battleship.logic.Ship;
 
 public class AskAndAddShipTests {
     @Test

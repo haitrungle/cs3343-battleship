@@ -3,8 +3,8 @@ package cs3343.battleship.logic;
 import java.util.Arrays;
 
 import cs3343.battleship.exceptions.*;
-import cs3343.battleship.logic.ship.Direction;
-import cs3343.battleship.logic.ship.Ship;
+import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Ship;
 
 /**
  * This class represents a game board, which is internally a square grid of

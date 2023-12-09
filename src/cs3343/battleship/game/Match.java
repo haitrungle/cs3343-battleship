@@ -4,7 +4,7 @@ import cs3343.battleship.backend.Backend;
 import cs3343.battleship.backend.Message;
 import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.ship.*;
+import cs3343.battleship.logic.*;
 
 /**
  * This class represents a match that a player is in with another player. Since

@@ -1,4 +1,4 @@
-package cs3343.battleship.test.game.console;
+package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;

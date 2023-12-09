@@ -1,4 +1,4 @@
-package cs3343.battleship.test.logic;
+package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,7 +8,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.exceptions.InvalidInputException;
-import cs3343.battleship.logic.ship.Direction;
+import cs3343.battleship.logic.Direction;
 
 public class DirectionTests {
     @Test
