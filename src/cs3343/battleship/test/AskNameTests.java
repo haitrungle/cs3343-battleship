@@ -9,11 +9,10 @@ import cs3343.battleship.game.Console;
 
 public class AskNameTests {
     @ParameterizedTest
-    @ValueSource(strings = { "Kai12", "Henry32", "Hei63", "Hai85", "Kusuma17", "Le23", "aer129" })
-    public void askNameKai_shouldGiveKai(String input) {
+    @ValueSource(strings = { "Kai 12\n", "Henry 32\n", "Hei 63\n", "Hai 85\n", "Kusuma 17\n", "Le 23\n", "aer 129" })
+    public void string_shouldGiveString(String input) {
         Console console = Console.make().withIn(input);
-
         String result = console.askName();
-        assertEquals(input, result);
+        assertEquals(input.trim(), result);
     }
 }

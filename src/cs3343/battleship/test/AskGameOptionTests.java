@@ -3,39 +3,39 @@ package cs3343.battleship.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import cs3343.battleship.game.Console;
 
 public class AskGameOptionTests {
-    @Test
-    public void numberNotValid_shouldAskUntilCorrect() {
-        String input = "4\n12\n321\n3\n";
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "4\n12\n321\n3\n",
+            "-4\n1.0\n2e-1\n3\n",
+    })
+    public void invalidNumber_shouldAskUntilCorrect(String input) {
         Console console = Console.make().withIn(input);
         int option = console.askGameOption();
         assertEquals(3, option);
     }
 
-    @Test
-    public void notNumber_shouldAskUntilCorrect() {
-        String input = "x\nceo02\n123m1\n1";
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "x\nceo02\n123m1\n1\n",
+            "o56\ncmco\n9vvb\n1\n",
+    })
+    public void notNumber_shouldAskUntilCorrect(String input) {
         Console console = Console.make().withIn(input);
         int option = console.askGameOption();
         assertEquals(1, option);
     }
 
-    @Test
-    public void number1_shouldGive1() {
-        String input = "1\n";
+    @ParameterizedTest
+    @ValueSource(strings = { "1\n", "2\n", "3\n" })
+    public void validNumber_shouldGiveCorrectNumber(String input) {
         Console console = Console.make().withIn(input);
         int a = console.askGameOption();
-        assertEquals(1, a);
-    }
-
-    @Test
-    public void number2_shouldGive2() {
-        String input = "2\n";
-        Console console = Console.make().withIn(input);
-        int a = console.askGameOption();
-        assertEquals(2, a);
+        assertEquals(input.charAt(0) - '0', a);
     }
 }

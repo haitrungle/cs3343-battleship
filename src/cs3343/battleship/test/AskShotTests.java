@@ -3,6 +3,8 @@ package cs3343.battleship.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
@@ -13,7 +15,7 @@ public class AskShotTests {
     private static final int boardSize = Config.DEFAULT_BOARD_SIZE;
 
     @Test
-    public void allPositionsExcept00AreShot_askShotRandom_shouldGive00() throws Exception {
+    public void randomShot_ifAllPositionsExcept00AreShot_shouldGive00() throws Exception {
         String input = "\n";
         Console console = Console.make().withIn(input);
 
@@ -31,8 +33,14 @@ public class AskShotTests {
         assertEquals(new Position(0, 0), p);
     }
 
-    @Test
-    public void askShotTwoNumbers_shouldGivePosition() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "0, 0\n",
+            "0,0\n",
+            "0 0\n",
+            "0 , 0\n",
+    })
+    public void validInput_shouldGiveCorrectPosition() {
         String input = "0 0\n";
         Console console = Console.make().withIn(input);
         Player p1 = new Player(boardSize);
@@ -40,18 +48,14 @@ public class AskShotTests {
         assertEquals(new Position(0, 0), p);
     }
 
-    @Test
-    public void askShotOneNumber_shouldAskUntilCorrectPosition() {
-        String input = "0 \n0 0";
-        Console console = Console.make().withIn(input);
-        Player p1 = new Player(boardSize);
-        Position p = console.askShot(p1);
-        assertEquals(new Position(0, 0), p);
-    }
-
-    @Test
-    public void askShotLetters_shouldAskUntilCorrectPosition() {
-        String input = "a b\n0 0";
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "1 1x\n4 of 0\n40g\n0,0\n",
+            "-1 1\n1 -1\n200 200\n0 0\n",
+            "123\n-49\n0 0\n",
+            "iodine\ncaleier 1 9\n0 0\n",
+    })
+    public void invalidInput_shouldAskUntilCorrectPosition(String input) {
         Console console = Console.make().withIn(input);
         Player p1 = new Player(boardSize);
         Position p = console.askShot(p1);

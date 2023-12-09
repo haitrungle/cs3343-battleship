@@ -65,7 +65,6 @@ public class PlayerTests {
         Ship s = new Battleship();
         p1.addShipRandom(s, Config.rng());
         List<Position> positions = s.positions();
-
         for (int i = 0; i < positions.size(); i++) {
             assertTrue(p1.getShot(positions.get(i)));
         }

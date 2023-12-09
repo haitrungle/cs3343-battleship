@@ -168,7 +168,7 @@ public final class Console {
     public String askName() {
         println("What is your name?");
         prompt();
-        return in.nextLine();
+        return in.nextLine().trim();
     }
 
     /**
