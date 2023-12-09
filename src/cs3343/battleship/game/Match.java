@@ -72,6 +72,7 @@ public final class Match {
                 console.println(player.boardToString());
                 console.askAndAddShip(fleet[i], player);
             }
+            console.println(player.boardToString());
 
             while (player.hasAliveShip()) {
                 if (myTurn) {
@@ -119,7 +120,7 @@ public final class Match {
     }
 
     private void waitUntilReady() throws Exception {
-        console.typeln("Waiting for another player to connect...");
+        if (!backend.isReady()) console.typeln("Waiting for another player to connect...");
         while (!backend.isReady())
             Thread.sleep(1000);
     }
