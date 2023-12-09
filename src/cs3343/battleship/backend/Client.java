@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import cs3343.battleship.exceptions.BackendException;
 import cs3343.battleship.game.Config;
 
 /**
@@ -13,8 +14,8 @@ import cs3343.battleship.game.Config;
  */
 public class Client extends SocketBackend {
     private Socket socket;
-    String host;
-    int port;
+    String remoteHost;
+    int remotePort;
 
     /**
      * Constructs a client that connects to the specified remote host and port.
@@ -25,22 +26,21 @@ public class Client extends SocketBackend {
      *                   connect to {@link Config#DEFAULT_PORT}.
      * @throws Exception
      */
-    public Client(String remoteHost, int remotePort) throws Exception {
-        this.host = remoteHost;
-        this.port = remotePort;
+    public Client(String remoteHost, int remotePort) throws BackendException {
+        this.remoteHost = remoteHost;
+        this.remotePort = remotePort;
         if (remoteHost == null) {
-            this.host = "localhost";
-            this.port = Config.DEFAULT_PORT;
+            this.remoteHost = "localhost";
         }
         try {
-            socket = new Socket(this.host, this.port);
+            socket = new Socket(this.remoteHost, this.remotePort);
             System.out.println("Server connected: " + socket.getInetAddress().getHostAddress());
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
             ready = true;
-        } catch (Exception e) {
-            throw new Exception("Error initializing Client: " + e.getMessage());
+        } catch (IOException e) {
+            throw new BackendException("Cannot initialize Client: " + e.getMessage());
         }
     }
 
@@ -49,6 +49,7 @@ public class Client extends SocketBackend {
      */
     public void close() throws IOException {
         super.close();
-        if (socket != null) socket.close();
+        if (socket != null)
+            socket.close();
     }
 }

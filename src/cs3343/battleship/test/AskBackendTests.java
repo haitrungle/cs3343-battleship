@@ -1,7 +1,6 @@
 package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterEach;
@@ -11,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import cs3343.battleship.backend.Backend;
+import cs3343.battleship.exceptions.BackendException;
 import cs3343.battleship.game.Console;
 
 public class AskBackendTests {
@@ -75,26 +75,23 @@ public class AskBackendTests {
     }
 
     @Test
-    public void noServer_clientConnectGivenAddress_shouldThrow() throws Exception {
+    public void noServer_clientConnectGivenAddress_shouldThrow() {
         String input = "n\n127.0.0.1:1234\n";
         Console console = Console.make().withIn(input);
-        Exception e = assertThrows(Exception.class, () -> console.askBackend());
-        assertEquals("Error initializing Client: Connection refused", e.getMessage());
+        assertThrows(BackendException.class, () -> console.askBackend());
     }
 
     @Test
-    public void noServer_clientConnectDefaultAddress_shouldThrow() throws Exception {
+    public void noServer_clientConnectDefaultAddress_shouldThrow() {
         String input = "n\n\n";
         Console console = Console.make().withIn(input);
-        Exception e = assertThrows(Exception.class, () -> console.askBackend());
-        assertEquals("Error initializing Client: Connection refused", e.getMessage());
+        assertThrows(BackendException.class, () -> console.askBackend());
     }
 
     @Test
-    public void noServer_clientConnectNumber_shouldThrow() throws Exception {
+    public void noServer_clientConnectNumber_shouldThrow() {
         String input = "n\n123412\n\n";
         Console console = Console.make().withIn(input);
-        Exception e = assertThrows(Exception.class, () -> console.askBackend());
-        assertEquals("Error initializing Client: Connection refused", e.getMessage());
+        assertThrows(BackendException.class, () -> console.askBackend());
     }
 }

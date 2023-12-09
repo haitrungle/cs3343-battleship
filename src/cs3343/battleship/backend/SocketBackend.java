@@ -2,6 +2,8 @@ package cs3343.battleship.backend;
 
 import java.io.*;
 
+import cs3343.battleship.exceptions.BackendException;
+
 /**
  * This abstract class represents a Backend using socket connection. Currently,
  * the implementation is rather simplistic: all operation is done synchronously.
@@ -39,21 +41,21 @@ public abstract class SocketBackend implements Backend {
         ready = false;
     }
 
-    public Message waitForMessage() {
+    public Message waitForMessage() throws BackendException {
         try {
             Message message = (Message) in.readObject();
             return message;
         } catch (IOException | ClassNotFoundException e) {
-            return null;
+            throw new BackendException("Cannot receive message: " + e.getMessage());
         }
     }
 
-    public void sendMessage(Message message) {
+    public void sendMessage(Message message) throws BackendException {
         try {
             out.writeObject(message);
             out.flush();
         } catch (IOException e) {
-            System.out.println("Error sending message to remote host: " + e.getMessage());
+            throw new BackendException("Cannot send message: " + e.getMessage());
         }
     }
 }

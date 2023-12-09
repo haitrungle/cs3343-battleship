@@ -1,6 +1,7 @@
 package cs3343.battleship.game;
 
-import cs3343.battleship.logic.*;
+import cs3343.battleship.logic.Player;
+import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.Ship;
 
 /**
@@ -17,10 +18,10 @@ public final class Tutorial {
      * 
      * @param c the console to use for input and output
      */
-    public Tutorial(Console c) {
-        player = new Player();
-        enemy = new Player();
-        console = c;
+    public Tutorial(Console console) {
+        this.console = console;
+        player = new Player(Config.getBoardSize());
+        enemy = new Player(Config.getBoardSize());
     }
 
     /**
@@ -77,7 +78,7 @@ public final class Tutorial {
 
         Ship[] enemyFleet = Config.defaultFleet();
         for (Ship s : enemyFleet) {
-            enemy.addShipRandom(s);
+            enemy.addShipRandom(s, Config.rng());
         }
 
         console.typeln("All ships have been placed on your board.");
@@ -130,7 +131,7 @@ public final class Tutorial {
 
         // Computer's turn
         try {
-            Position shot = enemy.getRandomShot();
+            Position shot = enemy.getRandomShot(Config.rng());
             boolean hit = player.getShot(shot);
             enemy.shotEnemy(shot, hit);
             console.println(player.twoBoardsToString());

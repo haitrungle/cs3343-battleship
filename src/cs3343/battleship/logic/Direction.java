@@ -2,7 +2,7 @@ package cs3343.battleship.logic;
 
 import java.util.Random;
 
-import cs3343.battleship.exceptions.*;
+import cs3343.battleship.exceptions.InvalidInputException;
 
 /**
  * This enum represents a direction in which a ship can be placed.

@@ -10,7 +10,7 @@ import cs3343.battleship.game.Console;
 public class AskNameTests {
     @ParameterizedTest
     @ValueSource(strings = { "Kai12", "Henry32", "Hei63", "Hai85", "Kusuma17", "Le23", "aer129" })
-    public void askNameKai_shouldGiveKai(String input) throws Exception {
+    public void askNameKai_shouldGiveKai(String input) {
         Console console = Console.make().withIn(input);
 
         String result = console.askName();

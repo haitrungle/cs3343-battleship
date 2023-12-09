@@ -4,27 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cs3343.battleship.exceptions.*;
-import cs3343.battleship.game.Config;
+import cs3343.battleship.exceptions.NullObjectException;
+import cs3343.battleship.exceptions.OverlapShipException;
+import cs3343.battleship.exceptions.PositionOutOfBoundsException;
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.logic.Board.State;
-import cs3343.battleship.logic.Direction;
-import cs3343.battleship.logic.Ship;
 
 /**
  * This class represents a player in the game. It integrates the components of
  * the logic package in a unified class.
  */
 public final class Player {
-    private Board board = new Board(Config.BOARD_SIZE);
-    private Board enemyBoard = new Board(Config.BOARD_SIZE);
-    private List<Ship> ships = new ArrayList<>();
-    private List<Position> targets = new ArrayList<>();
+    private final Board board;
+    private final Board enemyBoard;
+    private final List<Ship> ships = new ArrayList<>();
+    private final List<Position> targets = new ArrayList<>();
+
+    public Player(int boardSize) {
+        board = new Board(boardSize);
+        enemyBoard = new Board(boardSize);
+    }
 
     /**
      * Adds a ship to this player's board.
+     * @throws NullObjectException
+     * @throws OverlapShipException
+     * @throws PositionOutOfBoundsException
      */
-    public void addShip(Ship s) throws Exception {
+    public void addShip(Ship s) throws PositionOutOfBoundsException, OverlapShipException, NullObjectException {
         board.addShip(s);
         ships.add(s);
     }
@@ -35,8 +43,7 @@ public final class Player {
      * @param ship The ship to add, whose startPosition and direction may be unset.
      * @return The ship that was added, with startPosition and direction set.
      */
-    public Ship addShipRandom(Ship ship) {
-        Random rng = Config.rng();
+    public Ship addShipRandom(Ship ship, Random rng) {
         while (true) {
             Position p = Position.random(rng, board.getSize());
             ship.setStartPosition(p);
@@ -65,8 +72,10 @@ public final class Player {
      * 
      * @param shot the position of the shot
      * @return true if the shot hits a ship, false otherwise
+     * @throws NullObjectException
+     * @throws PositionShotTwiceException
      */
-    public boolean getShot(Position shot) throws Exception {
+    public boolean getShot(Position shot) throws PositionShotTwiceException, NullObjectException {
         return board.addShot(shot);
     }
 
@@ -76,7 +85,7 @@ public final class Player {
      * @param shot the position of the shot
      * @param hit  true if the shot hits a ship, false otherwise
      */
-    public void shotEnemy(Position shot, boolean hit) throws Exception {
+    public void shotEnemy(Position shot, boolean hit) throws NullObjectException, PositionOutOfBoundsException, PositionShotTwiceException {
         if (hasShotEnemyAt(shot))
             throw new PositionShotTwiceException(shot);
         State state = hit ? State.HIT : State.MISS;
@@ -140,8 +149,7 @@ public final class Player {
      * 
      * @return a random shot that this player has not shot at yet
      */
-    public Position getRandomShot() {
-        Random rng = Config.rng();
+    public Position getRandomShot(Random rng) {
         while (true) {
             Position p = Position.random(rng, board.getSize());
             if (hasShotEnemyAt(p))

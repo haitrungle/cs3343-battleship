@@ -2,6 +2,8 @@ package cs3343.battleship.backend;
 
 import java.io.Closeable;
 
+import cs3343.battleship.exceptions.BackendException;
+
 /**
  * This interface defines the methods needed for two instances of the game to
  * communicate with each other. Instead of one `sendMessageAndWairForReply()`
@@ -29,9 +31,9 @@ public interface Backend extends Closeable {
      * by {@link #sendMessage(Message)} from another Backend.
      * 
      * @return The message received.
-     * @throws Exception
+     * @throws BackendException
      */
-    public Message waitForMessage() throws Exception;
+    public Message waitForMessage() throws BackendException;
 
     /**
      * Sends a message. Typically, the message is received by
@@ -40,5 +42,5 @@ public interface Backend extends Closeable {
      * 
      * @param message The message to send.
      */
-    public void sendMessage(Message message);
+    public void sendMessage(Message message) throws BackendException;
 }

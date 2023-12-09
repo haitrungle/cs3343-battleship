@@ -2,9 +2,10 @@ package cs3343.battleship.logic;
 
 import java.util.Arrays;
 
-import cs3343.battleship.exceptions.*;
-import cs3343.battleship.logic.Direction;
-import cs3343.battleship.logic.Ship;
+import cs3343.battleship.exceptions.NullObjectException;
+import cs3343.battleship.exceptions.OverlapShipException;
+import cs3343.battleship.exceptions.PositionOutOfBoundsException;
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 
 /**
  * This class represents a game board, which is internally a square grid of
@@ -213,7 +214,7 @@ public final class Board {
      * @throws NullObjectException          if the input position or state is null
      * @throws PositionOutOfBoundsException if the position is out of bounds
      */
-    public void setState(Position position, State state) throws Exception {
+    public void setState(Position position, State state) throws NullObjectException, PositionOutOfBoundsException {
         if (position == null)
             throw new NullObjectException(Position.class);
         if (state == null)

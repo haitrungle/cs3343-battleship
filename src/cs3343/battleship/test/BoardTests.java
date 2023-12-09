@@ -12,34 +12,35 @@ import org.junit.jupiter.api.Test;
 import cs3343.battleship.exceptions.NullObjectException;
 import cs3343.battleship.exceptions.OverlapShipException;
 import cs3343.battleship.exceptions.PositionOutOfBoundsException;
-import cs3343.battleship.logic.Board;
-import cs3343.battleship.logic.Position;
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.logic.Battleship;
+import cs3343.battleship.logic.Board;
 import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.Ship;
 import cs3343.battleship.logic.Submarine;
 
 public class BoardTests {
     @Test
-    public void test_board_to_string_1() throws Exception {
+    public void test_board_to_string_1() {
         Board.State state = Board.State.HIT;
         assertEquals("×", state.toString());
     }
 
     @Test
-    public void test_board_to_string_2() throws Exception {
+    public void test_board_to_string_2() {
         Board.State state = Board.State.MISS;
         assertEquals("⋆", state.toString());
     }
 
     @Test
-    public void test_board_to_string_3() throws Exception {
+    public void test_board_to_string_3() {
         Board.State state = Board.State.SHIP;
         assertEquals("□", state.toString());
     }
 
     @Test
-    public void test_board_to_string_4() throws Exception {
+    public void test_board_to_string_4() {
         Board.State state = Board.State.WATER;
         assertEquals("~", state.toString());
     }
@@ -52,31 +53,26 @@ public class BoardTests {
     }
 
     @Test
-    public void test_board_set_state_exception_1() throws Exception {
+    public void test_board_set_state_exception_1() {
         Board test = new Board(9);
-        Exception e = assertThrows(Exception.class, () -> test.setState(null, Board.State.MISS));
-        assertEquals("An object of class cs3343.battleship.logic.Position is null", e.getMessage());
+        assertThrows(NullObjectException.class, () -> test.setState(null, Board.State.MISS));
     }
 
     @Test
-    public void test_board_set_state_exception_2() throws Exception {
+    public void test_board_set_state_exception_2() {
         Board test = new Board(9);
-        Exception e = assertThrows(Exception.class, () -> test.setState(new Position(1, 1), null));
-        assertEquals("An object of class cs3343.battleship.logic.Board$State is null", e.getMessage());
+        assertThrows(NullObjectException.class, () -> test.setState(new Position(1, 1), null));
     }
 
     @Test
-    public void test_board_set_state_exception_3() throws Exception {
+    public void test_board_set_state_exception_3() {
         Board test = new Board(1);
-        Exception e = assertThrows(Exception.class, () -> test.setState(new Position(1, 1), Board.State.MISS));
-        assertEquals(
-                "Invalid input: Position (1,1) is out of bounds. Row and column must be between 0 and " + (1 - 1) + ".",
-                e.getMessage());
+        assertThrows(Exception.class, () -> test.setState(new Position(1, 1), Board.State.MISS));
     }
 
     @Test
     public void test_board_add_ship_1() throws Exception {
-        Ship s = new Battleship(Direction.decode("r"), new Position(1, 1));
+        Ship s = new Battleship(Direction.RIGHT, new Position(1, 1));
         Board test = new Board(9);
         test.addShip(s);
         List<Position> positions = s.positions();
@@ -87,7 +83,7 @@ public class BoardTests {
 
     @Test
     public void test_board_add_ship_2() throws Exception {
-        Ship s = new Battleship(Direction.decode("d"), new Position(1, 1));
+        Ship s = new Battleship(Direction.DOWN, new Position(1, 1));
         Board test = new Board(9);
         test.addShip(s);
         List<Position> positions = s.positions();
@@ -97,70 +93,56 @@ public class BoardTests {
     }
 
     @Test
-    public void test_board_add_ship_exception_1() throws Exception {
+    public void test_board_add_ship_exception_1() {
         Ship s = new Battleship();
         Board test = new Board(1);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("An object of class cs3343.battleship.logic.Ship is null", e.getMessage());
+        assertThrows(NullObjectException.class, () -> test.addShip(s));
     }
 
     @Test
-    public void test_board_add_ship_exception_2() throws Exception {
+    public void test_board_add_ship_exception_2() {
         Ship s = new Battleship();
         s.setDirection(Direction.DOWN);
         Board test = new Board(1);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("An object of class cs3343.battleship.logic.Position is null", e.getMessage());
+        assertThrows(NullObjectException.class, () -> test.addShip(s));
     }
 
     @Test
-    public void test_board_add_ship_exception_3() throws Exception {
-        Ship s = new Battleship(Direction.decode("r"), new Position(1, 1));
+    public void test_board_add_ship_exception_3() {
+        Ship s = new Battleship(Direction.RIGHT, new Position(1, 1));
         Board test = new Board(1);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("Invalid input: Position (" + 1 + "," + 1
-                + ") is out of bounds. Row and column must be between 0 and " + (1 - 1) + ".", e.getMessage());
+        assertThrows(PositionOutOfBoundsException.class, () -> test.addShip(s));
     }
 
     @Test
-    public void test_board_add_ship_exception_4() throws Exception {
-        Ship s = new Battleship(Direction.decode("r"), new Position(1, 1));
-        ;
+    public void test_board_add_ship_exception_4() {
+        Ship s = new Battleship(Direction.RIGHT, new Position(1, 1));
         Board test = new Board(3);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("Invalid input: Position (" + 1 + "," + 4
-                + ") is out of bounds. Row and column must be between 0 and " + (3 - 1) + ".", e.getMessage());
+        assertThrows(PositionOutOfBoundsException.class, () -> test.addShip(s));
     }
 
     @Test
-    public void test_board_add_ship_exception_5() throws Exception {
-        Ship s = new Battleship(Direction.decode("d"), new Position(1, 1));
+    public void test_board_add_ship_exception_5() {
+        Ship s = new Battleship(Direction.DOWN, new Position(1, 1));
         Board test = new Board(3);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("Invalid input: Position (" + 4 + "," + 1
-                + ") is out of bounds. Row and column must be between 0 and " + (3 - 1) + ".", e.getMessage());
+        assertThrows(PositionOutOfBoundsException.class, () -> test.addShip(s));
     }
 
     @Test
     public void test_board_add_ship_exception_6() throws Exception {
-        Ship s = new Battleship(Direction.decode("r"), new Position(1, 1));
-        ;
+        Ship s = new Battleship(Direction.RIGHT, new Position(1, 1));
         Board test = new Board(9);
         test.addShip(s);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("Invalid input: There is an overlapping ship at " + "1,1"
-                + ". Please choose another location for your ship.", e.getMessage());
+        assertThrows(OverlapShipException.class, () -> test.addShip(s));
     }
 
     @Test
     public void test_board_add_ship_exception_7() throws Exception {
-        Ship s = new Battleship(Direction.decode("d"), new Position(1, 1));
-        ;
+        Ship s1 = new Battleship(Direction.RIGHT, new Position(1, 0));
+        Ship s2 = new Battleship(Direction.DOWN, new Position(0, 1));
         Board test = new Board(9);
-        test.addShip(s);
-        Exception e = assertThrows(Exception.class, () -> test.addShip(s));
-        assertEquals("Invalid input: There is an overlapping ship at " + "1,1"
-                + ". Please choose another location for your ship.", e.getMessage());
+        test.addShip(s1);
+        assertThrows(OverlapShipException.class, () -> test.addShip(s2));
     }
 
     @Test
@@ -173,8 +155,7 @@ public class BoardTests {
 
     @Test
     public void test_board_add_shot_2() throws Exception {
-        Ship s = new Battleship(Direction.decode("d"), new Position(1, 1));
-        ;
+        Ship s = new Battleship(Direction.DOWN, new Position(1, 1));
         Position shot = new Position(1, 1);
         Board test = new Board(9);
         test.addShip(s);
@@ -184,22 +165,18 @@ public class BoardTests {
 
     @Test
     public void test_board_add_shot_exception_1() throws Exception {
-        Ship s = new Battleship(Direction.decode("d"), new Position(1, 1));
-        ;
+        Ship s = new Battleship(Direction.DOWN, new Position(1, 1));
         Position shot = new Position(1, 1);
         Board test = new Board(9);
         test.addShip(s);
         test.addShot(shot);
-        Exception e = assertThrows(Exception.class, () -> test.addShot(shot));
-        assertEquals("Invalid input: You have already shot at " + "1,1"
-                + ". Please select another position.", e.getMessage());
+        assertThrows(PositionShotTwiceException.class, () -> test.addShot(shot));
     }
 
     @Test
-    public void test_board_add_shot_exception_2() throws Exception {
+    public void test_board_add_shot_exception_2() {
         Board test = new Board(9);
-        Exception e = assertThrows(Exception.class, () -> test.addShot(null));
-        assertEquals("An object of class cs3343.battleship.logic.Position is null", e.getMessage());
+        assertThrows(NullObjectException.class, () -> test.addShot(null));
     }
 
     @Test
@@ -210,8 +187,7 @@ public class BoardTests {
     }
 
     @Test
-    public void test_board_has_alive_ship_2() throws OverlapShipException,
-            PositionOutOfBoundsException, NullObjectException {
+    public void test_board_has_alive_ship_2() throws Exception {
         Board test = new Board(5);
         Ship s = new Submarine(Direction.DOWN, new Position(1, 1));
         test.addShip(s);

@@ -3,8 +3,6 @@ package cs3343.battleship.logic;
 import java.util.Arrays;
 import java.util.List;
 
-import cs3343.battleship.logic.Position;
-
 /**
  * This abstract class represents a ship in the game.
  * 

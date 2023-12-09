@@ -44,19 +44,19 @@ public class MessageTests {
     }
 
     @Test
-    public void shotMsgWithPosition_shouldHavePosition() {
+    public void shotMsgWithPosition_shouldHavePosition() throws Exception {
         Message m = Message.ShotMsg(new Position(1, 1));
         assertEquals(new Position(1, 1), m.getShot());
     }
 
     @Test
-    public void resultMsgWithFalse_shouldHaveHitFalse() {
+    public void resultMsgWithFalse_shouldHaveHitFalse() throws Exception {
         Message m = Message.ResultMsg(false);
         assertFalse(m.getHit());
     }
 
     @Test
-    public void resultMsgWithHit_shouldHaveHit() {
+    public void resultMsgWithHit_shouldHaveHit() throws Exception {
         Message m = Message.ResultMsg(true);
         assertEquals(true, m.getHit());
     }

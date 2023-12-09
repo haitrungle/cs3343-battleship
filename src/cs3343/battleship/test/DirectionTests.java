@@ -48,14 +48,12 @@ public class DirectionTests {
     }
 
     @Test
-    public void test_direction_exception_1() throws Exception {
-        Throwable exc = assertThrows(InvalidInputException.class, () -> Direction.decode("other"));
-        assertEquals("Invalid input: Direction can only be 'd'/'down' or 'r'/'right'.",
-                exc.getMessage());
+    public void test_direction_exception_1() {
+        assertThrows(InvalidInputException.class, () -> Direction.decode("other"));
     }
 
     @Test
-    public void test_direction_random() throws Exception {
+    public void test_direction_random() {
         Direction d = Direction.random(new Random());
         assertEquals(d, d);
     }

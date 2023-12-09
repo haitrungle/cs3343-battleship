@@ -3,9 +3,6 @@ package cs3343.battleship.test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,12 +18,9 @@ public class MatchTests {
     private boolean serverResult;
     private boolean clientResult;
 
-    private final OutputStream serverOutput = new ByteArrayOutputStream();
-    private final OutputStream clientOutput = new ByteArrayOutputStream();
-
     @BeforeEach
-    public void setup() throws Exception {
-        Config.TYPEWRITER_DELAY = 0;
+    public void setup() {
+        new Config.Setter().withTypewriterDelay(0).set();
         server = null;
         client = null;
     }
@@ -45,7 +39,7 @@ public class MatchTests {
             try {
                 Backend backend = Console.make().withIn("y\n").askBackend();
                 String input = "\n".repeat(100);
-                Console console = Console.make().withIn(input).withOut(serverOutput);
+                Console console = Console.make().withIn(input);
                 server = new Match(backend, console);
                 serverResult = server.run();
             } catch (Exception e) {
@@ -59,7 +53,7 @@ public class MatchTests {
         }
         Backend backend = Console.make().withIn("n\n\n").askBackend();
         String input = "n" + "\n".repeat(100);
-        Console console = Console.make().withIn(input).withOut(clientOutput);
+        Console console = Console.make().withIn(input);
         client = new Match(backend, console);
         clientResult = client.run();
 

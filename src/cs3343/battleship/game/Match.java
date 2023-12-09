@@ -2,9 +2,13 @@ package cs3343.battleship.game;
 
 import cs3343.battleship.backend.Backend;
 import cs3343.battleship.backend.Message;
+import cs3343.battleship.exceptions.GameException;
+import cs3343.battleship.exceptions.NullObjectException;
+import cs3343.battleship.exceptions.PositionOutOfBoundsException;
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.logic.Player;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.*;
+import cs3343.battleship.logic.Ship;
 
 /**
  * This class represents a match that a player is in with another player. Since
@@ -26,10 +30,10 @@ public final class Match {
      * @param b the backend to use
      * @param c the console to use
      */
-    public Match(Backend b, Console c) throws Exception {
+    public Match(Backend b, Console c) {
         console = c;
         backend = b;
-        player = new Player();
+        player = new Player(Config.getBoardSize());
         won = false;
     }
 
@@ -47,34 +51,32 @@ public final class Match {
      * contained within this method.
      * 
      * @return whether this player has won the match
+     * @throws InterruptedException
+     * @throws GameException
      */
-    public boolean run() {
-        try {
-            waitUntilReady();
-            Message init = Message.InitMsg();
-            backend.sendMessage(init);
-            Message remoteInit = backend.waitForMessage();
-            assert remoteInit.getType() == Message.Type.INIT;
-            myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
-        } catch (Exception e) {
-            console.println(e);
-        }
+    public boolean run() throws InterruptedException, GameException {
+        waitUntilReady();
+        Message init = Message.InitMsg();
+        backend.sendMessage(init);
+        Message remoteInit = backend.waitForMessage();
+        assert remoteInit.getType() == Message.Type.INIT;
+        myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
 
-        try {
-            console.println(".-------------.\n" +
-                    "|  NEW MATCH  |\n" +
-                    "'-------------'\n");
+        console.println(".-------------.\n" +
+                "|  NEW MATCH  |\n" +
+                "'-------------'\n");
 
-            console.typeln("Setting ships. You will have 5 ships in total.");
-            console.typeln("For each ship, enter direction and start position, e.g. 'd 2,3'");
-            Ship[] fleet = Config.defaultFleet();
-            for (int i = 0; i < 5; i++) {
-                console.println(player.boardToString());
-                console.askAndAddShip(fleet[i], player);
-            }
+        console.typeln("Setting ships. You will have 5 ships in total.");
+        console.typeln("For each ship, enter direction and start position, e.g. 'd 2,3'");
+        Ship[] fleet = Config.defaultFleet();
+        for (int i = 0; i < 5; i++) {
             console.println(player.boardToString());
+            console.askAndAddShip(fleet[i], player);
+        }
+        console.println(player.boardToString());
 
-            while (player.hasAliveShip()) {
+        while (player.hasAliveShip()) {
+            try {
                 if (myTurn) {
                     Position pos = console.askShot(player);
 
@@ -89,6 +91,7 @@ public final class Match {
                     console.println(player.twoBoardsToString());
                     console.typeln(hit ? "You have hit an enemy ship!" : "Sorry, you miss this one.");
                 } else {
+                    console.typeln("Waiting for the other player to make a move...");
                     Message msg = backend.waitForMessage();
                     if (msg.getType() == Message.Type.LOST) {
                         won = true;
@@ -105,22 +108,22 @@ public final class Match {
                     console.typeln("Enemy shot you at position " + shot);
                 }
                 myTurn = !myTurn;
+            } catch (PositionOutOfBoundsException | PositionShotTwiceException | NullObjectException e) {
+                throw new GameException("Unknown error (this should not happened): " + e.getMessage());
             }
-            if (won) {
-                console.typeln("\nCongratulations! You won the match!");
-            } else {
-                backend.sendMessage(Message.LostMsg());
-                console.typeln("\nSorry, you lost. Better luck next time.");
-            }
-            return won;
-        } catch (Exception e) {
-            console.println(e);
-            return false;
         }
+        if (won) {
+            console.typeln("\nCongratulations! You won the match!");
+        } else {
+            backend.sendMessage(Message.LostMsg());
+            console.typeln("\nSorry, you lost. Better luck next time.");
+        }
+        return won;
     }
 
-    private void waitUntilReady() throws Exception {
-        if (!backend.isReady()) console.typeln("Waiting for another player to connect...");
+    private void waitUntilReady() throws InterruptedException {
+        if (!backend.isReady())
+            console.typeln("Waiting for another player to connect...");
         while (!backend.isReady())
             Thread.sleep(1000);
     }

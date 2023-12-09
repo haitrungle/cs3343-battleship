@@ -1,7 +1,5 @@
 package cs3343.battleship.logic;
 
-import cs3343.battleship.logic.Position;
-
 public class Battleship extends Ship {
     public Battleship() {
         super("Battleship", 4);

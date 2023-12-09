@@ -8,8 +8,8 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Position;
 
 public class PositionTests {
     @Test

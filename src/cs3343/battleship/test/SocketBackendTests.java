@@ -18,6 +18,7 @@ import cs3343.battleship.backend.Client;
 import cs3343.battleship.backend.Message;
 import cs3343.battleship.backend.Server;
 import cs3343.battleship.backend.SocketBackend;
+import cs3343.battleship.exceptions.BackendException;
 import cs3343.battleship.logic.Position;
 
 public class SocketBackendTests {
@@ -53,7 +54,7 @@ public class SocketBackendTests {
 
     @ParameterizedTest
     @ArgumentsSource(MessageArgumentsProvider.class)
-    public void clientSendMsg_shouldBeSameWhenServerReceived(Message msg) {
+    public void clientSendMsg_shouldBeSameWhenServerReceived(Message msg) throws Exception {
         client.sendMessage(msg);
         Message received = server.waitForMessage();
         assertEquals(msg, received);
@@ -61,7 +62,7 @@ public class SocketBackendTests {
 
     @ParameterizedTest
     @ArgumentsSource(MessageArgumentsProvider.class)
-    public void serverSendMsg_shouldBeSameWhenClientReceived(Message msg) {
+    public void serverSendMsg_shouldBeSameWhenClientReceived(Message msg) throws Exception {
         server.sendMessage(msg);
         Message received = client.waitForMessage();
         assertEquals(msg, received);
@@ -83,8 +84,7 @@ public class SocketBackendTests {
 
     @Test
     public void newServerOnUsedPort_shouldFail() {
-        Exception e = assertThrows(Exception.class, () -> new Server(port));
-        assertEquals("Error initializing Server: Address already in use", e.getMessage());
+        assertThrows(BackendException.class, () -> new Server(port));
     }
 
     @Test

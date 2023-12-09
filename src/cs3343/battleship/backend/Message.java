@@ -3,13 +3,14 @@ package cs3343.battleship.backend;
 import java.io.Serializable;
 import java.time.Instant;
 
+import cs3343.battleship.exceptions.WrongMessageTypeException;
 import cs3343.battleship.logic.Position;
 
 /**
  * This class represents a message sent between two Backends. It contains the
  * neccessary information for the Battleship game to run.
  */
-public final class Message implements Serializable {
+public class Message implements Serializable {
     private static final long serialVersionUID = 19122003L;
 
     /**
@@ -22,6 +23,22 @@ public final class Message implements Serializable {
         SHOT,
         RESULT,
         LOST;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case INIT:
+                    return "INIT";
+                case SHOT:
+                    return "SHOT";
+                case RESULT:
+                    return "RESULT";
+                case LOST:
+                    return "LOST";
+                default:
+                    return "UNREACHABLE";
+            }
+        }
     }
 
     private Type type;
@@ -58,9 +75,11 @@ public final class Message implements Serializable {
      * Returns the shot position of this message, if it is a SHOT message.
      * 
      * @return the shot position of this message
+     * @throws WrongMessageTypeException
      */
-    public Position getShot() {
-        assert type == Type.SHOT;
+    public Position getShot() throws WrongMessageTypeException {
+        if (type != Type.SHOT)
+            throw new WrongMessageTypeException(Type.SHOT, type);
         return shot;
     }
 
@@ -68,9 +87,11 @@ public final class Message implements Serializable {
      * Returns the hit result of this message, if it is a RESULT message.
      * 
      * @return the result of a previous hit
+     * @throws WrongMessageTypeException
      */
-    public boolean getHit() {
-        assert type == Type.RESULT;
+    public boolean getHit() throws WrongMessageTypeException {
+        if (type != Type.RESULT)
+            throw new WrongMessageTypeException(Type.RESULT, type);
         return hit;
     }
 

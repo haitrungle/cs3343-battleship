@@ -8,8 +8,14 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.exceptions.InvalidInputException;
+import cs3343.battleship.logic.AircraftCarrier;
+import cs3343.battleship.logic.Battleship;
+import cs3343.battleship.logic.Cruiser;
+import cs3343.battleship.logic.Destroyer;
+import cs3343.battleship.logic.Direction;
 import cs3343.battleship.logic.Position;
-import cs3343.battleship.logic.*;
+import cs3343.battleship.logic.Ship;
+import cs3343.battleship.logic.Submarine;
 
 public class ShipTests {
     @Test

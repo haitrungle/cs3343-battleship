@@ -11,10 +11,11 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import cs3343.battleship.logic.Player;
-import cs3343.battleship.logic.Position;
+import cs3343.battleship.game.Config;
 import cs3343.battleship.logic.Battleship;
 import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Player;
+import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.Ship;
 
 public class PlayerTests {
@@ -22,7 +23,7 @@ public class PlayerTests {
 
     @BeforeEach
     public void showBoard() {
-        p1 = new Player();
+        p1 = new Player(Config.getBoardSize());
     }
 
     @Test
@@ -46,9 +47,9 @@ public class PlayerTests {
     }
 
     @Test
-    public void addShipRandom_shouldHaveCorrectPositions() throws Exception {
+    public void addShipRandom_shouldHaveCorrectPositions() {
         Ship s = new Battleship();
-        p1.addShipRandom(s);
+        p1.addShipRandom(s, Config.rng());
         List<Position> positions = s.positions();
         Direction d = s.getDirection();
         int row = positions.get(0).row;
@@ -62,7 +63,7 @@ public class PlayerTests {
     @Test
     public void getShotAtShipPositions_shouldBeTrue() throws Exception {
         Ship s = new Battleship();
-        p1.addShipRandom(s);
+        p1.addShipRandom(s, Config.rng());
         List<Position> positions = s.positions();
 
         for (int i = 0; i < positions.size(); i++) {
@@ -84,38 +85,30 @@ public class PlayerTests {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
         Exception e = assertThrows(Exception.class, () -> p1.shotEnemy(new Position(0, 0), false));
-        assertEquals("Invalid input: You have already shot at " + p
-                + ". Please select another position.", e.getMessage());
     }
 
     @Test
     public void checkShotAtShotPositionsShouldThrow() throws Exception {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
-        Exception e = assertThrows(Exception.class, () -> p1.checkShot(new Position(0, 0)));
-        assertEquals("Invalid input: You have already shot at " + p
-                + ". Please select another position.", e.getMessage());
+        assertThrows(Exception.class, () -> p1.checkShot(new Position(0, 0)));
     }
 
     @Test
-    public void negativeNumberForPosition_shouldThrow() throws Exception {
+    public void negativeNumberForPosition_shouldThrow() {
         Position p = new Position(-1, 0);
-        Exception e = assertThrows(Exception.class, () -> p1.checkShot(p));
-        assertEquals(
-                "Invalid input: Position (-1,0) is out of bounds. Row and column must be between 0 and "
-                        + (p1.getBoardSize() - 1) + ".",
-                e.getMessage());
+        assertThrows(Exception.class, () -> p1.checkShot(p));
     }
 
     @Test
-    public void afterAddShip_shouldHaveAliveShip() throws Exception {
+    public void afterAddShip_shouldHaveAliveShip() {
         Ship s = new Battleship();
-        p1.addShipRandom(s);
+        p1.addShipRandom(s, Config.rng());
         assertTrue(p1.hasAliveShip());
     }
 
     @Test
-    public void default_shouldHaveNoShip() throws Exception {
+    public void default_shouldHaveNoShip() {
         assertFalse(p1.hasAliveShip());
     }
 
@@ -137,15 +130,15 @@ public class PlayerTests {
 
     @Test
     public void shouldRememberLocationShot() throws Exception {
-        Position p = p1.getRandomShot();
+        Position p = p1.getRandomShot(Config.rng());
         p1.shotEnemy(p, true);
         boolean b = p1.hasShotEnemyAt(p);
         assertTrue(b);
     }
 
     @Test
-    public void shouldRememberLocationNotShot() throws Exception {
-        Position p = p1.getRandomShot();
+    public void shouldRememberLocationNotShot() {
+        Position p = p1.getRandomShot(Config.rng());
         boolean b = p1.hasShotEnemyAt(p);
         assertFalse(b);
     }

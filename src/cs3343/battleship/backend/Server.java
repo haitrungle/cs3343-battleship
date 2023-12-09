@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import cs3343.battleship.exceptions.BackendException;
+
 /**
  * This class represents a server in a client-server architecture over a socket
  * connection.
@@ -25,14 +27,12 @@ public class Server extends SocketBackend {
      * @param port The port to listen on.
      * @throws Exception
      */
-    public Server(int port) throws Exception {
+    public Server(int port) throws BackendException {
         this.port = port;
         try {
             ip = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
             ip = InetAddress.getLoopbackAddress();
-            throw new Exception(
-                    "Cannot determine the address of local host. You can only play with another person on the same machine.");
         }
         try {
             serverSocket = new ServerSocket(port);
@@ -47,7 +47,7 @@ public class Server extends SocketBackend {
                     in = new ObjectInputStream(socket.getInputStream());
                     ready = true;
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("Error accepting connection: " + e.getMessage());
                 }
             });
             thread.setUncaughtExceptionHandler((t, e) -> {
@@ -55,7 +55,7 @@ public class Server extends SocketBackend {
             });
             thread.start();
         } catch (IOException e) {
-            throw new Exception("Error initializing Server: " + e.getMessage());
+            throw new BackendException("Cannot initialize Server: " + e.getMessage());
         }
     }
 

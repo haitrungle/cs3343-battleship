@@ -5,10 +5,14 @@ import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import cs3343.battleship.backend.*;
-import cs3343.battleship.exceptions.*;
-import cs3343.battleship.logic.*;
+import cs3343.battleship.backend.Backend;
+import cs3343.battleship.backend.Client;
+import cs3343.battleship.backend.Server;
+import cs3343.battleship.exceptions.BackendException;
+import cs3343.battleship.exceptions.InvalidInputException;
 import cs3343.battleship.logic.Direction;
+import cs3343.battleship.logic.Player;
+import cs3343.battleship.logic.Position;
 import cs3343.battleship.logic.Ship;
 
 /**
@@ -115,8 +119,6 @@ public final class Console {
      *         specified color
      */
     public static String colorize(Object obj, Color color) {
-        if (!Config.CONSOLE_COLOR)
-            return obj.toString();
         return color.getValue() + obj.toString() + Color.RESET.getValue();
     }
 
@@ -128,20 +130,21 @@ public final class Console {
      * @param str the string to print
      */
     public void typeln(String str) {
-        if (Config.TYPEWRITER_DELAY <= 0) {
+        int delay = Config.getTypewriterDelay();
+        if (delay <= 0) {
             out.println(str);
             return;
         }
         for (int i = 0; i < str.length(); i++) {
             out.print(str.charAt(i));
             try {
-                Thread.sleep(Config.TYPEWRITER_DELAY);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         try {
-            Thread.sleep(Config.TYPEWRITER_DELAY * 3);
+            Thread.sleep(delay * 3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -175,10 +178,10 @@ public final class Console {
      * 
      * @return either a Server or a Client as specified by the user
      */
-    public Backend askBackend() throws Exception {
+    public Backend askBackend() throws BackendException {
         boolean isServer = askIsServer();
         if (isServer) {
-            return new Server(Config.DEFAULT_PORT);
+            return new Server(Config.getServerPort());
         } else {
             String[] parts = askAddress();
             return new Client(parts[0], Integer.parseInt(parts[1]));
@@ -231,22 +234,23 @@ public final class Console {
      * 
      * @return the specified option (1 for tutorial, 2 for new match)
      */
-    public int askGameOption() throws Exception {
+    public int askGameOption() {
         println("\nChoose an option:");
-        println("[1] Tutorial");
-        println("[2] New match");
+        println("[1] Start tutorial");
+        println("[2] Play new match");
+        println("[3] Exit game");
         while (true) {
             prompt();
             try {
                 int option = Integer.parseInt(in.nextLine());
-                if (option == 1 || option == 2)
+                if (option == 1 || option == 2 || option == 3)
                     return option;
                 else
-                    throw new InvalidInputException("Can only be 1 or 2. Please enter 1 or 2.");
+                    throw new InvalidInputException("Can only be 1, 2, or 3");
             } catch (InvalidInputException e) {
                 println(e.getMessage());
             } catch (NumberFormatException e) {
-                println("Cannot parse integer. Please enter 1 or 2.");
+                println("Cannot parse integer. Please enter 1, 2, or 3.");
             }
         }
     }
@@ -271,7 +275,7 @@ public final class Console {
             try {
                 Pair<Direction, Position> pair = readPositionAndDirection();
                 if (pair == null)
-                    return player.addShipRandom(ship);
+                    return player.addShipRandom(ship, Config.rng());
                 ship.setDirection(pair.first);
                 ship.setStartPosition(pair.second);
                 player.addShip(ship);
@@ -297,7 +301,7 @@ public final class Console {
             try {
                 Position shot = readPosition();
                 if (shot == null)
-                    shot = player.getRandomShot();
+                    shot = player.getRandomShot(Config.rng());
                 player.checkShot(shot);
                 return shot;
             } catch (InvalidInputException e) {
