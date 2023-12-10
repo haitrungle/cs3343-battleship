@@ -8,11 +8,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import cs3343.battleship.backend.Client;
 import cs3343.battleship.backend.Message;
@@ -53,7 +50,7 @@ public class SocketBackendTests {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(MessageArgumentsProvider.class)
+    @MethodSource("messageProvider")
     public void clientSendMsg_shouldBeSameWhenServerReceived(Message msg) throws Exception {
         client.sendMessage(msg);
         Message received = server.waitForMessage();
@@ -61,11 +58,21 @@ public class SocketBackendTests {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(MessageArgumentsProvider.class)
+    @MethodSource("messageProvider")
     public void serverSendMsg_shouldBeSameWhenClientReceived(Message msg) throws Exception {
         server.sendMessage(msg);
         Message received = client.waitForMessage();
         assertEquals(msg, received);
+    }
+
+    static Stream<Message> messageProvider() throws Exception {
+        return Stream.of(
+                Message.InitMsg(),
+                Message.ShotMsg(new Position(2, 3)),
+                Message.ShotMsg(new Position(0, 0)),
+                Message.ResultMsg(true),
+                Message.ResultMsg(false),
+                Message.LostMsg());
     }
 
     @Test
@@ -93,18 +100,5 @@ public class SocketBackendTests {
         client.sendMessage(m);
         Message message = server.waitForMessage();
         assertEquals(m.getType(), message.getType());
-    }
-}
-
-class MessageArgumentsProvider implements ArgumentsProvider {
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return Stream.of(
-                Message.InitMsg(),
-                Message.ShotMsg(new Position(2, 3)),
-                Message.ShotMsg(new Position(0, 0)),
-                Message.ResultMsg(true),
-                Message.ResultMsg(false),
-                Message.LostMsg()).map(Arguments::of);
     }
 }

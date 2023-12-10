@@ -2,8 +2,10 @@ package cs3343.battleship.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import cs3343.battleship.game.Config;
@@ -14,23 +16,33 @@ import cs3343.battleship.logic.Position;
 public class AskShotTests {
     private static final int boardSize = Config.DEFAULT_BOARD_SIZE;
 
-    @Test
-    public void randomShot_ifAllPositionsExcept00AreShot_shouldGive00() throws Exception {
+    static Stream<Position> positionProvider() {
+        return Stream.of(
+                new Position(1, 2),
+                new Position(2, 1),
+                new Position(4, 5),
+                new Position(3, 6),
+                new Position(5, 0),
+                new Position(0, 5));
+    }
+
+    @ParameterizedTest
+    @MethodSource("positionProvider")
+    public void ifAllPositionsExceptOneAreShot_randomShouldGiveThatPosition(Position pos) throws Exception {
         String input = "\n";
         Console console = Console.make().withIn(input);
 
         Player p1 = new Player(boardSize);
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (i == 0 && j == 0)
+                if (i == pos.row && j == pos.col)
                     continue;
-
                 p1.shotEnemy(new Position(i, j), false);
             }
         }
-        Position p = console.askShot(p1);
+        Position shot = console.askShot(p1);
 
-        assertEquals(new Position(0, 0), p);
+        assertEquals(pos, shot);
     }
 
     @ParameterizedTest

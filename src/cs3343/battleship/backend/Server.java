@@ -17,8 +17,6 @@ import cs3343.battleship.exceptions.BackendException;
 public class Server extends SocketBackend {
     private ServerSocket serverSocket;
     private Socket socket;
-    private static InetAddress ip;
-    private int port;
 
     /**
      * Constructs a server that listens on the specified port. This constructor
@@ -28,11 +26,11 @@ public class Server extends SocketBackend {
      * @throws Exception
      */
     public Server(int port) throws BackendException {
-        this.port = port;
+        InetAddress ip = InetAddress.getLoopbackAddress();
         try {
             ip = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-            ip = InetAddress.getLoopbackAddress();
+            System.out.println("Cannot get local host: " + e.getMessage());
         }
         try {
             serverSocket = new ServerSocket(port);

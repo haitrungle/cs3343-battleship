@@ -3,6 +3,7 @@ package cs3343.battleship.backend;
 import java.io.Serializable;
 import java.time.Instant;
 
+import cs3343.battleship.exceptions.NullObjectException;
 import cs3343.battleship.exceptions.WrongMessageTypeException;
 import cs3343.battleship.logic.Position;
 
@@ -96,6 +97,15 @@ public class Message implements Serializable {
     }
 
     /**
+     * Sets the timestamp of this message. Useful for testing.
+     * 
+     * @param timestamp the new timestamp
+     */
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    /**
      * Returns an initialization message, akin to a TCP handshake.
      * 
      * @return an INIT message
@@ -110,7 +120,9 @@ public class Message implements Serializable {
      * @param shot the shot position
      * @return a SHOT message
      */
-    public static Message ShotMsg(Position shot) {
+    public static Message ShotMsg(Position shot) throws NullObjectException {
+        if (shot == null)
+            throw new NullObjectException(Position.class);
         return new Message(Type.SHOT, shot, false);
     }
 
@@ -155,8 +167,6 @@ public class Message implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        System.out.println(this);
-        System.out.println(o);
         if (o == this)
             return true;
         if (!(o instanceof Message))

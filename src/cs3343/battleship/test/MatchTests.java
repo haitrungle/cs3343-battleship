@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import cs3343.battleship.backend.Backend;
-import cs3343.battleship.backend.Message;
-import cs3343.battleship.exceptions.BackendException;
 import cs3343.battleship.game.Config;
 import cs3343.battleship.game.Console;
 import cs3343.battleship.game.Match;

@@ -10,6 +10,8 @@ import java.util.Random;
  * row is row 0 and the left-most column is column 0.
  */
 public class Position implements Serializable {
+    private static final long serialVersionUID = 19122003L;
+
     public final int row;
     public final int col;
 

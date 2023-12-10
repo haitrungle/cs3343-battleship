@@ -29,42 +29,27 @@ public class AskBackendTests {
             server.close();
         if (client != null)
             client.close();
+        Thread.sleep(100);
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "h1\ny\n", "uo\n123\n90\nY\n", "0\ntrue\nyes\n", "12.3\nzzz\nYES\n", "io\nYes\n" })
     public void invalidInput_shouldAskUntilYes(String input) throws Exception {
-        Thread t = new Thread(() -> {
-            try {
-                Console console = Console.make().withIn(input);
-                server = console.askBackend();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        t.start();
-        t.join();
+        Console console = Console.make().withIn(input);
+        server = console.askBackend();
         assertNotNull(server);
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "901\nyyy\nn\n\n", "p00\n849\n05\nN\n\n", "0\nfalse\nNo\n\n", "30.1\neo$$\nnO\n\n" })
     public void invalidInput_shouldAskUntilNo(String input) throws Exception {
-        Thread serverThread = new Thread(() -> {
-            try {
-                Console console = Console.make().withIn("y\n");
-                server = console.askBackend();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        serverThread.start();
-        serverThread.join();
+        Console console = Console.make().withIn("y\n");
+        server = console.askBackend();
 
         Thread clientThread = new Thread(() -> {
             try {
-                Console console = Console.make().withIn(input);
-                client = console.askBackend();
+                Console console2 = Console.make().withIn(input);
+                client = console2.askBackend();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -72,6 +57,7 @@ public class AskBackendTests {
         clientThread.start();
         clientThread.join();
         assertNotNull(server);
+        assertNotNull(client);
     }
 
     @Test

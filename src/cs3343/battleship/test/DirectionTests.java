@@ -6,54 +6,35 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import cs3343.battleship.exceptions.InvalidInputException;
 import cs3343.battleship.logic.Direction;
 
 public class DirectionTests {
-    @Test
-    public void test_direction_down_1() throws Exception {
-        Direction dir = Direction.decode("D");
+    @ParameterizedTest
+    @ValueSource(strings = { "d", "D", "down", "Down", "DOWN", "doWN", "dOWn", "dowN" })
+    public void down_shouldDecodeCorrectly(String input) throws Exception {
+        Direction dir = Direction.decode(input);
         assertEquals(Direction.DOWN, dir);
     }
 
-    @Test
-    public void test_direction_down_2() throws Exception {
-        Direction dir = Direction.decode("d");
-        assertEquals(Direction.DOWN, dir);
-    }
-
-    @Test
-    public void test_direction_down_3() throws Exception {
-        Direction dir = Direction.decode("down");
-        assertEquals(Direction.DOWN, dir);
-    }
-
-    @Test
-    public void test_direction_right_1() throws Exception {
-        Direction dir = Direction.decode("R");
+    @ParameterizedTest
+    @ValueSource(strings = { "r", "R", "right", "Right", "RIGHT", "riGHT", "rIGHT", "riGhT" })
+    public void right_shouldDecodeCorrectly(String input) throws Exception {
+        Direction dir = Direction.decode(input);
         assertEquals(Direction.RIGHT, dir);
     }
 
-    @Test
-    public void test_direction_right_2() throws Exception {
-        Direction dir = Direction.decode("r");
-        assertEquals(Direction.RIGHT, dir);
+    @ParameterizedTest
+    @ValueSource(strings = { "other", "ceh", "righ", "dow", "up", "left", "downn", "rightt" })
+    public void invalidInput_shouldThrow(String input) {
+        assertThrows(InvalidInputException.class, () -> Direction.decode(input));
     }
 
     @Test
-    public void test_direction_right_3() throws Exception {
-        Direction dir = Direction.decode("right");
-        assertEquals(Direction.RIGHT, dir);
-    }
-
-    @Test
-    public void test_direction_exception_1() {
-        assertThrows(InvalidInputException.class, () -> Direction.decode("other"));
-    }
-
-    @Test
-    public void test_direction_random() {
+    public void equalsTest() {
         Direction d = Direction.random(new Random());
         assertEquals(d, d);
     }

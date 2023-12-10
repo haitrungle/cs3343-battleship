@@ -11,6 +11,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import cs3343.battleship.exceptions.PositionOutOfBoundsException;
+import cs3343.battleship.exceptions.PositionShotTwiceException;
 import cs3343.battleship.game.Config;
 import cs3343.battleship.logic.Battleship;
 import cs3343.battleship.logic.Direction;
@@ -83,20 +85,20 @@ public class PlayerTests {
     public void shotEnemyTwice_shouldThrow() throws Exception {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
-        Exception e = assertThrows(Exception.class, () -> p1.shotEnemy(new Position(0, 0), false));
+        assertThrows(PositionShotTwiceException.class, () -> p1.shotEnemy(new Position(0, 0), false));
     }
 
     @Test
-    public void checkShotAtShotPositionsShouldThrow() throws Exception {
+    public void checkShotAtShotPositions_shouldThrow() throws Exception {
         Position p = new Position(0, 0);
         p1.shotEnemy(p, false);
-        assertThrows(Exception.class, () -> p1.checkShot(new Position(0, 0)));
+        assertThrows(PositionShotTwiceException.class, () -> p1.checkShot(new Position(0, 0)));
     }
 
     @Test
     public void negativeNumberForPosition_shouldThrow() {
         Position p = new Position(-1, 0);
-        assertThrows(Exception.class, () -> p1.checkShot(p));
+        assertThrows(PositionOutOfBoundsException.class, () -> p1.checkShot(p));
     }
 
     @Test
