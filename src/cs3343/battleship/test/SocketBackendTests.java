@@ -49,6 +49,16 @@ public class SocketBackendTests {
         client.close();
     }
 
+    static Stream<Message> messageProvider() throws Exception {
+        return Stream.of(
+                Message.InitMsg(),
+                Message.ShotMsg(new Position(2, 3)),
+                Message.ShotMsg(new Position(0, 0)),
+                Message.ResultMsg(true),
+                Message.ResultMsg(false),
+                Message.LostMsg());
+    }
+
     @ParameterizedTest
     @MethodSource("messageProvider")
     public void clientSendMsg_shouldBeSameWhenServerReceived(Message msg) throws Exception {
@@ -65,40 +75,24 @@ public class SocketBackendTests {
         assertEquals(msg, received);
     }
 
-    static Stream<Message> messageProvider() throws Exception {
-        return Stream.of(
-                Message.InitMsg(),
-                Message.ShotMsg(new Position(2, 3)),
-                Message.ShotMsg(new Position(0, 0)),
-                Message.ResultMsg(true),
-                Message.ResultMsg(false),
-                Message.LostMsg());
+    @ParameterizedTest
+    @MethodSource("messageProvider")
+    public void clientSendMsg_serverShouldReceiveSameMsg(Message msg) throws Exception {
+        client.sendMessage(msg);
+        Message m = server.waitForMessage();
+        assertEquals(msg, m);
     }
 
-    @Test
-    public void waitMsg_thenSendInitMsg() throws Exception {
-        Thread client_wait_message = new Thread(() -> {
-            try {
-                client.waitForMessage();
-            } catch (Exception e) {
-                assertEquals("Error reading incoming message: null", e.getMessage());
-            }
-        });
-        client_wait_message.start();
-        Message m = Message.InitMsg();
-        client.sendMessage(m);
+    @ParameterizedTest
+    @MethodSource("messageProvider")
+    public void serverSendMsg_clientShouldReceiveSameMsg(Message msg) throws Exception {
+        server.sendMessage(msg);
+        Message m = client.waitForMessage();
+        assertEquals(msg, m);
     }
 
     @Test
     public void newServerOnUsedPort_shouldFail() {
         assertThrows(BackendException.class, () -> new Server(port));
-    }
-
-    @Test
-    public void clientSendResultMsg_serverShouldReceiveResultMsg() throws Exception {
-        Message m = Message.ResultMsg(true);
-        client.sendMessage(m);
-        Message message = server.waitForMessage();
-        assertEquals(m.getType(), message.getType());
     }
 }

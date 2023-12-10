@@ -165,6 +165,13 @@ public class Message implements Serializable {
         return "{ timestamp: " + timestamp.toString() + ", type: " + s + " }";
     }
 
+    /**
+     * Compares this message with the specified object. They are equal if `o` is a
+     * Message with same type, timestamp, and data with this message.
+     * 
+     * @param o the other object
+     * @return true if this message is equal to the other object, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this)

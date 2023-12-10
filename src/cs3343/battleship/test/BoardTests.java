@@ -111,6 +111,7 @@ public class BoardTests {
         s.setDirection(Direction.DOWN);
         Board test = new Board(1);
         assertThrows(NullObjectException.class, () -> test.addShip(s));
+        assertFalse(test.hasAliveShip());
     }
 
     @ParameterizedTest
@@ -119,6 +120,7 @@ public class BoardTests {
         Ship s = new AircraftCarrier(Direction.RIGHT, pos);
         Board test = new Board(6);
         assertThrows(PositionOutOfBoundsException.class, () -> test.addShip(s));
+        assertFalse(test.hasAliveShip());
     }
 
     static Stream<Position> overlapShipProvider() {

@@ -24,7 +24,8 @@ public class Client extends SocketBackend {
      *                   connect to "localhost".
      * @param remotePort The remote port to connect to. If null, the client will
      *                   connect to {@link Config#DEFAULT_PORT}.
-     * @throws Exception
+     * @throws BackendException if the client or the I/O streams cannot be
+     *                          initialized
      */
     public Client(String remoteHost, int remotePort) throws BackendException {
         this.remoteHost = remoteHost;
@@ -46,6 +47,8 @@ public class Client extends SocketBackend {
 
     /**
      * Closes the socket connection.
+     * 
+     * @throws IOException if an I/O error occurs when closing the socket
      */
     public void close() throws IOException {
         super.close();

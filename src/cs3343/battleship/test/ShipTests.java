@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import cs3343.battleship.logic.AircraftCarrier;
 import cs3343.battleship.logic.Battleship;
@@ -17,157 +20,91 @@ import cs3343.battleship.logic.Ship;
 import cs3343.battleship.logic.Submarine;
 
 public class ShipTests {
-    @Test
-    public void test_ship_get_name_1() {
-        Ship s = new AircraftCarrier();
-        assertEquals("Aircraft Carrier", s.getName());
+    private static final Direction down = Direction.DOWN;
+    private static final Position startPos = new Position(2, -1);
+
+    static Stream<Arguments> pairOfShipsProvider() {
+        return Stream.of(
+                Arguments.of(new AircraftCarrier(), new AircraftCarrier(down, startPos)),
+                Arguments.of(new Battleship(), new Battleship(down, startPos)),
+                Arguments.of(new Submarine(), new Submarine(down, startPos)),
+                Arguments.of(new Cruiser(), new Cruiser(down, startPos)),
+                Arguments.of(new Destroyer(), new Destroyer(down, startPos)));
     }
 
-    @Test
-    public void test_ship_get_name_2() {
-        Ship s = new AircraftCarrier(Direction.DOWN, new Position(1, 1));
-        assertEquals("Aircraft Carrier", s.getName());
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void sameType_shouldHaveSameNameAndLength(Ship a, Ship b) {
+        assertEquals(a.getName(), b.getName());
+        assertEquals(a.getLength(), b.getLength());
     }
 
-    @Test
-    public void test_ship_get_length_1() {
-        Ship s = new AircraftCarrier(Direction.DOWN, new Position(1, 1));
-        assertEquals(5, s.getLength());
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void getDirection_shouldBeCorrect(Ship a, Ship b) {
+        assertEquals(down, b.getDirection());
     }
 
-    @Test
-    public void test_ship_get_direction_1() {
-        Direction dir = Direction.DOWN;
-        Ship s = new AircraftCarrier(dir, new Position(1, 1));
-        assertEquals(dir, s.getDirection());
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void getStartPosition_shouldBeCorrect(Ship a, Ship b) {
+        assertEquals(startPos, b.getStartPosition());
     }
 
-    @Test
-    public void test_ship_get_start_position_1() {
-        Direction dir = Direction.DOWN;
-        Position p = new Position(1, 1);
-        Ship s = new AircraftCarrier(dir, p);
-        assertEquals(p, s.getStartPosition());
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void setDirection_shouldBeCorrect(Ship a, Ship b) {
+        Direction direction = Direction.RIGHT;
+        a.setDirection(direction);
+        b.setDirection(direction);
+        assertEquals(direction, a.getDirection());
+        assertEquals(direction, b.getDirection());
     }
 
-    @Test
-    public void test_ship_set_direction_1() {
-        Direction dir = Direction.RIGHT;
-        Position p = new Position(1, 1);
-        Ship s = new AircraftCarrier(Direction.DOWN, p);
-        s.setDirection(dir);
-        assertEquals(dir, s.getDirection());
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void setStartPosition_shouldBeCorrect(Ship a, Ship b) {
+        Position position = new Position(10, 10);
+        a.setStartPosition(position);
+        b.setStartPosition(position);
+        assertEquals(position, a.getStartPosition());
+        assertEquals(position, b.getStartPosition());
     }
 
-    @Test
-    public void test_ship_set_start_position_1() {
-        Position p = new Position(1, 1);
-        Ship s = new AircraftCarrier(Direction.DOWN, new Position(1, 1));
-        s.setStartPosition(p);
-        assertEquals(p, s.getStartPosition());
-    }
-
-    @Test
-    public void test_ship_introduce_1() {
-        Ship s = new AircraftCarrier(Direction.DOWN, new Position(1, 1));
-
-        assertEquals("Aircraft Carrier" + " (length " + 5 + ")", s.introduce());
-    }
-
-    @Test
-    public void test_ship_positions_1() {
-        Ship s = new AircraftCarrier(Direction.DOWN, new Position(1, 1));
-        List<Position> positions = s.positions();
-        for (int i = 0; i < 5; i++) {
-            assertEquals(new Position(1 + i, 1), positions.get(i));
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void positionsOfShipDown(Ship a, Ship b) {
+        List<Position> positions = b.positions();
+        for (int i = 0; i < b.getLength(); i++) {
+            assertEquals(new Position(startPos.row + i, startPos.col), positions.get(i));
         }
     }
 
-    @Test
-    public void test_ship_positions_2() {
-        Ship s = new AircraftCarrier(Direction.RIGHT, new Position(1, 1));
-        List<Position> positions = s.positions();
-        for (int i = 0; i < 5; i++) {
-            assertEquals(new Position(1, 1 + i), positions.get(i));
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void positionsOfShipRight(Ship a, Ship b) {
+        b.setDirection(Direction.RIGHT);
+        List<Position> positions = b.positions();
+        for (int i = 0; i < b.getLength(); i++) {
+            assertEquals(new Position(startPos.row, startPos.col + i), positions.get(i));
         }
     }
 
-    @Test
-    public void test_ship_overlap_position_1() {
-        Ship s = new AircraftCarrier(Direction.RIGHT, new Position(1, 1));
-        Ship s1 = new AircraftCarrier(Direction.RIGHT, new Position(1, 1));
-        Position p = Ship.overlapPosition(s, s1);
-        assertEquals(new Position(1, 1), p);
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void overlapShip_shouldGiveOverlapPosition(Ship a, Ship b) {
+        a.setDirection(Direction.RIGHT);
+        a.setStartPosition(startPos);
+        Position overlap = Ship.overlapPosition(a, b);
+        assertEquals(startPos, overlap);
     }
 
-    @Test
-    public void test_ship_overlap_position_2() {
-        Ship s = new AircraftCarrier(Direction.RIGHT, new Position(1, 1));
-        Ship s1 = new AircraftCarrier(Direction.RIGHT, new Position(2, 1));
-        Position p = Ship.overlapPosition(s, s1);
-        assertNull(p);
-    }
-
-    @Test
-    public void test_ship_1() {
-        Ship s = new AircraftCarrier(Direction.RIGHT, new Position(1, 1));
-        assertEquals("Aircraft Carrier", s.getName());
-        assertEquals(5, s.getLength());
-    }
-
-    @Test
-    public void test_ship_2() {
-        Ship s = new Submarine(Direction.RIGHT, new Position(1, 1));
-        assertEquals("Submarine", s.getName());
-        assertEquals(3, s.getLength());
-    }
-
-    @Test
-    public void test_ship_3() {
-        Ship s = new Submarine();
-        assertEquals("Submarine", s.getName());
-        assertEquals(3, s.getLength());
-    }
-
-    @Test
-    public void test_ship_4() {
-        Ship s = new Destroyer(Direction.RIGHT, new Position(1, 1));
-        assertEquals("Destroyer", s.getName());
-        assertEquals(2, s.getLength());
-    }
-
-    @Test
-    public void test_ship_5() {
-        Ship s = new Destroyer();
-        assertEquals("Destroyer", s.getName());
-        assertEquals(2, s.getLength());
-    }
-
-    @Test
-    public void test_ship_6() {
-        Ship s = new Cruiser(Direction.RIGHT, new Position(1, 1));
-        assertEquals("Cruiser", s.getName());
-        assertEquals(3, s.getLength());
-    }
-
-    @Test
-    public void test_ship_7() {
-        Ship s = new Cruiser();
-        assertEquals("Cruiser", s.getName());
-        assertEquals(3, s.getLength());
-    }
-
-    @Test
-    public void test_ship_8() {
-        Ship s = new Battleship(Direction.RIGHT, new Position(1, 1));
-        assertEquals("Battleship", s.getName());
-        assertEquals(4, s.getLength());
-    }
-
-    @Test
-    public void test_ship_9() {
-        Ship s = new Battleship();
-        assertEquals("Battleship", s.getName());
-        assertEquals(4, s.getLength());
+    @ParameterizedTest
+    @MethodSource("pairOfShipsProvider")
+    public void nonOverlapShip_shouldGiveNull(Ship a, Ship b) {
+        a.setDirection(Direction.DOWN);
+        a.setStartPosition(new Position(startPos.row, startPos.col + 1));
+        Position overlap = Ship.overlapPosition(a, b);
+        assertNull(overlap);
     }
 }

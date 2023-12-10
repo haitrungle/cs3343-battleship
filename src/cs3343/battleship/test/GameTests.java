@@ -1,5 +1,6 @@
 package cs3343.battleship.test;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +12,11 @@ public class GameTests {
     @BeforeEach
     public void setup() {
         new Config.Setter().withTypewriterDelay(0).set();
+    }
+
+    @AfterEach
+    public void teardown() {
+        Config.reset();
     }
 
     @Test

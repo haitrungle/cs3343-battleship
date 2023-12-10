@@ -27,20 +27,22 @@ public interface Backend extends Closeable {
     public boolean isReady();
 
     /**
-     * Blocks until a message is received. Typically, this is when a message is sent
-     * by {@link #sendMessage(Message)} from another Backend.
+     * Returns the latest received message. This method blocks until a message is
+     * received, typically when a message is sent by {@link #sendMessage(Message)}
+     * from another Backend.
      * 
-     * @return The message received.
-     * @throws BackendException
+     * @return The received message.
+     * @throws BackendException if the message cannot be received
      */
     public Message waitForMessage() throws BackendException;
 
     /**
-     * Sends a message. Typically, the message is received by
-     * {@link #waitForMessage()} from another Backend. Hence, if the other Backend
-     * is not running {@link #waitForMessage()}, the message will be lost.
+     * Sends a message. Typically, the message will be received by a blocking call
+     * to {@link #waitForMessage()} from another Backend. Otherwise, the message
+     * might get lost.
      * 
      * @param message The message to send.
+     * @throws BackendException if the message cannot be sent
      */
     public void sendMessage(Message message) throws BackendException;
 }

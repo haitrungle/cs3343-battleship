@@ -24,6 +24,9 @@ public final class Game {
     private Backend backend;
     private Console console = Console.system();
 
+    /**
+     * Constructs a new Game with the given console.
+     */
     public Game(Console console) {
         this.console = console;
     }

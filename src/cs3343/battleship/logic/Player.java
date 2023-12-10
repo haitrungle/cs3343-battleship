@@ -28,6 +28,7 @@ public final class Player {
 
     /**
      * Adds a ship to this player's board.
+     * 
      * @throws NullObjectException
      * @throws OverlapShipException
      * @throws PositionOutOfBoundsException
@@ -85,7 +86,8 @@ public final class Player {
      * @param shot the position of the shot
      * @param hit  true if the shot hits a ship, false otherwise
      */
-    public void shotEnemy(Position shot, boolean hit) throws NullObjectException, PositionOutOfBoundsException, PositionShotTwiceException {
+    public void shotEnemy(Position shot, boolean hit)
+            throws NullObjectException, PositionOutOfBoundsException, PositionShotTwiceException {
         if (hasShotEnemyAt(shot))
             throw new PositionShotTwiceException(shot);
         State state = hit ? State.HIT : State.MISS;

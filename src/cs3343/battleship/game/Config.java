@@ -39,10 +39,6 @@ public abstract class Config {
     private static int serverPort = DEFAULT_SERVER_PORT;
     public static int randomSeed = DEFAULT_RANDOM_SEED;
     public static int typewriterDelay = DEFAULT_TYPEWRITER_DELAY;
-    /**
-     * Flag to allow setting config only once during the program's lifetime.
-     */
-    private static boolean hasSet = false;
 
     /**
      * Get the board size.
@@ -90,8 +86,17 @@ public abstract class Config {
     }
 
     /**
-     * Sets the configuration. This method can only be called once during the
-     * program's lifetime.
+     * Sets the configuration to the default values.
+     */
+    public static void reset() {
+        Config.boardSize = DEFAULT_BOARD_SIZE;
+        Config.serverPort = DEFAULT_SERVER_PORT;
+        Config.randomSeed = DEFAULT_RANDOM_SEED;
+        Config.typewriterDelay = DEFAULT_TYPEWRITER_DELAY;
+    }
+
+    /**
+     * Sets the configuration to the specified values.
      * 
      * @param boardSize       the board size
      * @param serverPort      the server port
@@ -99,13 +104,10 @@ public abstract class Config {
      * @param typewriterDelay the typewriter effect delay
      */
     private static void setConfig(int boardSize, int serverPort, int randomSeed, int typewriterDelay) {
-        if (hasSet)
-            return;
         Config.boardSize = boardSize;
         Config.serverPort = serverPort;
         Config.randomSeed = randomSeed;
         Config.typewriterDelay = typewriterDelay;
-        hasSet = true;
     }
 
     /**

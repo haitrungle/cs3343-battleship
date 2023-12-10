@@ -16,7 +16,7 @@ public final class Tutorial {
     /**
      * Constructs a new tutorial with the given Console.
      * 
-     * @param c the console to use for input and output
+     * @param console the console to use for input and output
      */
     public Tutorial(Console console) {
         this.console = console;

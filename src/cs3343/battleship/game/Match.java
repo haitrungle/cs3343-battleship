@@ -51,15 +51,15 @@ public final class Match {
      * contained within this method.
      * 
      * @return whether this player has won the match
-     * @throws InterruptedException
-     * @throws GameException
+     * @throws InterruptedException if the thread is interrupted while waiting for
+     *                              the backend to be ready
+     * @throws GameException        if an unexpected error occurs
      */
     public boolean run() throws InterruptedException, GameException {
         waitUntilReady();
         Message init = Message.InitMsg();
         backend.sendMessage(init);
         Message remoteInit = backend.waitForMessage();
-        assert remoteInit.getType() == Message.Type.INIT;
         myTurn = init.getTimestamp().compareTo(remoteInit.getTimestamp()) < 0;
 
         console.println(".-------------.\n" +

@@ -23,7 +23,8 @@ public class Server extends SocketBackend {
      * spawns a thread to wait until a client to connect.
      * 
      * @param port The port to listen on.
-     * @throws Exception
+     * @throws BackendException if the server or the I/O streams cannot be
+     *                          initialized
      */
     public Server(int port) throws BackendException {
         InetAddress ip = InetAddress.getLoopbackAddress();
@@ -59,10 +60,14 @@ public class Server extends SocketBackend {
 
     /**
      * Closes the socket connection.
+     * 
+     * @throws IOException if an I/O error occurs when closing the socket
      */
     public void close() throws IOException {
         super.close();
-        if (serverSocket != null) serverSocket.close();
-        if (socket != null) socket.close();
+        if (serverSocket != null)
+            serverSocket.close();
+        if (socket != null)
+            socket.close();
     }
 }

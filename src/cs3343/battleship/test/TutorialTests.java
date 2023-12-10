@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +17,11 @@ public class TutorialTests {
     @BeforeEach
     public void setup() {
         new Config.Setter().withTypewriterDelay(0).set();
+    }
+
+    @AfterEach
+    public void teardown() {
+        Config.reset();
     }
 
     @Test

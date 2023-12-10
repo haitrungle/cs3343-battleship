@@ -34,6 +34,8 @@ public abstract class SocketBackend implements Backend {
      * streams. However, this matters if, say, we use a BufferedInputStream to wrap
      * the input stream, and we want to release the buffer before closing the
      * connection.
+     * 
+     * @throws IOException if an I/O error occurs when closing the backend
      */
     public void close() throws IOException {
         if (in != null) in.close();
